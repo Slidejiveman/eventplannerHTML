@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+<!-- Special version of Bootstrap that only affects content wrapped in .bootstrap-iso -->
+<link rel="stylesheet" href="https://formden.com/static/cdn/bootstrap-iso12.css" /> 
+
+<!--Font Awesome (added because you use icons in your prepend/append)-->
+<link rel="stylesheet" href="https://formden.com/static/cdn/font-awesome/4.4.0/css/font-awesome.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+<link rel="stylesheet" type="text/css" href="style.css">
+<!-- In-line CSS based on choices in "Settings" tab -->
+<style>.bootstrap-iso .formden_header h2, .bootstrap-iso .formden_header p, .bootstrap-iso form{font-family: Arial, Helvetica, sans-serif; color: black}.bootstrap-iso form button, .bootstrap-iso form button:hover{color: white !important;} .asteriskField{color: red;}</style>
+
+</head>
+<body>
+<!-- HTML Form (wrapped in a .bootstrap-iso div) -->
+<!-- HTML Form (wrapped in a .bootstrap-iso div) -->
+<div class="bootstrap-iso">
+ <div class="container">
+  <div class="row">
+   <div class="col-xs-6">
+   	<h3>Event Form</h3>
+    <form method="post">
+    <div class = "column">
+     <div class="form-group" style = "display:inline">
+      <label class="control-label requiredField" for="name" style = "display:block">
+       Customer Name
+       <span class="asteriskField">
+        *
+       </span>
+      </label>
+      <input class="form-control" id="name" name="name" type="text"/>
+     </div>
+     <h4>Event Information</h4>
+     <div class="form-group ">
+      <label class="control-label requiredField" for="eventName">
+       Event Name
+       <span class="asteriskField">
+        *
+       </span>
+      </label>
+      <input class="form-control" id="eventName" name="eventName" type="text"/>
+     </div>
+     <div class="form-group ">
+      <label class="control-label requiredField" for="venueloc">
+       Venue
+       <span class="asteriskField">
+        *
+       </span>
+      </label>
+      <input class="form-control" id="venueloc" name="venueloc" type="text"/>
+     </div>
+     <div class="form-group ">
+      <label class="control-label requiredField" for="number">
+       Percentage of Empty Seats
+       <span class="asteriskField">
+        *
+       </span>
+      </label>
+      <input class="form-control" id="number" name="number" type="text"/>
+     </div>
+     <div class="form-group ">
+      <label class="control-label requiredField" for="date">
+       Date
+       <span class="asteriskField">
+        *
+       </span>
+      </label>
+      <div class="input-group">
+       <div class="input-group-addon">
+        <i class="fa fa-calendar-check-o">
+        </i>
+       </div>
+       <input class="form-control" id="date" name="date" placeholder="MM/DD/YYYY" type="text"/>
+      </div>
+     </div>
+     <div class="form-group ">
+      <label class="control-label requiredField" for="select1">
+       Table Size
+       <span class="asteriskField">
+        *
+       </span>
+      </label>
+      <select class="select form-control" id="select1" name="select1">
+       <option value="4">
+        4
+       </option>
+       <option value="6">
+        6
+       </option>
+       <option value="8">
+        8
+       </option>
+      </select>
+     </div>
+     <div class="form-group ">
+      <label class="control-label requiredField" for="select2">
+       Table Shape
+       <span class="asteriskField">
+        *
+       </span>
+      </label>
+      <select class="select form-control" id="select2" name="select2">
+       <option value="Square">
+        Square
+       </option>
+       <option value="Rectangular">
+        Rectangular
+       </option>
+       <option value="Circular">
+        Circular
+       </option>
+      </select>
+     </div>
+     <div class="form-group ">
+      <label class="control-label requiredField" for="status">
+       Event Status
+       <span class="asteriskField">
+        *
+       </span>
+      </label>
+      <select class="select form-control" id="status" name="status">
+       <option value="Open">
+        Open
+       </option>
+       <option value="Closed">
+        Closed
+       </option>
+      </select>
+     </div>
+     </div>
+     <div class= "column">
+     <h4>Office Information</h4>
+     <div class="form-group ">
+      <label class="control-label requiredField" for="select3">
+       Event Planner
+       <span class="asteriskField">
+        *
+       </span>
+      </label>
+      <select class="select form-control" id="select3" name="select3">
+       <option value="Name to Be Added">
+        Name to Be Added
+       </option>
+      </select>
+     </div>
+     </div>
+     <div class="form-group">
+      <div>
+       <button class="btn btn-primary " name="submit" type="submit">
+        Submit
+       </button>
+      </div>
+     </div>
+    </form>
+   </div>
+  </div>
+ </div>
+</div>
+<!-- Extra JavaScript/CSS added manually in "Settings" tab -->
+<!-- Include jQuery -->
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<!-- Include Date Range Picker -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+<script>
+    $(document).ready(function(){
+        var date_input=$('input[name="date"]'); //our date input has the name "date"
+        var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+        date_input.datepicker({
+            format: 'mm/dd/yyyy',
+            container: container,
+            todayHighlight: true,
+            autoclose: true,
+        })
+    })
+</script>
+</body>
+</html>
+
+
