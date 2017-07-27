@@ -1,16 +1,7 @@
 @CHARSET "UTF-8";
 
 body {
-	background : #D8D8D8;
 	font-family: Ariel, sans-serif;
-}
-
-h2 {
-	background : #808080;
-	color : white;
-	text-align:center;
-	padding: 10px;
-	
 }
 table {
     border-collapse: collapse;
@@ -35,7 +26,6 @@ input[type="text"]
 button, input[type=button], input[type=submit] {
     background-color: #A4A4A4;
     border: none;
-    color: black;
     font-size: 1.1em;
     padding: 10px 16px;
     text-decoration: none;
@@ -62,6 +52,7 @@ form {
 	text-align : left;
 	margin: auto 0;
 	display: inline-block;
+	
 }
 form.inline {
 	display: inline-block;
@@ -73,7 +64,6 @@ form.inline {
     margin:0;
     padding:0;
     overflow: hidden;
-    background-color: #333;
     text-align:center;
 }
 .nav li{
@@ -89,4 +79,22 @@ form.inline {
 
 .nav a:hover {
     background-color: #111;
+}
+.nav-pills > li > a {
+	color:black;
+}
+.container{
+	
+}
+.formrow{
+	
+}
+.pageBody{
+	background-color:#F5FFFA;
+}
+.pageFooter{
+	background-color:#BOEOE6;
+}
+.logouttab{
+	float:right;
 }
