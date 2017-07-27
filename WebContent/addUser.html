@@ -1,0 +1,43 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+    <title>Add a User</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    </head>
+<body>
+    <h2>Add User</h2>
+<div id="id01" class="block-center">
+  <form class="userForm" method="post">
+      <label><b>Employee Name:</b></label>
+      <input type="text" placeholder="Enter Name" name="firstName" required>
+      <br><br>
+      <label><b>Employee Username:</b></label>
+      <input type="text" placeholder="Enter Username" name="userName" required>
+      <br><br>
+      <label><b>Password:</b></label>
+      <input type="password" placeholder="Enter Password" name="password" required>
+      <br><br>
+      <input id="check-ad" type="checkbox" name="employeeAdmin"><label for="cat-ad">Employee is Admin</label>
+      <br><br>
+      <input id="check-ac" type="checkbox" name="employeeActive"><label for="cat-ac">Employee is Active</label>
+      <br><br>
+      <button type="submit">Add</button>
+      <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
+  </form>
+</div>
+
+<script>
+// Get the modal
+var block-center = document.getElementById('id01');
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == block-center) {
+        modal.style.display = "none";
+    }
+}
+</script>
+</body>
+</html>
