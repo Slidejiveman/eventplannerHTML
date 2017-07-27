@@ -1,39 +1,34 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="ISO-8859-1">
-<title>Insert title here</title>
-<!-- Special version of Bootstrap that only affects content wrapped in .bootstrap-iso -->
-<link rel="stylesheet" href="https://formden.com/static/cdn/bootstrap-iso12.css" /> 
-
-<!--Font Awesome (added because you use icons in your prepend/append)-->
-<link rel="stylesheet" href="https://formden.com/static/cdn/font-awesome/4.4.0/css/font-awesome.min.css" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
-<link rel="stylesheet" type="text/css" href="style.css">
-<!-- In-line CSS based on choices in "Settings" tab -->
-<style>.bootstrap-iso .formden_header h2, .bootstrap-iso .formden_header p, .bootstrap-iso form{font-family: Arial, Helvetica, sans-serif; color: black}.bootstrap-iso form button, .bootstrap-iso form button:hover{color: white !important;} .asteriskField{color: red;}</style>
-
+  <title>Event Form</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <!--Font Awesome (added because you use icons in your prepend/append)-->
+	<link rel="stylesheet" href="https://formden.com/static/cdn/font-awesome/4.4.0/css/font-awesome.min.css" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
-<body>
-<!-- HTML Form (wrapped in a .bootstrap-iso div) -->
-<!-- HTML Form (wrapped in a .bootstrap-iso div) -->
-<div class="bootstrap-iso">
- <div class="container">
+<body class="pageBody">
+
+<div class="container">
+<div class=row>
+<ul class="nav nav-pills" >
+  <li role="presentation"><a href="eventsList.html">Events</a></li>
+  <li role="presentation"><a href="#">Customers</a></li>
+  <li role="presentation"><a href="#">Users</a></li>
+  <li class="logouttab pull-right" role="presentation"><a href="#">Logout</a></li>
+</ul>
+</div>
+<div class="formrow">
+  <h3>Event Form</h3> 
+   <h4>Event Information</h4>
   <div class="row">
-   <div class="col-xs-6">
-   	<h3>Event Form</h3>
-    <form method="post">
-    <div class = "column">
-     <div class="form-group" style = "display:inline">
-      <label class="control-label requiredField" for="name" style = "display:block">
-       Customer Name
-       <span class="asteriskField">
-        *
-       </span>
-      </label>
-      <input class="form-control" id="name" name="name" type="text"/>
-     </div>
-     <h4>Event Information</h4>
+  	  <form method="post">
+    <div class="col-sm-6"> 
      <div class="form-group ">
       <label class="control-label requiredField" for="eventName">
        Event Name
@@ -42,6 +37,21 @@
        </span>
       </label>
       <input class="form-control" id="eventName" name="eventName" type="text"/>
+     </div>
+       <div class="form-group ">
+      <label class="control-label requiredField" for="date">
+       Date
+       <span class="asteriskField">
+        *
+       </span>
+      </label>
+      <div class="input-group">
+       <div class="input-group-addon">
+        <i class="fa fa-calendar-check-o">
+        </i>
+       </div>
+       <input class="form-control" id="date" name="date" placeholder="MM/DD/YYYY" type="text"/>
+      </div>
      </div>
      <div class="form-group ">
       <label class="control-label requiredField" for="venueloc">
@@ -61,21 +71,7 @@
       </label>
       <input class="form-control" id="number" name="number" type="text"/>
      </div>
-     <div class="form-group ">
-      <label class="control-label requiredField" for="date">
-       Date
-       <span class="asteriskField">
-        *
-       </span>
-      </label>
-      <div class="input-group">
-       <div class="input-group-addon">
-        <i class="fa fa-calendar-check-o">
-        </i>
-       </div>
-       <input class="form-control" id="date" name="date" placeholder="MM/DD/YYYY" type="text"/>
-      </div>
-     </div>
+
      <div class="form-group ">
       <label class="control-label requiredField" for="select1">
        Table Size
@@ -95,7 +91,9 @@
        </option>
       </select>
      </div>
-     <div class="form-group ">
+    </div>
+    <div class="col-sm-6">
+    <div class="form-group ">
       <label class="control-label requiredField" for="select2">
        Table Shape
        <span class="asteriskField">
@@ -114,7 +112,7 @@
        </option>
       </select>
      </div>
-     <div class="form-group ">
+ 	<div class="form-group ">
       <label class="control-label requiredField" for="status">
        Event Status
        <span class="asteriskField">
@@ -130,8 +128,16 @@
        </option>
       </select>
      </div>
+    <h4>Customer Information</h4>
+     <div class="form-group">
+      <label class="control-label requiredField" for = "customerselection">
+      Customer Name
+      <span class ="asteriskField">*</span>
+      </label>
+      <select class=" select form-control" id="customerselection" name ="customerselection">
+      	<option value="custNames"> Names to Be Added</option>
+      </select>
      </div>
-     <div class= "column">
      <h4>Office Information</h4>
      <div class="form-group ">
       <label class="control-label requiredField" for="select3">
@@ -147,18 +153,88 @@
       </select>
      </div>
      </div>
-     <div class="form-group">
+    </form>
+    </div>
+    </div>
+    <div class="pageFooter">
+    <br><br>
+    <div class ="row">
+    <div class="col-md-3">
+    <div class="form-group">
       <div>
        <button class="btn btn-primary " name="submit" type="submit">
-        Submit
+        Save and Import Guests
        </button>
       </div>
      </div>
-    </form>
    </div>
-  </div>
- </div>
-</div>
+   <div class="col-md-3"><div class="form-group">
+      <div>
+       <button class="btn btn-primary " name="submit" type="submit">
+        View Guests
+       </button>
+      </div>
+     </div>
+    </div>
+  <div class="col-md-3"><div class="form-group">
+      <div>
+       <button class="btn btn-primary " name="submit" type="submit">
+        Generate Seating Assignments
+       </button>
+      </div>
+     </div></div>
+   <div class="col-md-3"><div class="form-group">
+      <div>
+       <button class="btn btn-primary " name="submit" type="submit">
+        View Seating Assignments
+       </button>
+      </div>
+     </div>
+   </div>
+    </div>
+    <div class=row>
+    <div class="col-md-3"><div class="form-group">
+      <div>
+       <button class="btn btn-primary " name="submit" type="submit">
+        Generate Seating Reports Alphabetically
+       </button>
+      </div>
+     </div>
+   </div>
+   <div class="col-md-3"><div class="form-group">
+      <div>
+       <button class="btn btn-primary " name="submit" type="submit">
+        Generate Seating Reports By Table
+       </button>
+      </div>
+     </div>
+     </div>
+   <div class="col-md-3"><div class="form-group">
+      <div>
+       <button class="btn btn-primary " name="submit" type="submit">
+        Generate Table Markers
+       </button>
+      </div>
+     </div></div>
+        <div class="col-md-1"><div class="form-group">
+      <div>
+       <button class="btn btn-primary " name="submit" type="submit">
+        Save
+       </button>
+      </div>
+     </div></div>
+        <div class="col-md-1"><div class="form-group">
+      <div>
+       <button class="btn btn-primary" name="submit" type="submit">
+        Cancel
+       </button>
+      </div>
+     </div></div>
+    </div>
+    <br>
+    </div>
+</div> 
+<br><br><br><br><br>
 <!-- Extra JavaScript/CSS added manually in "Settings" tab -->
 <!-- Include jQuery -->
 <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
@@ -179,5 +255,3 @@
 </script>
 </body>
 </html>
-
-
