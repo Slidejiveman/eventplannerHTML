@@ -25,6 +25,9 @@ th {
 	background-color: black;
     color: white;
 }
+h1,h2,h3{
+	text-align:left;	
+}
 input[type="text"]
 {
     font-size:12px;
