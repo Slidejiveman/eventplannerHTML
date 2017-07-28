@@ -43,7 +43,7 @@
 	}
   
     function createTable(start) {
-    	$.getJSON( "",{ page:start, per_page:page } )
+    	$.getJSON( "/eventplannerJava/rest/eventservice/events",{ page:start, per_page:page } )
     	  .done(function( response ) {
     		  var tableHTML = '<tr><th></th><th width= 50px>ID</th><th width= 100px>Event Name</th><th width= 100px>Event Planner</th><th width= 100px>Event Date</th></tr>';
     	        $.each(response, function (i, event) {
