@@ -1,0 +1,114 @@
+<!DOCTYPE HTML> 
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <!--Font Awesome (added because you use icons in your prepend/append)-->
+	<link rel="stylesheet" href="https://formden.com/static/cdn/font-awesome/4.4.0/css/font-awesome.min.css" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script>
+
+	var start = 0;
+	var page = 5;
+	createTable(start);
+
+	function getPrevious()
+	{
+		start = start-page;
+		if (start <1)  start = 0;
+		createTable(start);
+	}
+	
+	function getNext()
+	{
+		if ($("#user-list-table") && $("#user-list-table").prop('rows').length-1 == page) start=start+page;
+		createTable(start);
+	}
+
+    function selectChange() 
+    {
+        id = getId();
+        $("#selectedID").html(id);
+        $("#updateID").val(id);
+        $("#deleteID").val(id);   
+    }
+    
+    function getId()
+	{ 
+	  return jQuery( 'input[name=selectedRow]:checked' ).val()
+	}
+    
+    function createTable(start) {
+    	$.getJSON( "/eventplannerJava/rest/eventservice/events",{ page:start, per_page:page } )
+    	  .done(function( response ) {
+    		  var tableHTML = '<tr><th></th><th width= 50px>ID</th><th width= 100px>Event Name</th><th width= 100px>Event Planner</th><th width= 100px>Event Date</th></tr>';
+    	        $.each(response, function (i, user) {
+    	            tableHTML += '<tr><td><input type="radio" onchange= "selectChange()" name="selectedRow" value='+user.userNumber+'><td>' + user.getUserName() + '</td><td>';
+    	        });
+    	        tableHTML+='</table>';
+    	       $('#user-list-table').html(tableHTML);})
+  	  .fail(function(jqXHR, textStatus, errorThrown) {
+  	        console.log("error " + textStatus);
+  	        console.log("incoming Text " + jqXHR.responseText);});
+      }
+	$(document).ready(function() {
+    		$("#previous").click(function() {getPrevious()});
+    		$("#next").click(function() {getNext()});
+    })
+  
+</script>
+</head>
+<body class="pageBody"> 
+<div class= "container">
+<div class=row>
+<ul class="nav nav-pills" >
+  <li role="presentation"><a href="userList.html">user</a></li>
+  <li role="presentation"><a href="#">Customers</a></li>
+  <li role="presentation"><a href="#">Users</a></li>
+  <li class="logouttab pull-right" role="presentation"><a href="#">Logout</a></li>
+</ul>
+</div>
+<h2>User List</h2>
+<div class = "block-center">
+<div id="user-table">
+<table class='center' id='user-list-table' >
+</table>
+</div>
+<br><br>
+<button id="previous" class='btn btn-primary inline' >Previous</button>
+<button id = "next"class='btn btn-primary inline' >Next</button>
+<br><br>
+
+<br><br>
+<p id="selectedID"></p>
+<form class='inline' action="updateUser.html" method="get">
+	<input id="updateID" type="hidden" name="id" value="">
+     <button class="btn btn-primary" type = "submit" name="submit" value="Update">Update</button>
+</form>
+
+<form class='inline' action="addUser.html" method ="get">
+     <button class="btn btn-primary" type = "submit">Add</button>
+</form>
+<form class='inline' action="deleteUser.html" method="get">
+	<input id="deleteID" type="hidden" name="id" value="">
+         
+         <button class="btn btn-primary" type = "submit" onClick="confirmDelete();" value="Delete">Delete</button>
+ 
+    <script type="text/javascript">
+    function confirmDelete(){
+        var agree=confirm("Are you sure you want to delete this user?");
+            if (agree)
+                return true ;
+            else
+                return false ;
+        }
+  </script>
+</form>
+</div>
+</div>
+</body>
+</html>
