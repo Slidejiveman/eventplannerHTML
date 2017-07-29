@@ -7,7 +7,6 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <!--Font Awesome (added because you use icons in your prepend/append)-->
 	<link rel="stylesheet" href="https://formden.com/static/cdn/font-awesome/4.4.0/css/font-awesome.min.css" />
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script>
@@ -43,11 +42,11 @@
 	}
     
     function createTable(start) {
-    	$.getJSON( "/eventplannerJava/rest/eventservice/events",{ page:start, per_page:page } )
+    	$.getJSON( "/eventplannerJava/eventplanner/userservice/users",{ page:start, per_page:page } )
     	  .done(function( response ) {
-    		  var tableHTML = '<tr><th></th><th width= 50px>ID</th><th width= 100px>Event Name</th><th width= 100px>Event Planner</th><th width= 100px>Event Date</th></tr>';
+    		  var tableHTML = '<tr><th></th><th width= 50px>ID</th><th width= 100px>User Name</th></tr>';
     	        $.each(response, function (i, user) {
-    	            tableHTML += '<tr><td><input type="radio" onchange= "selectChange()" name="selectedRow" value='+user.userNumber+'><td>' + user.getUserName() + '</td><td>';
+    	            tableHTML += '<tr><td><input type="radio" onchange= "selectChange()" name="selectedRow" value='+user.userNumber+'><td>' + user.getUserName() + '</td></tr>';
     	        });
     	        tableHTML+='</table>';
     	       $('#user-list-table').html(tableHTML);})
@@ -66,9 +65,9 @@
 <div class= "container">
 <div class=row>
 <ul class="nav nav-pills" >
-  <li role="presentation"><a href="userList.html">user</a></li>
+  <li role="presentation"><a href="eventsList.html">Events</a></li>
   <li role="presentation"><a href="#">Customers</a></li>
-  <li role="presentation"><a href="#">Users</a></li>
+  <li role="presentation"><a href="userList.html">Users</a></li>
   <li class="logouttab pull-right" role="presentation"><a href="#">Logout</a></li>
 </ul>
 </div>
@@ -80,7 +79,7 @@
 </div>
 <br><br>
 <button id="previous" class='btn btn-primary inline' >Previous</button>
-<button id = "next"class='btn btn-primary inline' >Next</button>
+<button id = "next" class='btn btn-primary inline' >Next</button>
 <br><br>
 
 <br><br>
@@ -93,7 +92,7 @@
 <form class='inline' action="addUser.html" method ="get">
      <button class="btn btn-primary" type = "submit">Add</button>
 </form>
-<form class='inline' action="deleteUser.html" method="get">
+<form class='inline' action="userList.html" method="get">
 	<input id="deleteID" type="hidden" name="id" value="">
          
          <button class="btn btn-primary" type = "submit" onClick="confirmDelete();" value="Delete">Delete</button>
@@ -106,9 +105,34 @@
             else
                 return false ;
         }
+  
   </script>
 </form>
 </div>
 </div>
+<script type="text/javascript">
+$(document).ready(fumction () {
+    $("#deletebtn").click(function (e){
+    	console.log("delete function");
+    	$('#deleteMessage').html("Deleting record ... Wait");
+    	$('#deletebtn').attr("disabled", true);
+    	$.ajax({ 
+    		url:"/eventplannerJava/eventplanner/userservice/users/"+$.urlParam("id"),
+    		type: "DELETE",
+    	    success: (function(data) {
+    		  console.log("Delete success ");
+    		  window.location.assign("user-list.html");
+    		  console.log("Delete after change href");
+    	  }),
+    	  fail: (function(jqXHR, textStatus, errorThrown) {
+     	      console.log("Delete error " + textStatus);
+     	      console.log("incoming Text " + jqXHR.responseText);
+    	  })
+    	  
+      	 });
+    	console.log("end of delete");
+    });})	
+
+</script>
 </body>
 </html>
