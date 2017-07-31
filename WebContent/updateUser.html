@@ -1,51 +1,79 @@
-
 <!DOCTYPE html>
-<html>
-    <title>Update a User</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-<body>
-    <h2>Update User</h2>
-<div id="id01" class="block-center">
-  <form class="userForm" method="post">
-      <label><b>Employee Name:</b></label>
-      <input type="text" placeholder="Enter Name" name="firstName" required>
-      <br><br>
-      <label><b>Employee Username:</b></label>
-      <input type="text" placeholder="Enter Username" name="userName" required>
-      <br><br>
-      <label><b>Password:</b></label>
-      <input type="password" placeholder="Enter Password" name="password" required>
-      <br><br>
-      <input id="check-ad" type="checkbox" name="employeeAdmin"><label for="cat-ad">Employee is Admin</label>
-      <br><br>
-      <input id="check-ac" type="checkbox" name="employeeActive"><label for="cat-ac">Employee is Active</label>
-      <br><br>
-      <button type="submit">Update</button>
-      <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
-  </form>
-</div>
-
-<script>
-// Get the modal
-var block-center = document.getElementById('id01');
-
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-    if (event.target == block-center) {
-        modal.style.display = "none";
-    }
-}
-
-function load_user(){
-    var userdata = localStorage.getItem("userdata");
-  if(typeof userdata === undefined || userdata === null){
-    userdata = JSON.stringify({name:"",username:"",password:""});
-    localStorage.setItem("userdata",userdata);
-  }
-    return JSON.parse(userdata);
-}
-
-</script>
-</body>
+<html lang="en">
+    <head>
+        <title>Update User</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="style.css">
+        <!--  -->link rel="stylesheet" href="bootstrap.css"-->
+        <!--Font Awesome (added because you use icons in your prepend/append)-->
+        <link rel="stylesheet" href="https://formden.com/static/cdn/font-awesome/4.4.0/css/font-awesome.min.css" />
+	     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    </head>
+<body class="pageBody">
+   <div class="container">
+    <div class=row>
+     <ul class="nav nav-pills" >
+       <li role="presentation"><a href="eventsList.html">Events</a></li>
+       <li role="presentation"><a href="#">Customers</a></li>
+       <li role="presentation"><a href="userList.html">Users</a></li>
+       <li class="logouttab pull-right" role="presentation"><a href="#">Logout</a></li>
+     </ul>
+    </div>
+ <div class="formrow">
+   <form method="post">
+   <div class="col-md-4 col-lg-12">
+    <h1>Update User</h1>
+   <div class="form-group">
+      <label class="control-label requiredField" for="employeeName">
+       Employee Name:
+       <span class="asteriskField">*</span>
+      </label>    
+      <input class="form-control" id="employeeName" name="field" maxlength="10" type="text" title="Only Letters" value="Type Letters Only" onkeydown="return alphaOnly(event);" onblur="if (this.value == '') {this.value = 'Type Letters Only';}" onfocus="if (this.value == 'Type Letters Only') {this.value = '';}"/>
+    </div>
+   <div class="form-group">
+      <label class="control-label requiredField" for="userName">
+       Username:
+       <span class="asteriskField">*</span>
+      </label>    
+      <input class="form-control" id="userName" name="userName" type="text" />
+    </div>
+   <div class="form-group">
+      <label class="control-label requiredField" for="password">
+       Password:
+       <span class="asteriskField">*</span>
+      </label>   
+      <input class="form-control" id="password" name="password" type="password"/>
+   </div>
+       <div class="checkbox">
+       <label><input type="checkbox" value="">Employee is Admin</label>
+       </div>
+       <div class="checkbox">
+       <label><input type="checkbox" value="">Employee is Active</label>
+       </div>
+       </div>
+       <div class="col-md-6">
+           <button type="button" class="btn btn-primary">Update</button>
+           <button type="button" class="btn btn-primary">Cancel</button>
+      </div>
+     </form>
+       </div>
+    </div>
+    <script type="text/javascript">
+        function isValid(){
+        var password = document.getElementById('password').value;
+        if (password == "rawr")
+        {alert('Correct!')}
+        else
+        {alert('Wrong Password')}
+        }
+        
+        function alphaOnly(event) {
+        var key = event.keyCode;
+        return ((key >= 65 && key <= 90) || key == 8);
+        };
+  </script>
+    </body>
 </html>
