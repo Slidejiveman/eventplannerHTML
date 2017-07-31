@@ -94,7 +94,38 @@
 </form>
 <form class='inline' action="deleteEvent" method="get">
 	<input id="deleteID" type="hidden" name="id" value="">
-         <button class="btn btn-primary" type = "submit" value="Delete">Delete</button>
+         <button class="btn btn-primary" type = "submit" onClick="confirmDelete();" value="Delete">Delete</button>
+	<script type="text/javascript">
+	    function confirmDelete(){
+	        var agree=confirm("Are you sure you want to delete this event?");
+	            if (agree){
+	            	console.log("delete function");
+	            	$('#deleteMessage').html("Deleting record ... Wait");
+	            	$.ajax({ 
+	            		url:"/eventplannerJava/eventplanner/eventservice/events/"+$.urlParam("id"),
+	            		type: "DELETE",
+	            	    success: (function(data) {
+	            		  console.log("Delete success ");
+	            		  window.location.assign("eventsList.html");
+	            		  console.log("Delete after change href");
+	            	  }),
+	            	  fail: (function(jqXHR, textStatus, errorThrown) {
+	             	      console.log("Delete error " + textStatus);
+	             	      console.log("incoming Text " + jqXHR.responseText);
+	            	  })
+	            	  
+	              	 });
+	            	console.log("end of delete");
+	                return true ;
+	            }
+	            else{
+	            	console.log("Delete canceled ");
+          		  	window.location.assign("eventsList.html");
+	                return false ;
+	            }
+	        }
+	  
+	</script>
 </form>
 </div>
 </div>
