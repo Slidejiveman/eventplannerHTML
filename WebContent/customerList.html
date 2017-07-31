@@ -1,0 +1,138 @@
+<!DOCTYPE HTML> 
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <!--Font Awesome (added because you use icons in your prepend/append)-->
+	<link rel="stylesheet" href="https://formden.com/static/cdn/font-awesome/4.4.0/css/font-awesome.min.css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script>
+
+	var start = 0;
+	var page = 5;
+	createTable(start);
+
+	function getPrevious()
+	{
+		start = start-page;
+		if (start <1)  start = 0;
+		createTable(start);
+	}
+	
+	function getNext()
+	{
+		if ($("#customer-list-table") && $("#customer-list-table").prop('rows').length-1 == page) start=start+page;
+		createTable(start);
+	}
+
+    function selectChange() 
+    {
+        id = getId();
+        $("#selectedID").html(id);
+        $("#updateID").val(id);
+        $("#deleteID").val(id);   
+    }
+    
+    function getId()
+	{ 
+	  return jQuery( 'input[name=selectedRow]:checked' ).val()
+	}
+    
+    function createTable(start) {
+    	$.getJSON( "/eventplannerJava/eventplanner/customerservice/customers",{ page:start, per_page:page } )
+    	  .done(function( response ) {
+    		  var tableHTML = '<tr><th></th><th width= 50px>ID</th><th width= 100px>User Name</th></tr>';
+    	        $.each(response, function (i, user) {
+    	            tableHTML += '<tr><td><input type="radio" onchange= "selectChange()" name="selectedRow" value='+user.userNumber+'><td>' + user.getUserName() + '</td></tr>';
+    	        });
+    	        tableHTML+='</table>';
+    	       $('#customer-list-table').html(tableHTML);})
+  	  .fail(function(jqXHR, textStatus, errorThrown) {
+  	        console.log("error " + textStatus);
+  	        console.log("incoming Text " + jqXHR.responseText);});
+      }
+	$(document).ready(function() {
+    		$("#previous").click(function() {getPrevious()});
+    		$("#next").click(function() {getNext()});
+    })
+  
+</script>
+</head>
+<body class="pageBody"> 
+<div class= "container">
+<div class=row>
+<ul class="nav nav-pills" >
+  <li role="presentation"><a href="eventsList.html">Events</a></li>
+  <li role="presentation"><a href="#">Customers</a></li>
+  <li role="presentation"><a href="userList.html">Users</a></li>
+  <li class="logouttab pull-right" role="presentation"><a href="#">Logout</a></li>
+</ul>
+</div>
+<h2>Customer List</h2>
+<div class = "block-center">
+<div id="user-table">
+<table class='center' id='customer-list-table' >
+</table>
+</div>
+<br><br>
+<button id="previous" class='btn btn-primary inline' >Previous</button>
+<button id = "next" class='btn btn-primary inline' >Next</button>
+<br><br>
+
+<br><br>
+<p id="selectedID"></p>
+<form class='inline' action="updateCustomer.html" method="get">
+	<input id="updateID" type="hidden" name="id" value="">
+     <button class="btn btn-primary" type = "submit" name="submit" value="Update">Update</button>
+</form>
+
+<form class='inline' action="addCustomer.html" method ="get">
+     <button class="btn btn-primary" type = "submit">Add</button>
+</form>
+<form class='inline' action="customerList.html" method="get">
+	<input id="deleteID" type="hidden" name="id" value="">
+         
+         <button class="btn btn-primary" type = "submit" onClick="confirmDelete();" value="Delete">Delete</button>
+ 
+    <script type="text/javascript">
+    function confirmDelete(){
+        var agree=confirm("Are you sure you want to delete this customer?");
+            if (agree)
+                return true ;
+            else
+                return false ;
+        }
+  
+  </script>
+</form>
+</div>
+</div>
+<script type="text/javascript">
+$(document).ready(fumction () {
+    $("#deletebtn").click(function (e){
+    	console.log("delete function");
+    	$('#deleteMessage').html("Deleting record ... Wait");
+    	$('#deletebtn').attr("disabled", true);
+    	$.ajax({ 
+    		url:"/eventplannerJava/eventplanner/customerservice/customers/"+$.urlParam("id"),
+    		type: "DELETE",
+    	    success: (function(data) {
+    		  console.log("Delete success ");
+    		  window.location.assign("customer-list.html");
+    		  console.log("Delete after change href");
+    	  }),
+    	  fail: (function(jqXHR, textStatus, errorThrown) {
+     	      console.log("Delete error " + textStatus);
+     	      console.log("incoming Text " + jqXHR.responseText);
+    	  })
+    	  
+      	 });
+    	console.log("end of delete");
+    });})	
+
+</script>
+</body>
+</html>
