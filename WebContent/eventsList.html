@@ -1,35 +1,19 @@
 <!DOCTYPE HTML> 
 <html>
 <head>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" type="text/css" href="style.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <!--Font Awesome (added because you use icons in your prepend/append)-->
-	<link rel="stylesheet" href="https://formden.com/static/cdn/font-awesome/4.4.0/css/font-awesome.min.css" />
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+  <link rel="stylesheet" href="http://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script type="text/javascript" src="http://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  
 <script>
 
-	var start = 0;
-	var page = 5;
-	createTable(start);
+	createTable();
 
-	function getPrevious()
-	{
-		start = start-page;
-		if (start <1)  start = 0;
-		createTable(start);
-	}
-	
-	function getNext()
-	{
-		if ($("#event-list-table") && $("#event-list-table").prop('rows').length-1 == page) start=start+page;
-		createTable(start);
-	}
-
-    function selectChange() 
+	function selectChange() 
     {
         id = getId();
         $("#selectedID").html(id);
@@ -42,14 +26,14 @@
 	  return jQuery( 'input[name=selectedRow]:checked' ).val()
 	}
   
-    function createTable(start) {
-    	$.getJSON( "/eventplannerJava/rest/eventservice/events",{ page:start, per_page:page } )
+    function createTable() {
+    	$.getJSON( "/eventplannerJava/eventplanner/eventservice/events")
     	  .done(function( response ) {
-    		  var tableHTML = '<tr><th></th><th width= 50px>ID</th><th width= 100px>Event Name</th><th width= 100px>Event Planner</th><th width= 100px>Event Date</th></tr>';
+    		  var tableHTML = '<thead><tr><th></th><th>ID</th><th>Event Name</th><th>Event Planner</th><th>Event Date</th></tr></thead><tbody>';
     	        $.each(response, function (i, event) {
-    	            tableHTML += '<tr><td><input type="radio" onchange= "selectChange()" name="selectedRow" value='+event.eventNumber+'><td>' + event.getEventName() + '</td><td>' + event.getEventPlanner().getName() + '</td><td>' + event.getEventDate()+ '</td></tr>';
+    	            tableHTML += '<tr><td><input type="radio" onchange= "selectChange()" name="selectedRow" value='+event.id+'><td>' + event.id + '</td><td>' + event.name + '</td><td>' + event.assignedUser.name + '</td><td>' + event.date+ '</td></tr>';
     	        });
-    	        tableHTML+='</table>';
+    	       tableHTML+='</tbody>';
     	       $('#event-list-table').html(tableHTML);})
   	  .fail(function(jqXHR, textStatus, errorThrown) {
   	        console.log("error " + textStatus);
@@ -59,6 +43,12 @@
     		$("#previous").click(function() {getPrevious()});
     		$("#next").click(function() {getNext()});
     })
+</script>
+
+<script>
+$(document).ready(function(){
+    $('#event-list-table').dataTable();
+});
 </script>
 </head>
 <body class="pageBody"> 
@@ -72,18 +62,13 @@
 </ul>
 </div>
 <h2>Event List</h2>
-<div class = "block-center">
-<div id="event-table">
-<table class='center' id='event-list-table' >
-</table>
-</div>
-<br><br>
-<button id="previous" class='btn btn-primary inline' >Previous</button>
-<button id = "next"class='btn btn-primary inline' >Next</button>
-<br><br>
-
-<br><br>
+<div>
+<div class="table-responsive">
+<table class="table table-striped" id="event-list-table" >
+</table></div>
+<br>
 <p id="selectedID"></p>
+<div class="footer-buttons">
 <form class='inline' action="updateEvent.html" method="get">
 	<input id="updateID" type="hidden" name="id" value="">
      <button class="btn btn-primary" type = "submit" name="submit" value="Update">Update</button>
@@ -127,6 +112,7 @@
 	  
 	</script>
 </form>
+</div>
 </div>
 </div>
 </body>
