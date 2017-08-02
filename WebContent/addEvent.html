@@ -217,8 +217,8 @@
       </div>
      </div></div>
         <div class="col-md-1"><div class="form-group">
-      <div>
-       <button class="btn btn-primary " name="submit" type="submit">
+      <div >
+       <button id="save" class="btn btn-primary " name="submit" type="submit" onclick="save();">
         Save
        </button>
       </div>
@@ -242,6 +242,59 @@
 <!-- Include Date Range Picker -->
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
 <script>
+function save (){
+	//e.preventDefault;
+	var eventName = $('#eventName').val();
+	var selectedEventPlanner = $('#eventPlannerSelection').val();  
+	var selectedCustomer= $('#customerselection').val();  
+	var eventDate= $('#date').val();
+	var eventStatus= $('#status').val();
+	var eventLocation= $('#venueloc').val();
+	var eventMenu= $('#eventMenu').val();
+	var emptySeats= $('#emptySeats').val();
+
+	$.ajax( { 
+		/*url:"/eventplannerJava/eventplanner/eventservice/events/"+$.urlParam("id"),
+		type: "PUT",
+		dataType: "json",
+		contentType: "application/json",
+		data: '{'+
+			'"name" : "'+eventName+'",'+
+			'"date" :"'+ eventDate+'",'+
+		//	'"status" : "'+eventStatus+'",'+
+		//	'"location" : "'+eventLocation+'",'+
+			'"menu" : "'+eventMenu+'",'+
+			'"percentSeatsEmpty" : "'+emptySeats+'",'+
+		//	'"assignedUser":{"name": "'+selectedEventPlanner+'"},'+
+		//	'"customer":{"email": "'+selectedCustomer+'"},'+
+		"}",*/
+		statusCode: {
+			200: function(response) {
+
+				  $("#page-message").html("Record Updated");
+				  window.location.assign("eventsList.html");
+		  	},
+		  	406: function(response) {
+		  		var errors = response.responseJSON;
+		  		$(".error").html("*");
+		  		$.each(errors, function (i, message) {
+		  			$("#"+message.attributeName+"Err").html(message.message);
+		  			console.log("Error "+message.attributeName +" "+message.message)
+    	        		});
+		  		$("#page-message").html("Fix errors and click Save");
+		  	},
+		  	
+			404 : function(jqXHR, textStatus, errorThrown) {
+				$("#page-message").html("Error:"+textStatus);
+				consule.log(errorThrown);
+	  	        console.log("error " + textStatus);
+	  	        console.log("incoming Text " + jqXHR.responseText);
+	  	      }
+			}
+		});
+
+	//e.preventDefault();
+}
     $(document).ready(function(){
         var date_input=$('input[name="date"]'); //our date input has the name "date"
         var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
