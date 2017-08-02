@@ -18,8 +18,8 @@
 <div class=row>
 <ul class="nav nav-pills" >
   <li role="presentation"><a href="eventsList.html">Events</a></li>
-  <li role="presentation"><a href="#">Customers</a></li>
-  <li role="presentation"><a href="#">Users</a></li>
+  <li role="presentation"><a href="customerList.html">Customers</a></li>
+  <li role="presentation"><a href="userList.html">Users</a></li>
   <li class="logouttab pull-right" role="presentation"><a href="#">Logout</a></li>
 </ul>
 </div>
@@ -63,53 +63,37 @@
       <input class="form-control" id="venueloc" name="venueloc" type="text"/>
      </div>
      <div class="form-group ">
-      <label class="control-label requiredField" for="number">
+      <label class="control-label requiredField" for="emptySeats">
        Percentage of Empty Seats
        <span class="asteriskField">
         *
        </span>
       </label>
-      <input class="form-control" id="number" name="number" type="text"/>
+      <input class="form-control" id="emptySeats" name="emptySeats" type="text"/>
      </div>
 
      <div class="form-group ">
-      <label class="control-label requiredField" for="select1">
+      <label class="control-label requiredField" for="sizeselection">
        Table Size
        <span class="asteriskField">
         *
        </span>
       </label>
-      <select class="select form-control" id="select1" name="select1">
-       <option value="4">
-        4
-       </option>
-       <option value="6">
-        6
-       </option>
-       <option value="8">
-        8
-       </option>
+      <select class="select form-control" id="sizeselection" name="sizeselection" onclick="loadTableSizes();">
+       <option value="size">Select</option>
       </select>
      </div>
     </div>
     <div class="col-sm-6">
     <div class="form-group ">
-      <label class="control-label requiredField" for="select2">
+      <label class="control-label requiredField" for="shapeselection">
        Table Shape
        <span class="asteriskField">
         *
        </span>
       </label>
-      <select class="select form-control" id="select2" name="select2">
-       <option value="Square">
-        Square
-       </option>
-       <option value="Rectangular">
-        Rectangular
-       </option>
-       <option value="Circular">
-        Circular
-       </option>
+      <select class="select form-control" id="shapeselection" name="select2" onclick="loadTableShapes();">
+        <option value="shape">Select</option>
       </select>
      </div>
  	<div class="form-group ">
@@ -119,41 +103,49 @@
         *
        </span>
       </label>
-      <select class="select form-control" id="status" name="status">
-       <option value="Open">
-        Open
-       </option>
-       <option value="Closed">
-        Closed
-       </option>
+      <select class="select form-control" id="status" name="status" onclick="loadStatus();">
+        <option value="status">Select</option>
       </select>
      </div>
     <h4>Customer Information</h4>
-     <div class="form-group">
+     <div class="form-group custSelectOption">
       <label class="control-label requiredField" for = "customerselection">
       Customer Name
       <span class ="asteriskField">*</span>
       </label>
-      <select class=" select form-control" id="customerselection" name ="customerselection">
-      	<option value="custNames"> Names to Be Added</option>
+      <select class=" select form-control" id="customerselection" name ="customerselection"
+      	onclick="loadCustomers();">
+               <option value="customer">Select</option>
       </select>
      </div>
      <h4>Office Information</h4>
-     <div class="form-group ">
-      <label class="control-label requiredField" for="select3">
+     <div class="form-group epSelectOption">
+      <label class="control-label requiredField" for="eventPlannerSelection">
        Event Planner
        <span class="asteriskField">
         *
        </span>
       </label>
-      <select class="select form-control" id="select3" name="select3">
-       <option value="Name to Be Added">
-        Name to Be Added
-       </option>
+      <select class="select form-control" id="eventPlannerSelection" name="eventPlannerSelection" 
+       onclick="loadEventPlanners();">
+               <option value="eventPlanner">Select</option>
       </select>
      </div>
      </div>
     </form>
+    </div>
+     <div class="row">
+    	<div class="col-md-12">
+    	<div class="form-group ">
+      <label class="control-label requiredField" for="eventMenu">
+       Event Menu
+       <span class="asteriskField">
+        *
+       </span>
+      </label>
+      <input class="form-control" id="eventMenu" name="eventMenu" type="text"/>
+     </div>
+    	</div>
     </div>
     </div>
     <div class="pageFooter">
@@ -162,7 +154,7 @@
     <div class="col-md-3">
     <div class="form-group">
       <div>
-       <button class="btn btn-primary " name="submit" type="submit">
+       <button id="importbtn" class="btn btn-primary " name="submit" type="submit">
         Save and Import Guests
        </button>
       </div>
@@ -170,7 +162,7 @@
    </div>
    <div class="col-md-3"><div class="form-group">
       <div>
-       <button class="btn btn-primary " name="submit" type="submit">
+       <button id="viewguestsbtn" class="btn btn-primary " name="submit" type="submit">
         View Guests
        </button>
       </div>
@@ -178,24 +170,25 @@
     </div>
   <div class="col-md-3"><div class="form-group">
       <div>
-       <button class="btn btn-primary " name="submit" type="submit">
+       <button id="generateassignmentsbtn" class="btn btn-primary " name="submit" type="submit">
         Generate Seating Assignments
        </button>
       </div>
      </div></div>
    <div class="col-md-3"><div class="form-group">
       <div>
-       <button class="btn btn-primary " name="submit" type="submit">
+       <button id="viewassignmentsbtn" class="btn btn-primary " name="submit" type="submit">
         View Seating Assignments
        </button>
       </div>
      </div>
    </div>
     </div>
+   
     <div class=row>
     <div class="col-md-3"><div class="form-group">
       <div>
-       <button class="btn btn-primary " name="submit" type="submit">
+       <button id="seatingreportsa_zbtn" class="btn btn-primary " name="submit" type="submit">
         Generate Seating Reports Alphabetically
        </button>
       </div>
@@ -203,7 +196,7 @@
    </div>
    <div class="col-md-3"><div class="form-group">
       <div>
-       <button class="btn btn-primary " name="submit" type="submit">
+       <button id = "reportsbytablebtn" class="btn btn-primary " name="submit" type="submit">
         Generate Seating Reports By Table
        </button>
       </div>
@@ -211,21 +204,21 @@
      </div>
    <div class="col-md-3"><div class="form-group">
       <div>
-       <button class="btn btn-primary " name="submit" type="submit">
+       <button id = "generatemarkersbtn"class="btn btn-primary " name="submit" type="submit">
         Generate Table Markers
        </button>
       </div>
      </div></div>
-        <div class="col-md-1"><div class="form-group">
+     	<div class="col-md-1"><div class="form-group" id="savebtn">
       <div>
-       <button class="btn btn-primary " name="submit" type="submit">
+       <button class="btn btn-primary " name="submit" type="submit" onclick="save();">
         Save
        </button>
       </div>
      </div></div>
         <div class="col-md-1"><div class="form-group">
       <div>
-       <button class="btn btn-primary" name="submit" type="submit">
+       <button id="cancelbtn" class="btn btn-primary" name="submit" type="submit">
         Cancel
        </button>
       </div>
@@ -241,17 +234,173 @@
 
 <!-- Include Date Range Picker -->
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+
 <script>
+	function loadTableSizes(){
+		if ($('#sizeselection').find("option").size() == 1) { 
+			 $('#sizeselection').empty().append('<option>select</option>');  
+			 $("#sizeselection").empty().append("<option>"+4+"</option>");
+			 $("#sizeselection").append("<option>"+6+"</option>");
+			 $("#sizeselection").append("<option>"+8+"</option>");
+		}
+	}
+	function loadTableShapes(){
+		if ($('#shapeselection').find("option").size() == 1) { 
+			 $('#shapeselection').empty().append('<option>select</option>');
+			 $("#shapeselection").empty().append("<option>"+'Rectangular'+"</option>");
+			 $("#shapeselection").append("<option>"+'Circular'+"</option>");
+			 $("#shapeselection").append("<option>"+'Square'+"</option>");
+		}
+	}
+	function loadStatus(){
+		if ($('#status').find("option").size() == 1) { 
+			 $('#status').empty().append('<option>select</option>'); 
+			 $("#status").empty().append("<option>"+'Open'+"</option>");
+			 $("#status").append("<option>"+'Closed'+"</option>");
+		}
+	}
+	function loadEventPlanners()
+	{           
+		if ($('#eventPlannerSelection').find("option").size() == 1) {  //Check condition here
+		    $('#eventPlannerSelection').empty().append('<option>select</option>');        
+		    $.ajax({
+		            url: '/eventplannerJava/eventplanner/userservice/users',
+		            dataType: 'json',
+		            type: 'GET',
+		            success: function(response) {
+		              var eventPlanners = response;
+		              if (eventPlanners != null)
+		              {
+		            	$("#eventPlannerSelection").empty();
+		                for (i in eventPlanners) {
+		                 $("#eventPlannerSelection").append("<option>"+eventPlanners[i].name+"</option>");
+		               }
+		              }
+		            },
+		            error: function(x, e) {
+		
+		            }
+		        });
+		}
+	}
+	
+	function loadCustomers()
+	{           
+		if ($('#customerselection').find("option").size() == 1) {  //Check condition here
+		    $('#customerselection').empty().append('<option>select</option>');        
+		    $.ajax({
+		            url: '/eventplannerJava/eventplanner/customerservice/customers',
+		            dataType: 'json',
+		            type: 'GET',
+		            success: function(response) {
+		              var customers = response;
+		              if (customers != null)
+		              {
+		            	$("#customerselection").empty();
+		                for (i in customers) {
+		                 $("#customerselection").append("<option>"+customers[i].name+"</option>");
+		               }
+		              }
+		            },
+		            error: function(x, e) {
+		
+		            }
+		        });
+		}
+	}
+	
+	$.urlParam = function(name){
+	    var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+	    if (results==null){
+	       return null;
+	    }
+	    else{
+	       return results[1] || 0;
+	    }
+	}
+	
     $(document).ready(function(){
-        var date_input=$('input[name="date"]'); //our date input has the name "date"
+    	var date_input=$('input[name="date"]'); //our date input has the name "date"
         var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
         date_input.datepicker({
             format: 'mm/dd/yyyy',
             container: container,
             todayHighlight: true,
             autoclose: true,
-        })
-    })
+        });
+        
+    	//Populate the form with the data for the selected event
+        $.getJSON("/eventplannerJava/eventplanner/eventservice/events/"+$.urlParam("id"))
+    	.done(function(response){
+    		$('#eventName').val(response.name);
+    		$('#eventPlannerSelection').empty().append('<option>'+response.assignedUser.name+'</option>');  
+    		$('#customerselection').empty().append('<option>'+response.customer.name+'</option>');  
+    		$('#date').val(response.date);
+    		$('#status').empty().append('<option>'+response.eventStatus+'</option>');  
+    		$('#venueloc').val(response.location);
+    		$('#eventMenu').val(response.menu);
+    		$('#emptySeats').val(response.percentSeatsEmpty);
+    		
+    		//I must add to this table size and shape, 
+    	})
+    	.fail(function(jqXHR, textStatus, errorThrown) {
+	    console.log("error " + textStatus);
+	    console.log("incoming Text " + jqXHR.responseText);
+	    });
+    });
+    function save (){
+		//e.preventDefault;
+		var eventName = $('#eventName').val();
+    	var selectedEventPlanner = $('#eventPlannerSelection').val();  
+    	var selectedCustomer= $('#customerselection').val();  
+    	var eventDate= $('#date').val();
+    	var eventStatus= $('#status').val();
+    	var eventLocation= $('#venueloc').val();
+    	var eventMenu= $('#eventMenu').val();
+    	var emptySeats= $('#emptySeats').val();
+
+		$.ajax( { 
+			/*url:"/eventplannerJava/eventplanner/eventservice/events/"+$.urlParam("id"),
+			type: "PUT",
+			dataType: "json",
+			contentType: "application/json",
+			data: '{'+
+				'"name" : "'+eventName+'",'+
+				'"date" :"'+ eventDate+'",'+
+			//	'"status" : "'+eventStatus+'",'+
+			//	'"location" : "'+eventLocation+'",'+
+				'"menu" : "'+eventMenu+'",'+
+				'"percentSeatsEmpty" : "'+emptySeats+'",'+
+			//	'"assignedUser":{"name": "'+selectedEventPlanner+'"},'+
+			//	'"customer":{"email": "'+selectedCustomer+'"},'+
+			"}",*/
+			statusCode: {
+				200: function(response) {
+	
+					  $("#page-message").html("Record Updated");
+					  window.location.assign("eventsList.html");
+			  	},
+			  	406: function(response) {
+			  		var errors = response.responseJSON;
+			  		$(".error").html("*");
+			  		$.each(errors, function (i, message) {
+			  			$("#"+message.attributeName+"Err").html(message.message);
+			  			console.log("Error "+message.attributeName +" "+message.message)
+	    	        		});
+			  		$("#page-message").html("Fix errors and click Save");
+			  	},
+			  	
+				404 : function(jqXHR, textStatus, errorThrown) {
+					$("#page-message").html("Error:"+textStatus);
+					consule.log(errorThrown);
+		  	        console.log("error " + textStatus);
+		  	        console.log("incoming Text " + jqXHR.responseText);
+		  	      }
+				}
+			});
+
+		//e.preventDefault();
+}
 </script>
 </body>
 </html>
