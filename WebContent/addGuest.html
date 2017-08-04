@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Add Guest</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="style.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <!--link rel="stylesheet" href="bootstrap.css"-->
+        <!--Font Awesome (added because you use icons in your prepend/append)-->
+        <link rel="stylesheet" href="https://formden.com/static/cdn/font-awesome/4.4.0/css/font-awesome.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+       
+    </head>
+<body class="pageBody">
+    <nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <ul class="nav navbar-nav">
+      <li><a href="eventList.html">Events</a></li>
+      <li><a href="customerList.html">Customer</a></li>
+      <li><a href="userList.html">User</a></li>
+      <li><a href="#">Logout</a></li>
+    </ul>
+  </div>
+</nav> 
+    <div class="row">
+    <div class="text-center">
+     <h1>Add Guest</h1>
+    </div>
+    </div>
+   <div class="container">
+   <div class="row-1 col-md-4">
+ <form>
+  <div class="form-group text-left">
+    <label for="InputName">Gust Name</label>
+    <input type="text" class="form-control" placeholder="Name">
+  </div>
+  <div class="form-group">
+    <label for="exampleInputPassword1">Note</label>
+    <input type="text" class="form-control">
+  </div>
+  <div class="form-group">
+    <label for="gustSelect">Guests Invited</label>
+    <select class="form-control" id="gustSelect">
+      <option>Faunie Renyard</option>
+      <option>Haley Renyard</option>
+      <option>Name 3</option>
+      <option>Name 4</option>
+      <option>Name 5</option>
+    </select>
+     </div>
+       </form>
+     </div>
+    </div>
+    <div class="buttonShould">
+      <button type="button" class="btn btn-primary">Should Sit With</button>
+       <br><br>
+      <button type="button" class="btn btn-primary">Should Avoid</button>
+     </div>
+    <div class="groupList">
+     <div class="container">
+      <div class="row-2 col-sm-3">
+        <h2>Should Sit With</h2>
+            <div class="list-group">
+                <a href="#" class="list-group-item list-group-item-action">Faunie Reyard</a>
+                <a href="#" class="list-group-item list-group-item-action"><!--Name--></a>
+                <a href="#" class="list-group-item list-group-item-action"><!--Name--></a>
+                <a href="#" class="list-group-item list-group-item-action"><!--Name--></a>
+                <br>
+                <button type="button" class="btn-remove btn btn-primary">Remove</button>
+            </div>
+          <div class="groupList-shouldAvoid">
+          <h2>Should Avoid</h2>
+            <div class="list-group">
+                <a href="#" class="list-group-item list-group-item-action"><!--Name--></a>
+                <a href="#" class="list-group-item list-group-item-action"><!--Name--></a>
+                <a href="#" class="list-group-item list-group-item-action"><!--Name--></a>
+                <a href="#" class="list-group-item list-group-item-action"><!--Name--></a>
+                <a href="#" class="list-group-item list-group-item-action"><!--Name--></a>
+                <br>
+                <button type="button" class="btn-remove-2 btn btn-primary">Remove</button>
+            </div>
+         </div>
+     </div>  
+    </div>
+    </div>
+    <div class="button">
+        <button type="submit" class="btn btn-primary">Generate Table Marker</button>
+        <button type="submit" class="btn btn-primary">Add</button>
+        <button type="button" class="btn btn-primary">Cancel</button>
+    </div>
+    </body>
+</html>
+
+       
+           
+ 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+   
