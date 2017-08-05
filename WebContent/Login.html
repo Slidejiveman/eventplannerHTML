@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Login</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <!--Font Awesome (added because you use icons in your prepend/append)-->
+	<link rel="stylesheet" href="https://formden.com/static/cdn/font-awesome/4.4.0/css/font-awesome.min.css" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body class="pageBody">
+
+<div class="container">
+<div class=row>
+<ul class="nav nav-pills" >
+  <li role="presentation"><a href="eventsList.html">Events</a></li>
+  <li role="presentation"><a href="customerList.html">Customers</a></li>
+  <li role="presentation"><a href="userList.html">Users</a></li>
+  <li class="logouttab pull-right" role="presentation"><a href="Logout.html">Logout</a></li>
+</ul>
+</div>
+<div class="formrow">
+  <h3>Login</h3> 
+  <div class="row">
+  	  <form method="post">
+    <div class="col-sm-6"> 
+     <div class="form-group ">
+      <label class="control-label requiredField" for="username">
+       Username
+       <span class="asteriskField">
+        *
+       </span>
+      </label>
+      <input class="form-control" id="username" name="username" type="text"/>
+     </div>
+       <div class="form-group ">
+      <label class="control-label requiredField" for="password">
+       Password
+       <span class="asteriskField">
+        *
+       </span>
+      </label>
+      <div class="input-group">
+       <input class="form-control" id="password" name="customerEmail" type="password"/>
+      </div>
+     </div>
+     
+    
+    </form>
+    </div>
+    </div>
+    <div class="pageFooter">
+    <br><br>
+    <div class ="row">
+        <div class="col-md-1"><div class="form-group">
+      <div>
+       <button class="btn btn-primary " name="submit" type="submit">
+        Login
+       </button>
+      </div>
+     </div></div>
+    </div>
+    <br>
+    </div>
+</div> 
+<br><br><br><br><br>
+<!-- Extra JavaScript/CSS added manually in "Settings" tab -->
+<!-- Include jQuery -->
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script>
+    
+</script>
+</body>
+</html>
