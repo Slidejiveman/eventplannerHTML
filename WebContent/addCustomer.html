@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Add Customer</title>
+  <title>Customer Form</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" type="text/css" href="style.css">
@@ -13,7 +13,6 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body class="pageBody">
-
 <div class="container">
 <div class=row>
 <ul class="nav nav-pills" >
@@ -23,83 +22,58 @@
   <li class="logouttab pull-right" role="presentation"><a href="#">Logout</a></li>
 </ul>
 </div>
-<div class="formrow">
-  <h3>Add Customer</h3> 
-   <h4>Customer Information</h4>
-  <div class="row">
-  	  <form method="post">
-    <div class="col-sm-6"> 
-     <div class="form-group ">
-      <label class="control-label requiredField" for="customerName">
+<h3>Customer Form</h3> 
+ <form>
+  <div class="form-group row">
+	<div class="col-xs-8">
+    <label class="control-label requiredField" for="customerName">
        Customer Name
        <span class="asteriskField">
         *
        </span>
       </label>
-      <input class="form-control" id="customerName" name="customerName" type="text"/>
-     </div>
-       <div class="form-group ">
-      <label class="control-label requiredField" for="customerEmail">
+    <input type="text" class="form-control" id="customerName">
+	</div>
+  </div>
+  <div class="form-group row">
+	<div class ="col-xs-8">
+     <label class="control-label requiredField" for="customerEmail">
        Email
        <span class="asteriskField">
         *
        </span>
       </label>
-      <div class="input-group">
-       <input class="form-control" id="customerEmail" name="customerEmail" placeholder="customer@website.com" type="text"/>
-      </div>
-     </div>
-     <div class="form-group ">
-      <label class="control-label requiredField" for="customerPhone">
-       Phone Number
+    <input type="password" class="form-control" id="pwd">
+	</div>
+  </div>
+  <div class="form-group row">
+	<div class ="col-xs-8">
+     <label class="control-label requiredField" for="phone">
+       Phone
        <span class="asteriskField">
         *
        </span>
       </label>
-      <input class="form-control" id="customerPhone" name="customerPhone" type="text"/>
-     </div>
-     <div class="form-group ">
-      <label class="control-label requiredField" for="customerID">
-       ID Number
-       <span class="asteriskField">
-        *
-       </span>
-      </label>
-      <input class="form-control" id="customerID" name="customerID" type="text"/>
-     </div>
-    </div>
-    
-    </form>
-    </div>
-    </div>
-    <div class="pageFooter">
-    <br><br>
-    <div class ="row">
-        <div class="col-md-1"><div class="form-group">
-      <div>
-       <button class="btn btn-primary " name="submit" type="submit">
+    <input type="text" class="form-control" id="phone">
+	</div>
+  </div>
+  <div class="row">
+  	<div class="col-xs-1"><div class="form-group">
+      <div >
+       <button id="save" class="btn btn-primary " name="submit" type="submit" onclick="save();">
         Save
        </button>
       </div>
      </div></div>
-        <div class="col-md-1"><div class="form-group">
+     <div class="col-xs-1"><div class="form-group">
       <div>
        <button class="btn btn-primary" name="submit" type="submit">
         Cancel
        </button>
       </div>
      </div></div>
-    </div>
-    <br>
-    </div>
-</div> 
-<br><br><br><br><br>
-<!-- Extra JavaScript/CSS added manually in "Settings" tab -->
-<!-- Include jQuery -->
-<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
-
-<script>
-    
-</script>
+  </div>
+</form> 
+</div>
 </body>
 </html>
