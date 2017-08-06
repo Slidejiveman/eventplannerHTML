@@ -5,28 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" type="text/css" href="style.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="http://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css">
   <!--Font Awesome (added because you use icons in your prepend/append)-->
 	<link rel="stylesheet" href="https://formden.com/static/cdn/font-awesome/4.4.0/css/font-awesome.min.css" />
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script type="text/javascript" src="http://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script>
 
-	var start = 0;
-	var page = 5;
-	createTable(start);
-
-	function getPrevious()
-	{
-		start = start-page;
-		if (start <1)  start = 0;
-		createTable(start);
-	}
 	
-	function getNext()
-	{
-		if ($("#customer-list-table") && $("#customer-list-table").prop('rows').length-1 == page) start=start+page;
-		createTable(start);
-	}
+	createTable();
 
     function selectChange() 
     {
@@ -41,24 +29,25 @@
 	  return jQuery( 'input[name=selectedRow]:checked' ).val()
 	}
     
-    function createTable(start) {
-    	$.getJSON( "/eventplannerJava/eventplanner/customerservice/customers",{ page:start, per_page:page } )
+    function createTable() {
+    	$.getJSON( "/eventplannerJava/eventplanner/customerservice/customers" )
     	  .done(function( response ) {
-    		  var tableHTML = '<tr><th></th><th width= 50px>ID</th><th width= 100px>User Name</th></tr>';
-    	        $.each(response, function (i, user) {
-    	            tableHTML += '<tr><td><input type="radio" onchange= "selectChange()" name="selectedRow" value='+user.userNumber+'><td>' + user.getUserName() + '</td></tr>';
+    		  var tableHTML = '<thead><tr><th></th><th>ID</th><th>Customer Name</th></tr></thead><tbody>';
+    	        $.each(response, function (i, customer) {
+    	            tableHTML += '<tr><td><input type="radio" onchange= "selectChange()" name="selectedRow" value='+customer.id+'><td>'+customer.id+'</td><td>' + customer.name + '</td></tr>';
     	        });
-    	        tableHTML+='</table>';
+    	        tableHTML+='</tbody>';
     	       $('#customer-list-table').html(tableHTML);})
   	  .fail(function(jqXHR, textStatus, errorThrown) {
   	        console.log("error " + textStatus);
   	        console.log("incoming Text " + jqXHR.responseText);});
       }
-	$(document).ready(function() {
-    		$("#previous").click(function() {getPrevious()});
-    		$("#next").click(function() {getNext()});
-    })
   
+</script>
+<script>
+	$(document).ready(function(){
+		$('#customer-list-table').dataTable();
+	});
 </script>
 </head>
 <body class="pageBody"> 
@@ -72,17 +61,10 @@
 </ul>
 </div>
 <h2>Customer List</h2>
-<div class = "block-center">
-<div id="user-table">
-<table class='center' id='customer-list-table' >
+<div class="table-responsive">
+<table class='table table-striped' id='customer-list-table'>
 </table>
 </div>
-<br><br>
-<button id="previous" class='btn btn-primary inline' >Previous</button>
-<button id = "next" class='btn btn-primary inline' >Next</button>
-<br><br>
-
-<br><br>
 <p id="selectedID"></p>
 <form class='inline' action="updateCustomer.html" method="get">
 	<input id="updateID" type="hidden" name="id" value="">
@@ -109,9 +91,8 @@
   </script>
 </form>
 </div>
-</div>
 <script type="text/javascript">
-$(document).ready(fumction () {
+/*$(document).ready(function () {
     $("#deletebtn").click(function (e){
     	console.log("delete function");
     	$('#deleteMessage').html("Deleting record ... Wait");
@@ -132,7 +113,7 @@ $(document).ready(fumction () {
       	 });
     	console.log("end of delete");
     });})	
-
+*/
 </script>
 </body>
 </html>
