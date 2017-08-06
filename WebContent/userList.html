@@ -33,7 +33,7 @@
     function createTable() {
     	$.getJSON( "/eventplannerJava/eventplanner/userservice/users")
     	  .done(function( response ) {
-    		  var tableHTML = '<thead><tr><th></th><th>ID</th><th>User Name</th><th></thead><tbody>';
+    		  var tableHTML = '<thead><tr><th></th><th>ID</th><th>User Name</th></tr></thead><tbody>';
     	        $.each(response, function (i, user) {
     	            tableHTML += '<tr><td><input type="radio" onchange= "selectChange()" name="selectedRow" value='+user.id+'><td>'+ user.id+ '</td><td>' + user.name + '</td></tr>';
     	        });
