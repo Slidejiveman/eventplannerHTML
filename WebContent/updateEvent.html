@@ -364,16 +364,20 @@
 			type: "PUT",
 			dataType: "json",
 			contentType: "application/json",
-			data: '{'+
-				'"name" : "'+eventName+'",'+
-				'"date" :"'+ eventDate+'",'+
-				'"status" : "'+eventStatus+'",'+
-				'"location" : "'+eventLocation+'",'+
-				'"menu" : "'+eventMenu+'",'+
-				'"percentSeatsEmpty" : "'+emptySeats+'",'+
-			//	'"assignedUser":{"name": "'+selectedEventPlanner+'"},'+
-			//	'"customer":{"email": "'+selectedCustomer+'"},'+
-			"}",
+			data: {
+				'name': eventName,
+				'date': eventDate,
+				'status' : eventStatus,
+				'location' : eventLocation,
+				'menu' : eventMenu,
+				'percentSeatsEmpty' : emptySeats,
+				assignedUser:{
+					'name':selectedEventPlanner,
+				},
+				customer:{
+					'name':selectedCustomer
+				}
+			},
 			statusCode: {
 				200: function(response) {
 	
