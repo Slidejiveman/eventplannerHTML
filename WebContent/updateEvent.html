@@ -218,7 +218,7 @@
      </div></div>
         <div class="col-md-1"><div class="form-group">
       <div>
-       <button id="cancelbtn" class="btn btn-primary" name="submit" type="submit">
+       <button id="cancelbtn" class="btn btn-primary" name="submit" type="submit" onclick="cancel();">
         Cancel
        </button>
       </div>
@@ -360,20 +360,20 @@
     	var emptySeats= $('#emptySeats').val();
 
 		$.ajax( { 
-			/*url:"/eventplannerJava/eventplanner/eventservice/events/"+$.urlParam("id"),
+			url:"/eventplannerJava/eventplanner/eventservice/events/"+$.urlParam("id"),
 			type: "PUT",
 			dataType: "json",
 			contentType: "application/json",
 			data: '{'+
 				'"name" : "'+eventName+'",'+
 				'"date" :"'+ eventDate+'",'+
-			//	'"status" : "'+eventStatus+'",'+
-			//	'"location" : "'+eventLocation+'",'+
+				'"status" : "'+eventStatus+'",'+
+				'"location" : "'+eventLocation+'",'+
 				'"menu" : "'+eventMenu+'",'+
 				'"percentSeatsEmpty" : "'+emptySeats+'",'+
 			//	'"assignedUser":{"name": "'+selectedEventPlanner+'"},'+
 			//	'"customer":{"email": "'+selectedCustomer+'"},'+
-			"}",*/
+			"}",
 			statusCode: {
 				200: function(response) {
 	
@@ -400,7 +400,10 @@
 			});
 
 		//e.preventDefault();
-}
+	}
+    function cancel(){
+    	 window.location.assign("eventsList.html");
+    }
 </script>
 </body>
 </html>

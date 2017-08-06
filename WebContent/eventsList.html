@@ -46,9 +46,44 @@
 </script>
 
 <script>
+var agree;
 $(document).ready(function(){
     $('#event-list-table').dataTable();
 });
+function confirmDeletion(){
+	$.getJSON( "/eventplannerJava/eventplanner/eventservice/events/"+$("#deleteID").val())
+	.done(function( response ) {
+		console.log(response);
+	    agree = confirm("Do you want to delete event: "+response.name+"?");
+	     if(agree){
+	    	//alert("Delete "+$("#deleteID").val());
+	 		//alert("You confirmed the deletion");
+	 		$('#deletebtn').attr("disabled", true);
+	 		$.ajax({ 
+	 			url:"/eventplannerJava/eventplanner/eventservice/events/"+$("#deleteID").val(),
+	 			type: "DELETE",
+	 		    success: (function(data) {
+	 			  console.log("Delete success ");
+	 			  window.location.assign("eventsList.html");
+	 			  console.log("Delete after change href");
+	 		  }),
+	 		  fail: (function(jqXHR, textStatus, errorThrown) {
+	 	 	      console.log("Delete error " + textStatus);
+	 	 	      console.log("incoming Text " + jqXHR.responseText);
+	 		  })
+
+	 	  	 });
+	 		console.log("end of delete")
+	 	}else{
+	 		//alert("You canceled the deletion");
+			  window.location.assign("eventsList.html");
+	 	}
+		})
+	.fail(function(jqXHR, textStatus, errorThrown) {
+	    console.log("error " + textStatus);
+	    console.log("incoming Text " + jqXHR.responseText);
+	    });
+}
 </script>
 </head>
 <body class="pageBody"> 
@@ -77,20 +112,10 @@ $(document).ready(function(){
 <form class='inline' action="addEvent.html" method ="get">
      <button class="full btn btn-primary" type = "submit">Add</button>
 </form>
-<form class='inline'>
+<form class='inline' method="get">
 	<input id="deleteID" type="hidden" name="id" value="">
-         <button class="full btn btn-primary" type = "submit" onclick="confirmDelete();" value="Delete">Delete</button>
+         <button class="full btn btn-primary" onclick ="confirmDeletion();" type = "submit" value="Delete">Delete</button>
 </form>
-<script>
-	function confirmDelete(){
-		var agree = confirm("Really doing this?");
-		if(agree){
-			
-		}else{
-			
-		}
-	}
-</script>
 </div>
 </div>
 </div>

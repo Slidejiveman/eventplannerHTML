@@ -11,6 +11,124 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script>
+  function loadEventPlanners()
+	{           
+		if ($('#eventPlannerSelection').find("option").size() == 1) {  //Check condition here
+		    $('#eventPlannerSelection').empty().append('<option>select</option>');        
+		    $.ajax({
+		            url: '/eventplannerJava/eventplanner/userservice/users',
+		            dataType: 'json',
+		            type: 'GET',
+		            success: function(response) {
+		              var eventPlanners = response;
+		              if (eventPlanners != null)
+		              {
+		            	$("#eventPlannerSelection").empty();
+		                for (i in eventPlanners) {
+		                 $("#eventPlannerSelection").append("<option>"+eventPlanners[i].name+"</option>");
+		               }
+		              }
+		            },
+		            error: function(x, e) {
+		
+		            }
+		        });
+		}
+	}
+	
+	function loadCustomers()
+	{           
+		if ($('#customerselection').find("option").size() == 1) {  //Check condition here
+		    $('#customerselection').empty().append('<option>select</option>');        
+		    $.ajax({
+		            url: '/eventplannerJava/eventplanner/customerservice/customers',
+		            dataType: 'json',
+		            type: 'GET',
+		            success: function(response) {
+		              var customers = response;
+		              if (customers != null)
+		              {
+		            	$("#customerselection").empty();
+		                for (i in customers) {
+		                 $("#customerselection").append("<option>"+customers[i].name+"</option>");
+		               }
+		              }
+		            },
+		            error: function(x, e) {
+		
+		            }
+		        });
+		}
+	}
+    $(document).ready(function(){
+        var date_input=$('input[name="date"]'); //our date input has the name "date"
+        var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+        date_input.datepicker({
+            format: 'mm/dd/yyyy',
+            container: container,
+            todayHighlight: true,
+            autoclose: true,
+        })
+        $("#save").click(function() {
+        	//e.preventDefault();
+        	var eventName = $('#eventName').val();
+    		var selectedEventPlanner = $('#eventPlannerSelection').val();  
+    		var selectedCustomer= $('#customerselection').val();  
+    		var eventDate= $('#date').val();
+    		var eventStatus= $('#status').val();
+    		var eventLocation= $('#venueloc').val();
+    		var eventMenu= $('#eventMenu').val();
+    		var emptySeats= $('#emptySeats').val();
+    	
+    		$.ajax( { 
+    			url:"/eventplannerJava/eventplanner/eventservice/events/",
+    			type: "POST",
+    			dataType: "json",
+    			contentType: "application/json",
+    			data: '{'+
+    				'"name" : "'+eventName+'",'+
+    				'"date" :"'+ eventDate+'",'+
+    				'"status" : "'+eventStatus+'",'+
+    				'"location" : "'+eventLocation+'",'+
+    				'"menu" : "'+eventMenu+'",'+
+    				'"percentSeatsEmpty" : "'+emptySeats+'",'+
+    			//	'"assignedUser":{"name": "'+selectedEventPlanner+'"},'+
+    			//	'"customer":{"email": "'+selectedCustomer+'"},'+
+    			"}",
+    			statusCode: {
+    				200: function(response) {
+    	
+    					  $("#page-message").html("Record Updated");
+    					  window.location.assign("eventsList.html");
+    			  	},
+    			  	406: function(response) {
+    			  		var errors = response.responseJSON;
+    			  		$(".error").html("*");
+    			  		$.each(errors, function (i, message) {
+    			  			$("#"+message.attributeName+"Err").html(message.message);
+    			  			console.log("Error "+message.attributeName +" "+message.message)
+    	    	        		});
+    			  		$("#page-message").html("Fix errors and click Save");
+    			  	},
+    			  	
+    				404 : function(jqXHR, textStatus, errorThrown) {
+    					$("#page-message").html("Error:"+textStatus);
+    					consule.log(errorThrown);
+    		  	        console.log("error " + textStatus);
+    		  	        console.log("incoming Text " + jqXHR.responseText);
+    		  	      }
+    				}
+    			});
+    	
+    		//e.preventDefault();
+        	
+        });
+        $("#cancel").click(function(){
+        	window.location.assign("eventsList.html");
+        })
+    })
+</script>
 </head>
 <body class="pageBody">
 
@@ -134,22 +252,20 @@
       Customer Name
       <span class ="asteriskField">*</span>
       </label>
-      <select class=" select form-control" id="customerselection" name ="customerselection">
-      	<option value="custNames"> Names to Be Added</option>
+      <select class=" select form-control" id="customerselection" name ="customerselection" onclick="loadCustomers();">
+      	 <option value="customerselection">Select</option>
       </select>
      </div>
      <h4>Office Information</h4>
      <div class="form-group ">
-      <label class="control-label requiredField" for="select3">
+      <label class="control-label requiredField" for="eventPlannerSelection">
        Event Planner
        <span class="asteriskField">
         *
        </span>
       </label>
-      <select class="select form-control" id="select3" name="select3">
-       <option value="Name to Be Added">
-        Name to Be Added
-       </option>
+      <select class="select form-control" id="eventPlannerSelection" name="eventPlannerSelection" onclick="loadEventPlanners();">
+      <option value="eventPlannerSelection">Select</option>
       </select>
      </div>
      </div>
@@ -218,14 +334,14 @@
      </div></div>
         <div class="col-md-1"><div class="form-group">
       <div >
-       <button id="save" class="btn btn-primary " name="submit" type="submit" onclick="save();">
+       <button id="save" class="btn btn-primary " name="submit" type="submit">
         Save
        </button>
       </div>
      </div></div>
         <div class="col-md-1"><div class="form-group">
       <div>
-       <button class="btn btn-primary" name="submit" type="submit">
+       <button id="cancel" class="btn btn-primary" name="submit" type="submit">
         Cancel
        </button>
       </div>
@@ -241,70 +357,5 @@
 
 <!-- Include Date Range Picker -->
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
-<script>
-function save (){
-	//e.preventDefault;
-	var eventName = $('#eventName').val();
-	var selectedEventPlanner = $('#eventPlannerSelection').val();  
-	var selectedCustomer= $('#customerselection').val();  
-	var eventDate= $('#date').val();
-	var eventStatus= $('#status').val();
-	var eventLocation= $('#venueloc').val();
-	var eventMenu= $('#eventMenu').val();
-	var emptySeats= $('#emptySeats').val();
-
-	$.ajax( { 
-		/*url:"/eventplannerJava/eventplanner/eventservice/events/"+$.urlParam("id"),
-		type: "PUT",
-		dataType: "json",
-		contentType: "application/json",
-		data: '{'+
-			'"name" : "'+eventName+'",'+
-			'"date" :"'+ eventDate+'",'+
-		//	'"status" : "'+eventStatus+'",'+
-		//	'"location" : "'+eventLocation+'",'+
-			'"menu" : "'+eventMenu+'",'+
-			'"percentSeatsEmpty" : "'+emptySeats+'",'+
-		//	'"assignedUser":{"name": "'+selectedEventPlanner+'"},'+
-		//	'"customer":{"email": "'+selectedCustomer+'"},'+
-		"}",*/
-		statusCode: {
-			200: function(response) {
-
-				  $("#page-message").html("Record Updated");
-				  window.location.assign("eventsList.html");
-		  	},
-		  	406: function(response) {
-		  		var errors = response.responseJSON;
-		  		$(".error").html("*");
-		  		$.each(errors, function (i, message) {
-		  			$("#"+message.attributeName+"Err").html(message.message);
-		  			console.log("Error "+message.attributeName +" "+message.message)
-    	        		});
-		  		$("#page-message").html("Fix errors and click Save");
-		  	},
-		  	
-			404 : function(jqXHR, textStatus, errorThrown) {
-				$("#page-message").html("Error:"+textStatus);
-				consule.log(errorThrown);
-	  	        console.log("error " + textStatus);
-	  	        console.log("incoming Text " + jqXHR.responseText);
-	  	      }
-			}
-		});
-
-	//e.preventDefault();
-}
-    $(document).ready(function(){
-        var date_input=$('input[name="date"]'); //our date input has the name "date"
-        var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
-        date_input.datepicker({
-            format: 'mm/dd/yyyy',
-            container: container,
-            todayHighlight: true,
-            autoclose: true,
-        })
-    })
-</script>
 </body>
 </html>
