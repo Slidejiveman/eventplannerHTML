@@ -32,7 +32,7 @@
     	  .done(function( response ) {
     		  var tableHTML = '<thead><tr><th></th><th>ID</th><th>Customer Name</th></tr></thead><tbody>';
     	        $.each(response, function (i, customer) {
-    	            tableHTML += '<tr><td><input type="radio" onchange= "selectChange()" name="selectedRow" value='+customer.id+'><td>'+customer.id+'</td><td>' + customer.name + '</td></tr>';
+    	            tableHTML += '<tr><td><input type="radio" onchange= "selectChange()" name="selectedRow" value='+customer.id+'></td><td>'+customer.id+'</td><td>' + customer.name + '</td></tr>';
     	        });
     	        tableHTML+='</tbody>';
     	       $('#customer-list-table').html(tableHTML);})
