@@ -11,6 +11,60 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script>
+    $(document).ready(function(){
+        var date_input=$('input[name="date"]'); //our date input has the name "date"
+        var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+        $("#save").click(function() {
+        	//e.preventDefault();
+        	var customerName = $('#customerName').val();
+    		var customerEmail = $('#customerEmail').val();  
+    		var customerPhone= $('#phone').val();  
+    	
+    		$.ajax( { 
+    			url:"/eventplannerJava/eventplanner/customerservice/customers/",
+    			type: "POST",
+    			dataType: "json",
+    			contentType: "application/json",
+    			data: {
+    				'customer_name': customerName,
+    				'customer_email': eventDate,
+    				'customer_phone' : eventStatus,
+    			},
+    			statusCode: {
+    				200: function(response) {
+    	
+    					  $("#page-message").html("Record Updated");
+    					  window.location.assign("customerList.html");
+    			  	},
+    			  	406: function(response) {
+    			  		var errors = response.responseJSON;
+    			  		$(".error").html("*");
+    			  		$.each(errors, function (i, message) {
+    			  			$("#"+message.attributeName+"Err").html(message.message);
+    			  			console.log("Error "+message.attributeName +" "+message.message)
+    	    	        		});
+    			  		$("#page-message").html("Fix errors and click Save");
+    			  	},
+    			  	
+    				404 : function(jqXHR, textStatus, errorThrown) {
+    					$("#page-message").html("Error:"+textStatus);
+    					consule.log(errorThrown);
+    		  	        console.log("error " + textStatus);
+    		  	        console.log("incoming Text " + jqXHR.responseText);
+    		  	      }
+    				}
+    			});
+    	
+    		//e.preventDefault();
+        	
+        });
+        $("#cancel").click(function(){
+        	window.location.assign("customerList.html");
+        })
+    })
+</script>
+  
 </head>
 <body class="pageBody">
 <div class="container">
