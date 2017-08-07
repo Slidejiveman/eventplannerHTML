@@ -12,8 +12,6 @@
   <script type="text/javascript" src="http://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script>
-
-	
 	createTable();
 
     function selectChange() 
@@ -45,9 +43,44 @@
   
 </script>
 <script>
+	var agree;
 	$(document).ready(function(){
 		$('#customer-list-table').dataTable();
 	});
+	function confirmDeletion(){
+		$.getJSON( "/eventplannerJava/eventplanner/customerservice/customers/"+$("#deleteID").val())
+		.done(function( response ) {
+			console.log(response);
+		    agree = confirm("Do you want to delete event: "+response.name+"?");
+		     if(agree){
+		    	//alert("Delete "+$("#deleteID").val());
+		 		//alert("You confirmed the deletion");
+		 		$('#deletebtn').attr("disabled", true);
+		 		$.ajax({ 
+		 			url:"/eventplannerJava/eventplanner/customerservice/customers/"+$("#deleteID").val(),
+		 			type: "DELETE",
+		 		    success: (function(data) {
+		 			  console.log("Delete success ");
+		 			  window.location.assign("customerList.html");
+		 			  console.log("Delete after change href");
+		 		  }),
+		 		  fail: (function(jqXHR, textStatus, errorThrown) {
+		 	 	      console.log("Delete error " + textStatus);
+		 	 	      console.log("incoming Text " + jqXHR.responseText);
+		 		  })
+
+		 	  	 });
+		 		console.log("end of delete")
+		 	}else{
+		 		//alert("You canceled the deletion");
+				  window.location.assign("customerList.html");
+		 	}
+			})
+		.fail(function(jqXHR, textStatus, errorThrown) {
+		    console.log("error " + textStatus);
+		    console.log("incoming Text " + jqXHR.responseText);
+		    });
+	}
 </script>
 </head>
 <body class="pageBody"> 
@@ -66,6 +99,7 @@
 </table>
 </div>
 <p id="selectedID"></p>
+<div class="footer-buttons">
 <form class='inline' action="updateCustomer.html" method="get">
 	<input id="updateID" type="hidden" name="id" value="">
      <button class="btn btn-primary" type = "submit" name="submit" value="Update">Update</button>
@@ -77,43 +111,9 @@
 <form class='inline' action="customerList.html" method="get">
 	<input id="deleteID" type="hidden" name="id" value="">
          
-         <button class="btn btn-primary" type = "submit" onClick="confirmDelete();" value="Delete">Delete</button>
- 
-    <script type="text/javascript">
-    function confirmDelete(){
-        var agree=confirm("Are you sure you want to delete this customer?");
-            if (agree)
-                return true ;
-            else
-                return false ;
-        }
-  
-  </script>
+         <button class="btn btn-primary" type = "submit" onclick="confirmDeletion();" value="Delete">Delete</button>
 </form>
 </div>
-<script type="text/javascript">
-/*$(document).ready(function () {
-    $("#deletebtn").click(function (e){
-    	console.log("delete function");
-    	$('#deleteMessage').html("Deleting record ... Wait");
-    	$('#deletebtn').attr("disabled", true);
-    	$.ajax({ 
-    		url:"/eventplannerJava/eventplanner/customerservice/customers/"+$.urlParam("id"),
-    		type: "DELETE",
-    	    success: (function(data) {
-    		  console.log("Delete success ");
-    		  window.location.assign("customer-list.html");
-    		  console.log("Delete after change href");
-    	  }),
-    	  fail: (function(jqXHR, textStatus, errorThrown) {
-     	      console.log("Delete error " + textStatus);
-     	      console.log("incoming Text " + jqXHR.responseText);
-    	  })
-    	  
-      	 });
-    	console.log("end of delete");
-    });})	
-*/
-</script>
+</div>
 </body>
 </html>

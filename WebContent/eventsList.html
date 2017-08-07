@@ -31,7 +31,7 @@
     	  .done(function( response ) {
     		  var tableHTML = '<thead><tr><th></th><th>ID</th><th>Event Name</th><th>Event Planner</th><th>Event Date</th></tr></thead><tbody>';
     	        $.each(response, function (i, event) {
-    	            tableHTML += '<tr><td><input type="radio" onchange= "selectChange()" name="selectedRow" value='+event.id+'><td>' + event.id + '</td><td>' + event.name + '</td><td>' + event.assignedUser.name + '</td><td>' + event.date+ '</td></tr>';
+    	            tableHTML += '<tr><td><input type="radio" onchange= "selectChange()" name="selectedRow" value='+event.id+'></td><td>' + event.id + '</td><td>' + event.name + '</td><td>' + event.assignedUser.name + '</td><td>' + event.date+ '</td></tr>';
     	        });
     	       tableHTML+='</tbody>';
     	       $('#event-list-table').html(tableHTML);})
@@ -39,10 +39,6 @@
   	        console.log("error " + textStatus);
   	        console.log("incoming Text " + jqXHR.responseText);});
       }
-	$(document).ready(function() {
-    		$("#previous").click(function() {getPrevious()});
-    		$("#next").click(function() {getNext()});
-    })
 </script>
 
 <script>
