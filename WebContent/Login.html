@@ -66,11 +66,11 @@
 
 $(document).ready(function() {
 $("#loginForm").submit(function (e){
-		var userName = $('#username').val();
+		var username = $('#username').val();
 		var password = $('#password').val();
 
 		$.ajax( { 
-			url:"/eventplannerJava/eventplanner/userservices/login/", 
+			url:"/eventplannerJava/eventplanner/userservice/login/", 
 			type: "POST",
 			dataType: "json",
 			contentType: "application/json",
