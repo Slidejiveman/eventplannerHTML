@@ -1,13 +1,13 @@
 <!DOCTYPE HTML> 
 <html>
 <head>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+
 <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" type="text/css" href="style.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <!--Font Awesome (added because you use icons in your prepend/append)-->
-	<link rel="stylesheet" href="https://formden.com/static/cdn/font-awesome/4.4.0/css/font-awesome.min.css" />
+<link rel="stylesheet" href="http://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript" src="http://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script>
 
@@ -34,7 +34,7 @@
     	  .done(function( response ) {
     		  var tableHTML = '<thead><tr><th></th><th>ID</th><th>Guest Name</th></tr></thead><tbody>';
     	        $.each(response, function (i, guest) {
-    	            tableHTML += '<tr><td><input type="radio" onchange= "selectChange()" name="selectedRow" value='+guest.id+'><td>' + guest.id + '</td></tr>' +guest.name + '</td><td>';
+    	            tableHTML += '<tr><td><input type="radio" onchange= "selectChange()" name="selectedRow" value='+guest.id+'><td>' + guest.id + '</td><td>' +guest.name + '</td></tr>';
     	        });
     	        tableHTML+='</tbody>';
     	       $('#guest-list-table').html(tableHTML);})
@@ -89,7 +89,7 @@ $.getJSON( "/eventplannerJava/eventplanner/guestservice/guests/"+$("#deleteID").
 }
      
   
-  </script>
+
 </script>
 </head>
 <body class="pageBody"> 
@@ -107,8 +107,7 @@ $.getJSON( "/eventplannerJava/eventplanner/guestservice/guests/"+$("#deleteID").
 <div class = "table-responsive">
 
 <table class="table table-striped" id="guest-list-table" >
-</table>
-</div>
+</table></div>
 <br>
 
 <p id="selectedID"></p>
@@ -119,7 +118,7 @@ $.getJSON( "/eventplannerJava/eventplanner/guestservice/guests/"+$("#deleteID").
 </form>
 
 <form class='inline' action="addGuest.html" method ="get">
-     <button class="btn btn-primary" type = "submit">Add</button>
+     <button class="full btn btn-primary" type = "submit">Add</button>
 </form>
 <form class='inline' method="get">
 	<input id="deleteID" type="hidden" name="id" value="">
