@@ -70,12 +70,12 @@ $("#loginForm").submit(function (e){
 		var password = $('#password').val();
 
 		$.ajax( { 
-			url:"/SchoolRestJPASecure/system/systemservices/login/", //Change this
+			url:"/eventplannerJava/eventplanner/userservices/login/", 
 			type: "POST",
 			dataType: "json",
 			contentType: "application/json",
 			data: '{'+  
-				'"userName" : "'+userName+'",'+
+				'"username" : "'+username+'",'+
 				'"password" : "'+password+'"'+
 			"}",
 			statusCode: {
