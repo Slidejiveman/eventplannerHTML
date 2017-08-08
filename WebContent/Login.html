@@ -16,9 +16,14 @@
 <div class="container">
 <div class="formrow">
   <h3>Login</h3> 
+  <p><span class="error-head">* required field.</span></p>
+  <p><span id="page-message">Enter fields and click Save</span></p>
   <div class="row">
-  	  <form method="post">
+
     <div class="col-sm-4 col-md-offset-4"> 
+
+  	  <form id="login" method="post">
+    <div class="col-sm-4"> 
      <div class="form-group ">
       <label class="control-label requiredField" for="username">
        Username
@@ -44,10 +49,11 @@
     </div>
     </div>
     <div class="pageFooter footer-buttons">
+     <div class="pageFooter">
     <div class ="row">
         <div class="col-md-2 col-md-offset-4"><div class="form-group">
       <div>
-       <button class="btn btn-primary " name="submit" type="submit">
+       <button class="btn btn-primary " name="submit" type="submit" id="loginbtn">
         Login
        </button>
       </div>
@@ -55,6 +61,9 @@
     </div>
     <br>
     </div>
+    </div>
+    </div>
+    
 </div> 
 <br><br><br><br><br>
 <!-- Extra JavaScript/CSS added manually in "Settings" tab -->
@@ -65,12 +74,12 @@
 
 
 $(document).ready(function() {
-$("#loginForm").submit(function (e){
-		var userName = $('#username').val();
+$("#login").submit(function (e){
+		var username = $('#username').val();
 		var password = $('#password').val();
 
 		$.ajax( { 
-			url:"/eventplannerJava/eventplanner/userservices/login/", 
+			url:"/eventplannerJava/eventplanner/userservice/login/", 
 			type: "POST",
 			dataType: "json",
 			contentType: "application/json",
@@ -84,8 +93,9 @@ $("#loginForm").submit(function (e){
 				  $("#page-message").html("Logged in");
 				  window.location.assign("eventsList.html");
 		  		},
-		  	406: function(response) {
+		  	401: function(response) {
 		  		var errors = response.responseJSON;
+		  		console.log(errors);
 		  		$(".error").html("*");
 		  		$.each(errors, function (i, message) {
 		  			$("#"+message.attributeName+"Err").html(message.message);
@@ -96,7 +106,7 @@ $("#loginForm").submit(function (e){
 		  	
 			404 : function(jqXHR, textStatus, errorThrown) {
 				$("#page-message").html("Error:"+textStatus);
-				consule.log(errorThrown);
+				console.log(errorThrown);
 	  	        console.log("error " + textStatus);
 	  	        console.log("incoming Text " + jqXHR.responseText);
 	  	      	}
