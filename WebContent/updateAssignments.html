@@ -1,0 +1,81 @@
+<!DOCTYPE HTML> 
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="http://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script type="text/javascript" src="http://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  
+<script>
+
+	createTable();
+
+	function selectChange() 
+    {
+        id = getId();
+        $("#selectedID").html(id);
+        $("#updateID").val(id);
+        $("#deleteID").val(id);   
+    }
+    
+    function getId()
+	{ 
+	  return jQuery( 'input[name=selectedRow]:checked' ).val()
+	}
+  
+    function createTable() {
+    	$.getJSON( "/eventplannerJava/eventplanner/assignmentservice/assignments")
+    	  .done(function( response ) {
+    		  var tableHTML = '<thead><tr><th></th><th>ID</th><th>Table Number</th><th>Guest Name</th></tr></thead><tbody>';
+    	        $.each(response, function (i, assignment) {
+    	            tableHTML += '<tr><td><input type="radio" onchange= "selectChange()" name="selectedRow" value='+assignment.id+'></td><td>' + assignment.id + '</td><td>' + assignment.table.number + '</td></tr>';
+    	        });
+    	       tableHTML+='</tbody>';
+    	       $('#assignments-list-table').html(tableHTML);})
+  	  .fail(function(jqXHR, textStatus, errorThrown) {
+  	        console.log("error " + textStatus);
+  	        console.log("incoming Text " + jqXHR.responseText);});
+      }
+</script>
+
+<script>
+var agree;
+$(document).ready(function(){
+    $('#assignments-list-table').dataTable();
+});
+</script>
+</head>
+<body class="pageBody"> 
+<div class= "container">
+<div class=row>
+<ul class="nav nav-pills" >
+  <li role="presentation"><a href="eventsList.html">Events</a></li>
+  <li role="presentation"><a href="customerList.html">Customers</a></li>
+  <li role="presentation"><a href="userList.html">Users</a></li>
+  <li class="logouttab pull-right" role="presentation"><a href="#">Logout</a></li>
+</ul>
+</div>
+<h2>Seating Assignments List</h2>
+<div>
+<div class="table-responsive">
+<table class="table table-striped" id="assignments-list-table" >
+</table></div>
+<br>
+<p id="selectedID"></p>
+<div class="footer-buttons">
+<form class='inline' action="assignments.html" method="get">
+	<input id="updateID" type="hidden" name="id" value="">
+     <button class="full btn btn-primary" type = "submit" name="submit" value="Update">Save</button>
+</form>
+
+<form class='inline' method="get" action="assignments.html">
+  <button class="full btn btn-primary" type = "submit" value="Cancel" id="cancelbtn">Cancel</button>
+</form>
+</div>
+</div>
+</div>
+</body>
+</html>
