@@ -12,30 +12,57 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script>
+       function loadGuests()
+   	{           
+   		if (1) {  //Check condition here
+   		    $('#guestselection').empty().append('<option>select</option>');        
+   		    $.ajax({
+   		            url: '/eventplannerJava/eventplanner/guestservice/guests',
+   		            dataType: 'json',
+   		            type: 'GET',
+   		            success: function(response) {
+   		              var guests = response;
+   		              if (guests != null)
+   		              {
+   		            	$("#guestselection").empty();
+   		                for (i in guests) {
+   		                 $("#guestselection").append("<option>"+guests[i].name+"</option>");
+   		               }
+   		              }
+   		            },
+   		            error: function(x, e) {
+   		
+   		            }
+   		        });
+   		}
+   	}
+       </script>
        
     </head>
 <body class="pageBody">
 
   <div class="container">
-<div class=row>
+<div class="row">
+<nav>
     <ul class="nav nav-pills" >
-      <li><a href="eventList.html">Events</a></li>
-      <li><a href="customerList.html">Customer</a></li>
-      <li><a href="userList.html">User</a></li>
-      <li><a href="#">Logout</a></li>
+      <li role="presentation"><a href="eventsList.html">Events</a></li>
+  <li role="presentation"><a href="customerList.html">Customer</a></li>
+  <li role="presentation"><a href="userList.html">Users</a></li>
+  <li class="logouttab pull-right"><a href="#">Logout</a></li>
     </ul>
-  </div>
+  </nav>
 </div>
-    <div class="row">
+    
     <div class="text-center">
      <h1>Update Guest</h1>
     </div>
-    </div>
-   <div class="container">
-   <div class="row-1 col-md-4">
+    
+   <div class="row">
+   <div class="col-sm-4">
  <form>
   <div class="form-group text-left">
-    <label for="InputName">Gust Name</label>
+    <label for="InputName">Guest Name</label>
     <input type="text" class="form-control" placeholder="Name">
   </div>
   <div class="form-group">
@@ -43,40 +70,45 @@
     <input type="text" class="form-control">
   </div>
   <div class="form-group">
-    <label for="gustSelect">Guests Invited</label>
-    <select class="form-control" id="gustSelect">
-      <option>Faunie Renyard</option>
-      <option>Haley Renyard</option>
-      <option>Name 3</option>
-      <option>Name 4</option>
-      <option>Name 5</option>
+    <label class="control-label requiredField" for = "guestselection">
+     Other Guest
+      <span class ="asteriskField">*</span>
+      </label>
+      <select class=" select form-control" id="guestselection" name ="guestselection" onclick="loadGuests();">
+      	 
+	 <option value="guestselection">Select</option>
+    
     </select>
      </div>
        </form>
      </div>
-    </div>
+    <div class="col-sm-2 col-sm-offset">
     <div class="buttonShould">
       <button type="button" class="btn btn-primary">Should Sit With</button>
        <br><br>
       <button type="button" class="btn btn-primary">Should Avoid</button>
      </div>
+  </div>
+  <div class="col-sm-3"> 
     <div class="groupList">
-     <div class="container">
-      <div class="row-2 col-sm-3">
+     
         <h2>Should Sit With</h2>
             <div class="list-group">
-                <a href="#" class="list-group-item list-group-item-action">Faunie Reyard</a>
+                <a class="list-group-item list-group-item-action">Faunie Reyard</a>
                 <a href="#" class="list-group-item list-group-item-action"><!--Name--></a>
                 <a href="#" class="list-group-item list-group-item-action"><!--Name--></a>
                 <a href="#" class="list-group-item list-group-item-action"><!--Name--></a>
                 <br>
                 <button type="button" class="btn-remove btn btn-primary">Remove</button>
             </div>
+            </div>
+            </div>
+        <div class="col-sm-3">
           <div class="groupList-shouldAvoid">
           <h2>Should Avoid</h2>
             <div class="list-group">
-                <a href="#" class="list-group-item list-group-item-action"><!--Name--></a>
-                <a href="#" class="list-group-item list-group-item-action"><!--Name--></a>
+                <a class="list-group-item list-group-item-action"><!--Name--></a>
+                <a href="" class="list-group-item list-group-item-action"><!--Name--></a>
                 <a href="#" class="list-group-item list-group-item-action"><!--Name--></a>
                 <a href="#" class="list-group-item list-group-item-action"><!--Name--></a>
                 <a href="#" class="list-group-item list-group-item-action"><!--Name--></a>
@@ -86,26 +118,36 @@
          </div>
      </div>  
     </div>
+     <div class="footer-buttons">
+     <br><br><br>
+     <div class="row">
+     <div class="col-sm-3 col-sm-offset-3"> 
+          <div class="form-group">
+       <div>
+       <button class="btn btn-primary " name="submit" type="submit">Generate Table Markers</button>
     </div>
-    <div class="button">
-        <button type="submit" class="btn btn-primary">Generate Table Marker</button>
-        <button type="submit" class="btn btn-primary">Update</button>
-        <button type="button" class="btn btn-primary">Cancel</button>
+    </div>
+    </div>
+    <div class="col-sm-1">
+    <div class="form-group">
+        <div>
+        <button class="btn btn-primary" name="submit" type="submit">
+	Add
+        </button>
+</div>
+</div>
+</div>
+<div class="col-sm-1">
+<div class="form-group">
+<div>
+<button class="btn btn-primary " name="submit" type="submit">
+        Cancel
+       </button>
+      </div>
+     </div>
+     </div>
+    </div>
+    </div>
     </div>
     </body>
 </html>
-
-       
-           
- 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-   
