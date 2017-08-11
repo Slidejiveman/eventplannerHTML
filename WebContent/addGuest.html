@@ -1,163 +1,137 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <title>Add Guest</title>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" type="text/css" href="style.css">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-        
-        <!--Font Awesome (added because you use icons in your prepend/append)-->
-        <link rel="stylesheet" href="https://formden.com/static/cdn/font-awesome/4.4.0/css/font-awesome.min.css" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-       <script>
-       function loadGuests()
-   	{           
-   		if (1) {  //Check condition here
-   		    $('#guestselection').empty().append('<option>select</option>');        
-   		    $.ajax({
-   		            url: '/eventplannerJava/eventplanner/guestservice/guests',
-   		            dataType: 'json',
-   		            type: 'GET',
-   		            success: function(response) {
-   		              var guests = response;
-   		              if (guests != null)
-   		              {
-   		            	$("#guestselection").empty();
-   		                for (i in guests) {
-   		                 $("#guestselection").append("<option>"+guests[i].name+"</option>");
-   		               }
-   		              }
-   		            },
-   		            error: function(x, e) {
-   		
-   		            }
-   		        });
-   		}
-   	}
-       </script>
-    </head>
-<body class="pageBody">
-<div class="container">
-<div class="row">
-<nav>
-    <ul class="nav nav-pills" >
-     <li role="presentation"><a href="eventsList.html">Events</a></li>
-  <li role="presentation"><a href="customerList.html">Customer</a></li>
-  <li role="presentation"><a href="userList.html">Users</a></li>
-  <li class="logouttab pull-right"><a href="#">Logout</a></li>
-    </ul>
-    </nav>
-  </div>
-    <div class="text-center">
-     <h1>Add Guest</h1>
-    </div>
-   <div class="row">
-    
-   <div class="col-sm-4">
- <form>
-  <div class="form-group text-left">
-    <label for="InputName">Guest Name</label>
-    <input type="text" class="form-control" placeholder="Name">
-  </div>
-  <div class="form-group">
-    <label for="exampleInputPassword1">Note</label>
-    <input type="text" class="form-control">
-  </div>
-<div class="form-group">
-      <label class="control-label requiredField" for = "guestselection">
-     Other Guest
-      <span class ="asteriskField">*</span>
-      </label>
-      <select class=" select form-control" id="guestselection" name ="guestselection" onclick="loadGuests();">
-      	 <option value="guestselection">Select</option>
-      </select>
-     </div>
-     
-       </form>
-     </div>
-   <div class="col-sm-2 col-sm-offset">
-   	<div class="buttonShould">
-      <button type="button" class="btn btn-primary">Should Sit With</button>
-       <br><br>
-      <button type="button" class="btn btn-primary">Should Avoid</button>
-     </div>
-   </div>
-   <div class="col-sm-3">
-    <div class="groupList">
-        <h2>Should Sit With</h2>
-            <div class="list-group">
-                <a class="list-group-item list-group-item-action">Faunie Reyard</a>
-                <a href="#" class="list-group-item list-group-item-action"><!--Name--></a>
-                <a href="#" class="list-group-item list-group-item-action"><!--Name--></a>
-                <a href="#" class="list-group-item list-group-item-action"><!--Name--></a>
-                <br>
-                <button type="button" class="btn-remove btn btn-primary">Remove</button>
-            </div>
-            </div>
-            </div>
-      	<div class="col-sm-3">
-          <div class="groupList-shouldAvoid">
-          <h2>Should Avoid</h2>
-            <div class="list-group">
-                <a class="list-group-item list-group-item-action"><!--Name--></a>
-                <a href="" class="list-group-item list-group-item-action"><!--Name--></a>
-                <a href="#" class="list-group-item list-group-item-action"><!--Name--></a>
-                <a href="#" class="list-group-item list-group-item-action"><!--Name--></a>
-                <a href="#" class="list-group-item list-group-item-action"><!--Name--></a>
-                <br>
-                <button type="button" class="btn-remove-2 btn btn-primary">Remove</button>
-            </div>
-         </div>
-     </div> 
-     </div>
-     <div class="footer-buttons">
-     <br><br><br>
-     <div class="row"> 
-     <div class="col-sm-3 col-sm-offset-3">
-     	<div class="form-group">
-      <div>
-       <button class="btn btn-primary " name="submit" type="submit">Generate Table Markers</button>
-      </div>
-     </div>
-     </div>
-     <div class="col-sm-1">
-     <div class="form-group">
-      <div>
-       <button class="btn btn-primary " name="submit" type="submit">
-      	Add
-       </button>
-      </div>
-     </div>
-     </div>
-     <div class="col-sm-1">
-     <div class="form-group">
-      <div>
-       <button class="btn btn-primary " name="submit" type="submit">
-        Cancel
-       </button>
-      </div>
-     </div>
-     </div>
-    </div>
-    </div>
-     </div>
-    </body>
-</html>
+<!DOCTYPE HTML> 
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 
-       
-           
- 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+</head>
+<body> 
+<script>
+function getCurrentUser() {
+	$.ajax({
+	    url: "/eventplannerJava/eventplanner/guestservice/guests",
+	    type: 'GET',
+	    datatype: 'json',
+	    statusCode: {
+	    200: function( response ) {
+	
+	    		},
+	    401:function( response ) {
+	    		$('#page-message').html("You must Login first");
+	    		},
+    	    405:function( response ) {
+	  	    	$('#page-message').html("Access to the page forbiden");
+	  	    	}
+	    },
+	    
+	    error: function(jqXHR, textStatus, errorThrown) {
+  	        console.log("error " + textStatus);
+  	        console.log("incoming Text " + jqXHR.responseText);},
+	    beforeSend: setHeader       
+	  });   	
+}
+function getCookie(cname) {
+    var name = cname + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for(var i = 0; i <ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+}
+
+function setHeader(xhr) {
+	  token = getCookie("token");
+	  xhr.setRequestHeader('Authorization', 'Bearer '+token );		  
+}
+
+
+
+}
+$(document).ready(function() {
+
+	$("#guestForm").submit(function (e){
+		
+		var guestName =$('#guestName').val();
+		var note = $('#note').val();
+		
+		$.ajax( { 
+			url:"/eventplannerJava/eventplanner/guestservice/guests/",
+			type: "POST",
+			dataType: "json",
+			contentType: "application/json",
+			data: '{'+  
+				'"name" : "'+guestName+'",'+
+				'"relationshipDesciptor" :"'+ note+'",'+
+			"}",
+			statusCode: {
+			200: function(response) {
+				  $("#page-message").html("Record Added");
+				  window.location.assign("guestList.html");
+		  		},
+		  	401:function( response ) {
+  	    			$('#page-message').html("You must Login first");
+  	    			},
+  	      	405:function( response ) {
+  		  	    	$('#page-message').html("Access to the page forbiden");
+  		  	    	},
+
+		  	406: function(response) {
+		  		var errors = response.responseJSON;
+		  		$(".error").html("*");
+		  		$.each(errors, function (i, message) {
+		  			$("#"+message.attributeName+"Err").html(message.message);
+		  			console.log("Error "+message.attributeName +" "+message.message)
+    	        		});
+		  		$("#page-message").html("Fix errors and click Save");
+		  		},
+		  	
+			404 : function(jqXHR, textStatus, errorThrown) {
+				$("#page-message").html("Error:"+textStatus);
+				console.log(errorThrown);
+	  	        console.log("error " + textStatus);
+	  	        console.log("incoming Text " + jqXHR.responseText);
+	  	    		}
+		  	},
+		  	 beforeSend: setHeader 
+			});
+
+		e.preventDefault();
+});
+});
+</script>
+<div>
+<ul class="nav">
+<li><a href="eventList.html">Event</a></li>
+<li><a href="customerList.html">Customer</a></li>
+<li><a href="userList.html">Users</a></li>
+<li><a href="#">Logout</a></li>
+</ul>
+</div>
+<h2>Add Guest</h2>
+<p id ='debug'></p>
+<div class ='block-center'>
+<p><span class="error-head">* required field.</span></p>
+<form id="guestForm" method="post">
+   Guest Name: <input type="text" id="name">
+   <span id="firstNameErr" class="error">* </span>
+   <br><br>
+   Note: <input type="text" id="relationshipDesciptor">
+   <span id="lastNameErr" class="error">* </span>
    
+   <br><br>
+   <input type="submit" name="Add" value="Add"> 
+</form>
+<form action="guestList.html" method ="get">
+<button type="submit" >Cancel</button>
+</form>
+
+</div>
+</body>
+</html>
