@@ -12,11 +12,47 @@
   <script type="text/javascript" src="http://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script>
-
-
-		createTable();
-
-
+	function getCurrentUser() {
+		$.ajax({
+		    url: "/eventplannerJava/eventplanner/userservice/users/current",
+		    type: 'GET',
+		    datatype: 'json',
+		    statusCode: {
+		    200: function( response ) {
+		
+				$('#userWelcome').html("Welcome, "+response.firstName+" "+response.lastName);
+		    },
+		    401:function( response ) {
+		    		$('#user-list-table').html("You must Login first");}
+		    },
+		    
+		    error: function(jqXHR, textStatus, errorThrown) {
+	  	        console.log("error " + textStatus);
+	  	        console.log("incoming Text " + jqXHR.responseText);},
+		    beforeSend: setHeader       
+		  });   	
+	}
+	function getCookie(cname) {
+	    var name = cname + "=";
+	    var decodedCookie = decodeURIComponent(document.cookie);
+	    var ca = decodedCookie.split(';');
+	    for(var i = 0; i <ca.length; i++) {
+	        var c = ca[i];
+	        while (c.charAt(0) == ' ') {
+	            c = c.substring(1);
+	        }
+	        if (c.indexOf(name) == 0) {
+	            return c.substring(name.length, c.length);
+	        }
+	    }
+	    return "";
+	}
+	
+	function setHeader(xhr) {
+		  token = getCookie("token");
+		  xhr.setRequestHeader('Authorization', 'Bearer '+token );		  
+	}
+	createTable();
     function selectChange() 
     {
         id = getId();
@@ -31,8 +67,8 @@
 	}
     
     function createTable() {
-    	$.getJSON( "/eventplannerJava/eventplanner/userservice/users")
-    	  .done(function( response ) {
+    	//$.getJSON( "/eventplannerJava/eventplanner/userservice/users")
+    	 /* .done(function( response ) {
     		  var tableHTML = '<thead><tr><th></th><th>ID</th><th>User Name</th></tr></thead><tbody>';
     	        $.each(response, function (i, user) {
     	            tableHTML += '<tr><td><input type="radio" onchange= "selectChange()" name="selectedRow" value='+user.id+'><td>'+ user.id+ '</td><td>' + user.name + '</td></tr>';
@@ -42,14 +78,36 @@
   	  .fail(function(jqXHR, textStatus, errorThrown) {
   	        console.log("error " + textStatus);
   	        console.log("incoming Text " + jqXHR.responseText);});
-      }
-
-
+      },
+      beforeSend: setHeader*/
+      $.ajax({
+    	  url:"/eventplannerJava/eventplanner/userservice/users",
+    	  type:'GET',
+    	  datatype:'json',
+    	  statusCode:{
+    		  	200:function(response){
+        		  	var tableHTML = '<thead><tr><th></th><th>ID</th><th>User Name</th></tr></thead><tbody>';
+        		  	$.each(response, function (i, user) {
+        	            tableHTML += '<tr><td><input type="radio" onchange= "selectChange()" name="selectedRow" value='+user.id+'><td>'+ user.id+ '</td><td>' + user.name + '</td></tr>';
+        	        });
+        		  	tableHTML+='</tbody>';
+        		  	$('#user-list-table').html(tableHTML);},
+        		401:function( response ) {
+          	    	$('#user-list-table').html("You must Login first");},
+            	403:function( response ) {
+          	    	$('#user-list-table').html("Access to the page forbiden");}
+    	  	},
+    	  	error: function(jqXHR, textStatus, errorThrown) {
+      	        console.log("error " + textStatus);
+      	        console.log("incoming Text " + jqXHR.responseText);},
+    	    beforeSend: setHeader
+    	});
+   	}
 </script>
 <script>
 	$(document).ready(function(){
     		$('#user-list-table').dataTable();
-    		
+    		getCurrentUser();
     });
   
 </script>
