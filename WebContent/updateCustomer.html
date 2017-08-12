@@ -7,6 +7,8 @@
 </head>
 <body> 
 <script>
+// This function returns the URL parameter for an ID using a regular expression.
+// for this function to work, the text "id" needs to appear in the URL field
 $.urlParam = function(name){
     var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
     if (results==null){

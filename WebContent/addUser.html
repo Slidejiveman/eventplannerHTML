@@ -22,10 +22,10 @@ function getCurrentUser() {
 	    statusCode: {
 	    200: function( response ) {
 	
-			$('#userWelcome').html("Welcome, "+response.firstName+" "+response.lastName);
+			//$('#userWelcome').html("Welcome, "+response.firstName+" "+response.lastName);
 	    },
 	    401:function( response ) {
-	    		$('#student-list-table').html("You must Login first");}
+	    		$('#page-message').html("You must Login first");}
 	    },
 	    
 	    error: function(jqXHR, textStatus, errorThrown) {
@@ -86,7 +86,7 @@ $(document).ready(function() {
 	    			$('#page-messge').html("You must Login first");
 	    			},
 		  	405:function( response ) {
-	  	    		$('#page-messge').html("Access to the page forbiden");
+	  	    		$('#page-messge').html("Access to the page forbidden");
 	  	    		},
 		  	406: function(response) {
 		  		var errors = response.responseJSON;
@@ -140,10 +140,10 @@ $(document).ready(function() {
  	<option value="Standard">Standard</option>
    </select>
 	<br><br>
-   <input type="submit" name="Add" value="Add"> 
+   <button type="submit" name="Add" value="Add"> Add </button> 
 </form>
 <form action="userList.html" method ="get">
-<button type="submit" >Cancel</button>
+<button type="submit">Cancel</button>
 </form>
 
 </div>

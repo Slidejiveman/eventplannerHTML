@@ -1,87 +1,194 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <title>Update User</title>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" type="text/css" href="style.css">
-        <!--link rel="stylesheet" href="bootstrap.css"-->
-        <!--Font Awesome (added because you use icons in your prepend/append)-->
-        <link rel="stylesheet" href="https://formden.com/static/cdn/font-awesome/4.4.0/css/font-awesome.min.css" />
-	     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-    </head>
-<body class="pageBody">
-   <div class="container">
-    <div class=row>
-     <ul class="nav nav-pills" >
-       <li role="presentation"><a href="eventsList.html">Events</a></li>
-       <li role="presentation"><a href="#">Customers</a></li>
-       <li role="presentation"><a href="userList.html">Users</a></li>
-       <li class="logouttab pull-right" role="presentation"><a onclick ="confirmLogout();" href="#">Logout</a></li>
-     </ul>
-    </div>
- <div class="formrow">
-   <form method="post">
-   <div class="col-md-4 col-lg-12">
-    <h1>Update User</h1>
-   <div class="form-group">
-      <label class="control-label requiredField" for="employeeName">
-       Employee Name:
-       <span class="asteriskField">*</span>
-      </label>    
-      <input class="form-control" id="employeeName" name="field" maxlength="10" type="text" title="Only Letters" value="Type Letters Only" onkeydown="return alphaOnly(event);" onblur="if (this.value == '') {this.value = 'Type Letters Only';}" onfocus="if (this.value == 'Type Letters Only') {this.value = '';}"/>
-    </div>
-   <div class="form-group">
-      <label class="control-label requiredField" for="userName">
-       Username:
-       <span class="asteriskField">*</span>
-      </label>    
-      <input class="form-control" id="userName" name="userName" type="text" />
-    </div>
-   <div class="form-group">
-      <label class="control-label requiredField" for="password">
-       Password:
-       <span class="asteriskField">*</span>
-      </label>   
-      <input class="form-control" id="password" name="password" type="password"/>
-   </div>
-       <div class="checkbox">
-       <label><input type="checkbox" value="">Employee is Admin</label>
-       </div>
-       <div class="checkbox">
-       <label><input type="checkbox" value="">Employee is Active</label>
-       </div>
-       </div>
-       <div class="col-md-6">
-           <button type="button" class="btn btn-primary">Update</button>
-           <button type="button" class="btn btn-primary">Cancel</button>
-      </div>
-     </form>
-       </div>
-    </div>
-    <script type="text/javascript">
-        function isValid(){
-        var password = document.getElementById('password').value;
-        if (password == "rawr")
-        {alert('Correct!')}
-        else
-        {alert('Wrong Password')}
+<!DOCTYPE HTML> 
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+
+</head>
+<body> 
+<script>
+function confirmLogout(){
+    agree = confirm("Do you want to logout?");
+     if(agree){
+ 		window.location.assign("Logout.html");
+ 	}
+}
+
+$.urlParam = function(name){
+    var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+    if (results==null){
+       return null;
+    }
+    else{
+       return results[1] || 0;
+    }
+}
+
+function getCurrentUser() {
+	$.ajax({
+	    url: "/eventplannerJava/eventplanner/userservice/users/current",
+	    type: 'GET',
+	    datatype: 'json',
+	    statusCode: {
+	    200: function( response ) {
+	
+			//$('#userWelcome').html("Welcome, "+response.firstName+" "+response.lastName);
+	    },
+	    401:function( response ) {
+	    		$('#page-message').html("You must Login first");}
+	    },
+	    
+	    error: function(jqXHR, textStatus, errorThrown) {
+  	        console.log("error " + textStatus);
+  	        console.log("incoming Text " + jqXHR.responseText);},
+	    beforeSend: setHeader       
+	  });   	
+}
+function getCookie(cname) {
+    var name = cname + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for(var i = 0; i <ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
         }
-        
-        function alphaOnly(event) {
-        var key = event.keyCode;
-        return ((key >= 65 && key <= 90) || key == 8);
-        };
-        
-        function confirmLogout(){
-	        agree = confirm("Do you want to logout?");
-	         if(agree){
-	     		window.location.assign("Logout.html");
-	     	}
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
         }
-        
-  </script>
-    </body>
+    }
+    return "";
+}
+
+function setHeader(xhr) {
+	  token = getCookie("token");
+	  xhr.setRequestHeader('Authorization', 'Bearer '+token );		  
+}
+
+$(document).ready(function() {
+
+	getCurrentUser();
+	
+	$.ajax({
+	    url: "/eventplannerJava/eventplanner/userservice/users/"+$.urlParam("id"),
+	    type: 'GET',
+	    datatype: 'json',
+	    statusCode: {
+	    200: function(response) {
+	    		
+			$('#name').val(response.name);
+			$('#username').val(response.username);
+			$('#password').val(response.password);
+			$('#role').val(response.roleAssignments[0].role); 
+			    // Attr selector if we wanted to allow multiple role assignments: 
+				//option[value="'+ response.roleAssignments[0].role + "']").prop("selected", true);
+			},
+			
+	    401:function( response ) {
+	    		$('#page-messge').html("You must Login first");
+	    		},
+		403:function( response ) {
+  	    		$('#page-messge').html("Access to the page forbiden");
+  	    		}
+
+	    		},
+	    
+	    error: function(jqXHR, textStatus, errorThrown) {
+  	        console.log("error " + textStatus);
+  	        console.log("incoming Text " + jqXHR.responseText);
+  	        },
+	    beforeSend: setHeader   
+	  });
+	
+	$("#userForm").submit(function (e){
+		
+		var name = $('#name').val();
+		var username= $('#username').val();
+		var password = $('#password').val();		
+		var role = $('#role').val();
+		var jsonData = 
+					'{'+  
+					'"name" :"'+name+'",'+					
+					'"username" : "'+username+'",'+
+					'"password" : "'+password+'",'+
+					'"roleAssignments" : [ {"role": "'+role+'" } ] }';
+				
+		$.ajax( { 
+			url:"/eventplannerJava/eventplanner/userservice/users/"+$.urlParam("id"),
+			type: "PUT",
+			dataType: "json",
+			contentType: "application/json",
+			data: jsonData,  
+		statusCode: {
+			200: function(response) {
+				  $("#page-message").html("Record Updated");
+				  window.location.assign("userList.html");
+		  		},
+		  	401:function( response ) {
+	    			$('#page-messge').html("You must Login first");
+	    			},
+		  	405:function( response ) {
+	  	    		$('#page-messge').html("Access to the page forbidden");
+	  	    		},
+		  	406: function(response) {
+		  		var errors = response.responseJSON;
+		  		$(".error").html("*");
+		  		$.each(errors, function (i, message) {
+		  			$("#"+message.attributeName+"Err").html(message.message);
+		  			console.log("Error "+message.attributeName +" "+message.message)
+    	        		});
+		  		$("#page-message").html("Fix errors and click Save");
+		  		},
+		  					  	
+			404: function(jqXHR, textStatus, errorThrown) {
+				$("#page-message").html("Error:"+textStatus);
+				console.log(errorThrown);
+	  	        console.log("error " + textStatus);
+	  	        console.log("incoming Text " + jqXHR.responseText);
+	  	      }
+			},
+			beforeSend: setHeader
+		});
+		e.preventDefault();
+});
+});
+</script>
+<div>
+<ul class="nav">
+<li><a href="eventList.html">Event</a></li>
+<li><a href="customerList.html">Customer</a></li>
+<li><a href="userList.html">Users</a></li>
+<li class="logouttab pull-right" role="presentation"><a onclick ="confirmLogout();" href="#">Logout</a></li>
+</ul>
+</div>
+<div id="userWelcome"> </div>
+<h2>User Update</h2>
+<p id ='debug'></p>
+<div class ='block-center'>
+<p><span id="page-message">Enter fields and click Save</span></p>
+<p><span class="error-head">* required field.</span></p>
+<form id="userForm" method="post"> 
+   Name: <input type="text" id="name">
+   <span id="nameErr" class="error">* </span>
+   <br><br>
+   Username: <input type="text" id="username">
+   <span id ="userNameErr" class="error">* </span>
+   <br><br>
+   Password: <input type="text" id="password">
+   <span id="passwordErr" class="error">* </span>
+   <br><br>
+   Role:<select id="role">
+  	<option value="Administrator">Administrator</option>
+ 	<option value="Standard">Standard</option>
+   </select>
+	<br><br>
+   <button type="submit" name="Update" value="Update"> Update </button>
+</form>
+<form action="userList.html" method ="get">
+<button type="submit" >Cancel</button>
+</form>
+
+</div>
+</body>
 </html>
+
