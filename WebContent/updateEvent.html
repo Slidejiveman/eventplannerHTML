@@ -241,6 +241,12 @@
 	       return results[1] || 0;
 	    }
 	}
+	  function confirmLogout(){
+	        agree = confirm("Do you want to logout?");
+	         if(agree){
+	     		window.location.assign("Logout.html");
+	     	 }
+	  }
     $(document).ready(function(){
     	 $(".searchableselect").select2();
     	 $("#customerselection").prop("disabled", true);
@@ -383,12 +389,6 @@
 	 $("#generatemarkersbtn").click(function(){
 		 window.location.assign("#");	
 	 });
-
-	    function confirmLogout(){
-	        agree = confirm("Do you want to logout?");
-	         if(agree){
-	     		window.location.assign("Logout.html");
-	     	}
 </script>
 </body>
 </html>
