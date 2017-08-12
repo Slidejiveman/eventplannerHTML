@@ -10,7 +10,6 @@
 $(document).ready(function(){
     
     $("#customerForm").submit(function(e) {
-    	//e.preventDefault();
     	var customerName = $('#customerName').val();
 		var customerEmail = $('#customerEmail').val();  
 		var customerPhone= $('#phone').val();  
@@ -61,8 +60,8 @@ $(document).ready(function(){
     });
     $("#cancel").click(function(){
     	window.location.assign("customerList.html");
-    })
-})
+    });
+});
 
 function confirmLogout(){
     agree = confirm("Do you want to logout?");
