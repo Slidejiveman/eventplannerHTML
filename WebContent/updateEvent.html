@@ -83,8 +83,10 @@
         *
        </span>
       </label>
-      <select class="select form-control searchableselect" id="sizeselection" name="sizeselection" onclick="loadTableSizes();">
-       <option value="size">Select</option>
+      <select class="form-control searchableselect" id="sizeselection" name="sizeselection" data-placeholder="Select an option">
+      	<option value="4">4</option>
+       <option value="6">6</option>
+       <option value="8">8</option>
       </select>
      </div>
     </div>
@@ -96,8 +98,10 @@
         *
        </span>
       </label>
-      <select class="select form-control searchableselect" id="shapeselection" name="select2" onclick="loadTableShapes();">
-        <option value="shape">Select</option>
+      <select class="form-control searchableselect" id="shapeselection" name="select2" data-placeholder="Select an option">
+      	<option value="Square">Square</option>
+       <option value="Rectangular">Rectangular</option>
+       <option value="Circular">Circular</option>
       </select>
      </div>
  	<div class="form-group ">
@@ -107,8 +111,9 @@
         *
        </span>
       </label>
-      <select class="select form-control searchableselect" id="status" name="status" onclick="loadStatus();">
-        <option value="status">Select</option>
+      <select class=" form-control searchableselect" id="status" name="status" data-placeholder="Select an option">
+      <option value="Open">Open</option>
+       <option value="Closed">Closed</option>
       </select>
      </div>
     <h4>Customer Information</h4>
@@ -117,10 +122,8 @@
       Customer Name
       <span class ="asteriskField">*</span>
       </label>
-      <select class="form-control searchableselect" id="customerselection" name ="customerselection"
-      	onclick="loadCustomers();">
-               <option value="customer">Select</option>
-      </select>
+      <select class="form-control searchableselect" id="customerselection" name ="customerselection" data-placeholder="Select an option"
+      ></select>
      </div>
      <h4>Office Information</h4>
      <div class="form-group epSelectOption">
@@ -130,10 +133,7 @@
         *
        </span>
       </label>
-      <select class="form-control searchableselect" id="eventPlannerSelection" name="eventPlannerSelection" 
-       onclick="loadEventPlanners();">
-               <option value="eventPlanner">Select</option>
-      </select>
+      <select class="form-control searchableselect" id="eventPlannerSelection" name="eventPlannerSelection" data-placeholder="Select an option"></select>
      </div>
      </div>
     </form>
@@ -232,79 +232,6 @@
 </div> 
 <br><br><br><br><br>
 <script>
-	function loadTableSizes(){
-		if ($('#sizeselection').find("option").size() == 1) { 
-			 $('#sizeselection').empty().append('<option>select</option>');  
-			 $("#sizeselection").empty().append("<option>"+4+"</option>");
-			 $("#sizeselection").append("<option>"+6+"</option>");
-			 $("#sizeselection").append("<option>"+8+"</option>");
-		}
-	}
-	function loadTableShapes(){
-		if ($('#shapeselection').find("option").size() == 1) { 
-			 $('#shapeselection').empty().append('<option>select</option>');
-			 $("#shapeselection").empty().append("<option>"+'Rectangular'+"</option>");
-			 $("#shapeselection").append("<option>"+'Circular'+"</option>");
-			 $("#shapeselection").append("<option>"+'Square'+"</option>");
-		}
-	}
-	function loadStatus(){
-		if ($('#status').find("option").size() == 1) { 
-			 $('#status').empty().append('<option>select</option>'); 
-			 $("#status").empty().append("<option>"+'Open'+"</option>");
-			 $("#status").append("<option>"+'Closed'+"</option>");
-		}
-	}
-	function loadEventPlanners()
-	{           
-		if ($('#eventPlannerSelection').find("option").size() == 1) {  //Check condition here
-		    $('#eventPlannerSelection').empty().append('<option>select</option>');        
-		    $.ajax({
-		            url: '/eventplannerJava/eventplanner/userservice/users',
-		            dataType: 'json',
-		            type: 'GET',
-		            success: function(response) {
-		              var eventPlanners = response;
-		              if (eventPlanners != null)
-		              {
-		            	$("#eventPlannerSelection").empty();
-		                for (i in eventPlanners) {
-		                 $("#eventPlannerSelection").append("<option>"+eventPlanners[i].name+"</option>");
-		               }
-		              }
-		            },
-		            error: function(x, e) {
-		
-		            }
-		        });
-		}
-	}
-	
-	function loadCustomers()
-	{           
-		if ($('#customerselection').find("option").size() == 1) {  //Check condition here
-		    $('#customerselection').empty().append('<option>select</option>');        
-		    $.ajax({
-		            url: '/eventplannerJava/eventplanner/customerservice/customers',
-		            dataType: 'json',
-		            type: 'GET',
-		            success: function(response) {
-		              var customers = response;
-		              if (customers != null)
-		              {
-		            	$("#customerselection").empty();
-		                for (i in customers) {
-		                 $("#customerselection").append("<option>"+customers[i].name+"</option>");
-		               }
-		              }
-		            },
-		            error: function(x, e) {
-		
-		            }
-		        });
-		}
-	}
-	
 	$.urlParam = function(name){
 	    var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
 	    if (results==null){
@@ -314,9 +241,9 @@
 	       return results[1] || 0;
 	    }
 	}
-	
     $(document).ready(function(){
     	 $(".searchableselect").select2();
+    	 $("#customerselection").prop("disabled", true);
     	var date_input=$('input[name="date"]'); //our date input has the name "date"
         var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
         date_input.datepicker({
@@ -325,15 +252,42 @@
             todayHighlight: true,
             autoclose: true,
         });
-        
+        $("#customerselection").select2({
+   	 	  ajax:{
+  	            url: '/eventplannerJava/eventplanner/customerservice/customers',
+  	            dataType: 'json',
+  	            type: 'GET',
+  	            processResults: function (data) {
+  	                return {
+  	                    results: $.map(data, function(obj) {
+  	                        return { id: obj.id, text: (obj.name+"_"+obj.id)};
+  	                    })
+  	                };
+  	            }
+  	        }
+   	 	});
+   	 $("#eventPlannerSelection").select2({
+  	 	  ajax:{
+  	            url: '/eventplannerJava/eventplanner/userservice/users',
+  	            dataType: 'json',
+  	            type: 'GET',
+  	            processResults: function (data) {
+  	                return {
+  	                    results: $.map(data, function(obj) {
+  	                        return { id: obj.id, text: (obj.name+"_"+obj.id)};
+  	                    })
+  	                };
+  	            }
+  	        }
+  	 	});
     	//Populate the form with the data for the selected event
         $.getJSON("/eventplannerJava/eventplanner/eventservice/events/"+$.urlParam("id"))
     	.done(function(response){
     		$('#eventName').val(response.name);
-    		$('#eventPlannerSelection').empty().append('<option>'+response.assignedUser.name+'</option>');  
-    		$('#customerselection').empty().append('<option>'+response.customer.name+'</option>');  
+    		$('#eventPlannerSelection').empty().append('<option>'+response.assignedUser.name+'_'+response.assignedUser.id+'</option>');  
+    		$('#customerselection').empty().append('<option>'+response.customer.name+'_'+response.customer.id+'</option>');  
     		$('#date').val(response.date);
-    		$('#status').empty().append('<option>'+response.eventStatus+'</option>');  
+    		$("#status").val(response.eventStatus);
     		$('#venueloc').val(response.location);
     		$('#eventMenu').val(response.menu);
     		$('#emptySeats').val(response.percentSeatsEmpty);
@@ -355,7 +309,8 @@
     	var eventLocation= $('#venueloc').val();
     	var eventMenu= $('#eventMenu').val();
     	var emptySeats= $('#emptySeats').val();
-
+    	var selectedCustomerId = (selectedCustomer.split('_'))[1];
+		alert(selectedCustomerId);
 		$.ajax( { 
 			url:"/eventplannerJava/eventplanner/eventservice/events/"+$.urlParam("id"),
 			type: "PUT",
@@ -417,7 +372,7 @@
 	 	window.location.assign("#");
 	 });
 	 $("#viewassignmentsbtn").click(function(){
-	 	window.location.assign("assignments.html");
+	 	window.location.assign("updateAssignments.html?id="+$.urlParam("id")+"&like=like");
 	 });
 	 $("#seatingreportsa_zbtn").click(function(){
 	 	window.location.assign("#");

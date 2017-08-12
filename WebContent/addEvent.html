@@ -16,57 +16,37 @@
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <script>
-  function loadEventPlanners()
-	{           
-		if ($('#eventPlannerSelection').find("option").size() == 1) {  //Check condition here
-		    $('#eventPlannerSelection').empty().append('<option>select</option>');        
-		    $.ajax({
-		            url: '/eventplannerJava/eventplanner/userservice/users',
-		            dataType: 'json',
-		            type: 'GET',
-		            success: function(response) {
-		              var eventPlanners = response;
-		              if (eventPlanners != null)
-		              {
-		            	$("#eventPlannerSelection").empty();
-		                for (i in eventPlanners) {
-		                 $("#eventPlannerSelection").append("<option>"+eventPlanners[i].name+"</option>");
-		               }
-		              }
-		            },
-		            error: function(x, e) {
-		
-		            }
-		        });
-		}
-	}
-	
-	function loadCustomers()
-	{           
-		if ($('#customerselection').find("option").size() == 1) {  //Check condition here
-		    $('#customerselection').empty().append('<option>select</option>');        
-		    $.ajax({
-		            url: '/eventplannerJava/eventplanner/customerservice/customers',
-		            dataType: 'json',
-		            type: 'GET',
-		            success: function(response) {
-		              var customers = response;
-		              if (customers != null)
-		              {
-		            	$("#customerselection").empty();
-		                for (i in customers) {
-		                 $("#customerselection").append("<option>"+customers[i].name+"</option>");
-		               }
-		              }
-		            },
-		            error: function(x, e) {
-		
-		            }
-		        });
-		}
-	}
+  
     $(document).ready(function(){
-   	 	$(".searchableselect").select2();
+    	 $("#customerselection").select2({
+      	 	  ajax:{
+     	            url: '/eventplannerJava/eventplanner/customerservice/customers',
+     	            dataType: 'json',
+     	            type: 'GET',
+     	            processResults: function (data) {
+     	                return {
+     	                    results: $.map(data, function(obj) {
+     	                        return { id: obj.id, text:obj.name};
+     	                    })
+     	                };
+     	            }
+     	        }
+      	 	});
+      	 $("#eventPlannerSelection").select2({
+     	 	  ajax:{
+     	            url: '/eventplannerJava/eventplanner/userservice/users',
+     	            dataType: 'json',
+     	            type: 'GET',
+     	            processResults: function (data) {
+     	                return {
+     	                    results: $.map(data, function(obj) {
+     	                        return { id: obj.id, text: obj.name};
+     	                    })
+     	                };
+     	            }
+     	        }
+     	 	});
+   	 $(".searchableselect").select2();
         var date_input=$('input[name="date"]'); //our date input has the name "date"
         var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
         date_input.datepicker({
@@ -85,6 +65,7 @@
     		var eventLocation= $('#venueloc').val();
     		var eventMenu= $('#eventMenu').val();
     		var emptySeats= $('#emptySeats').val();
+    		alert(selectedCustomer);
     	
     		$.ajax( { 
     			url:"/eventplannerJava/eventplanner/eventservice/events/",
@@ -282,8 +263,7 @@
       Customer Name
       <span class ="asteriskField">*</span>
       </label>
-      <select class=" select form-control searchableselect" id="customerselection" name ="customerselection" onclick="loadCustomers();">
-      	 <option value="customerselection">Select</option>
+      <select class="form-control searchableselect1" id="customerselection" name ="customerselection" data-placeholder="Select an option">
       </select>
      </div>
      <h4>Office Information</h4>
@@ -294,8 +274,7 @@
         *
        </span>
       </label>
-      <select class="select form-control searchableselect" id="eventPlannerSelection" name="eventPlannerSelection" onclick="loadEventPlanners();">
-      <option value="eventPlannerSelection">Select</option>
+      <select class="select form-control searchableselect" id="eventPlannerSelection" name="eventPlannerSelection" data-placeholder="Select an option">
       </select>
      </div>
      </div>
