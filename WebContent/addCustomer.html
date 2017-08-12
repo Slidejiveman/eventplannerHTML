@@ -75,15 +75,17 @@ function confirmLogout(){
  	}
 }
 </script>
-<div>
+<div class=row>
 <ul class="nav">
-<li><a href="eventList.html">Event</a></li>
-<li><a href="customerList.html">Customer</a></li>
-<li><a href="userList.html">Users</a></li>
+<li role="presentation"><a href="eventList.html">Event</a></li>
+<li role="presentation"><a href="customerList.html">Customer</a></li>
+<li role="presentation"><a href="userList.html">Users</a></li>
 <li class="logouttab pull-right" role="presentation"><a onclick ="confirmLogout();" href="#">Logout</a></li>
 </ul>
 </div>
-<h2>Add Customer</h2>
+<div class="customerform"></div>
+<h3>Add Customer</h3>
+<form class="formbody"></form>
 <p id ='debug'></p>
 <div class ='block-center'>
 <p><span class="error-head">* required field.</span></p>
@@ -98,12 +100,11 @@ function confirmLogout(){
    <br><br>
    Customer Phone: <input type="text" id="phone">
    <span id="phoneErr" class="error">* </span>
-   <input type="submit" name="Add" value="Add"> 
+   <button type="submit" name="Add" value="Add">Add</button> 
 </form>
 <form action="customerList.html" method ="get">
 <button type="submit" >Cancel</button>
 </form>
-
 </div>
 </body>
 </html>
