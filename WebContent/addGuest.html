@@ -12,8 +12,8 @@ $(document).ready(function() {
 
 	$("#guestForm").submit(function (e){
 		
-		var guestName =$('#guestName').val();
-		var note = $('#note').val();
+		var guestName =$('#name').val();
+		var note = $('#relationshipDescriptor').val();
 		
 		$.ajax( { 
 			url:"/eventplannerJava/eventplanner/guestservice/guests/",
@@ -22,7 +22,7 @@ $(document).ready(function() {
 			contentType: "application/json",
 			data: '{'+  
 				'"name" : "'+guestName+'",'+
-				'"relationshipDescriptor" :"'+ note+'",'+
+				'"relationshipDescriptor" :"'+ note+'"'+
 			"}",
 			statusCode: {
 			200: function(response) {
