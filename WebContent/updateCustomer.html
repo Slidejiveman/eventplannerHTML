@@ -1,68 +1,86 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE HTML> 
+<html>
 <head>
-  <title>Add Customer</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" type="text/css" href="style.css">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <!--Font Awesome (added because you use icons in your prepend/append)-->
-	<link rel="stylesheet" href="https://formden.com/static/cdn/font-awesome/4.4.0/css/font-awesome.min.css" />
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <script>
-  $(document).ready(function(){
-  	var date_input=$('input[name="date"]'); //our date input has the name "date"
-      var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
-      date_input.datepicker({
-          format: 'mm/dd/yyyy',
-          container: container,
-          todayHighlight: true,
-          autoclose: true,
-      });
-      
-  	//Populate the form with the data for the selected event
-      $.getJSON("/eventplannerJava/eventplanner/eventservice/events/"+$.urlParam("id"))
-  	.done(function(response){
-  		$('#eventName').val(response.name);
-  		$('#eventPlannerSelection').empty().append('<option>'+response.assignedUser.name+'</option>');  
-  		$('#customerselection').empty().append('<option>'+response.customer.name+'</option>');  
-  		$('#date').val(response.date);
-  		$('#status').empty().append('<option>'+response.eventStatus+'</option>');  
-  		$('#venueloc').val(response.location);
-  		$('#eventMenu').val(response.menu);
-  		$('#emptySeats').val(response.percentSeatsEmpty);
-  		
-  		//I must add to this table size and shape, 
-  	})
-  	.fail(function(jqXHR, textStatus, errorThrown) {
-	    console.log("error " + textStatus);
-	    console.log("incoming Text " + jqXHR.responseText);
-	    });
-  });
-  function save (){
-		//e.preventDefault;
-		var customerName = $('#customerName').val();
-    	var customerEmail = $('#customerEmail').val();  
-    	var customerPhone= $('#phone').val();
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 
+</head>
+<body> 
+<script>
+$.urlParam = function(name){
+    var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+    if (results==null){
+       return null;
+    }
+    else{
+       return results[1] || 0;
+    }
+}
+
+// This method is called when the page
+// is loaded.
+$(document).ready(function(){
+	
+	// Get the customer that you want the default values to display for
+	$.ajax({
+	    url: "/eventplannerJava/eventplanner/customerservice/customers/"+$.urlParam("id"),
+	    type: 'GET',
+	    datatype: 'json',
+	    statusCode: {
+	    200: function(response) {
+	    	
+	    	$('#customerName').val(response.name);
+			$('#customerEmail').val(response.email);  
+			$('#phone').val(response.phoneNumber);
+			
+			},
+			
+	    401:function( response ) {
+	    		$('#page-messge').html("You must Login first");
+	    		},
+		403:function( response ) {
+  	    		$('#page-messge').html("Access to the page forbiden");
+  	    		}
+
+	    		},
+	    
+	    error: function(jqXHR, textStatus, errorThrown) {
+  	        console.log("error " + textStatus);
+  	        console.log("incoming Text " + jqXHR.responseText);
+  	        },  
+	  });
+	  
+	// This should reference the form id
+    $("#customerForm").submit(function(e) {
+    	// These reference the text box ids
+    	var customerName = $('#customerName').val();
+		var customerEmail = $('#customerEmail').val();  
+		var customerPhone= $('#phone').val();  
+	
+		// Ensure you are using the correct type and url here.
+		//  This will put the updates in the database
 		$.ajax( { 
 			url:"/eventplannerJava/eventplanner/customerservice/customers/"+$.urlParam("id"),
 			type: "PUT",
 			dataType: "json",
 			contentType: "application/json",
-			data: {
-				'customer_name': customerName,
-				'customer_email': eventDate,
-				'customer_phone' : eventStatus,
-			},
+			data: '{'+
+			'"name": "'+customerName+'",'+
+			'"email": "'+customerEmail+'",'+
+			'"phoneNumber" : "'+customerPhone+'"'+
+		"}",
 			statusCode: {
 				200: function(response) {
 	
-					  $("#page-message").html("Record Updated");
+					  $("#page-message").html("Record Added");
 					  window.location.assign("customerList.html");
-			  	},
+				},
+			  	401:function( response ) {
+	  	    			$('#page-message').html("You must Login first");
+	  	    			},
+	  	      	405:function( response ) {
+	  		  	    	$('#page-message').html("Access to the page forbiden");
+	  		  	    	},
 			  	406: function(response) {
 			  		var errors = response.responseJSON;
 			  		$(".error").html("*");
@@ -75,105 +93,59 @@
 			  	
 				404 : function(jqXHR, textStatus, errorThrown) {
 					$("#page-message").html("Error:"+textStatus);
-					consule.log(errorThrown);
+					console.log(errorThrown);
 		  	        console.log("error " + textStatus);
 		  	        console.log("incoming Text " + jqXHR.responseText);
 		  	      }
 				}
 			});
+	// Don't comment this out. It prevents the form from submitting
+	// If none of the above responses are satisfied.
+		e.preventDefault();
+    	
+    });
+    $("#cancel").click(function(){
+    	window.location.assign("customerList.html");
+    });
+}); // Do not forget these semi-colons.
 
-		//e.preventDefault();
-	}
-  function cancel(){
-  	 window.location.assign("customerList.html");
-  }
-  
-  function confirmLogout(){
-	    agree = confirm("Do you want to logout?");
-	     if(agree){
-	 		window.location.assign("Logout.html");
-	 	}
-		}
-  
+// Needed to allow logout from this page.
+function confirmLogout(){
+    agree = confirm("Do you want to logout?");
+     if(agree){
+ 		window.location.assign("Logout.html");
+ 	}
+}
 </script>
-</head>
-<body class="pageBody">
-
-<div class="container">
-<div class=row>
-<ul class="nav nav-pills" >
-  <li role="presentation"><a href="eventsList.html">Events</a></li>
-  <li role="presentation"><a href="customerList.html">Customers</a></li>
-  <li role="presentation"><a href="userList.html">Users</a></li>
-  <li class="logouttab pull-right" role="presentation"><a onclick ="confirmLogout();" href="#">Logout</a></li>
+<div>
+<ul class="nav">
+<li><a href="eventList.html">Event</a></li>
+<li><a href="customerList.html">Customer</a></li>
+<li><a href="userList.html">Users</a></li>
+<li class="logouttab pull-right" role="presentation"><a onclick ="confirmLogout();" href="#">Logout</a></li>
 </ul>
 </div>
-<div class="formrow">
-  <h3>Update Customer</h3> 
-   <h4>Customer Information</h4>
-  <div class="row">
-  	  <form method="post">
-    <div class="col-sm-6 col-md-offset-3"> 
-     <div class="form-group ">
-      <label class="control-label requiredField" for="customerName">
-       Customer Name
-       <span class="asteriskField">
-        *
-       </span>
-      </label>
-      <input class="form-control" id="customerName" name="customerName" type="text"/>
-     </div>
-       <div class="form-group ">
-      <label class="control-label requiredField" for="customerEmail">
-       Email
-       <span class="asteriskField">
-        *
-       </span>
-      </label>
-       <input class="form-control" id="customerEmail" name="customerEmail" placeholder="customer@website.com" type="text"/>
-     </div>
-     <div class="form-group ">
-      <label class="control-label requiredField" for="customerPhone">
-       Phone Number
-       <span class="asteriskField">
-        *
-       </span>
-      </label>
-      <input class="form-control" id="customerPhone" name="customerPhone" type="text"/>
-     </div>
-    </div>
-    
-    </form>
-    </div>
-    </div>
-    <div class="pageFooter">
-    <br><br>
-    <div class ="row">
-        <div class="col-md-2 col-md-offset-4"><div class="form-group">
-      <div>
-       <button class="btn btn-primary " name="submit" type="submit">
-        Update
-       </button>
-      </div>
-     </div></div>
-        <div class="col-md-2"><div class="form-group">
-      <div>
-       <button class="btn btn-primary" name="submit" type="submit">
-        Cancel
-       </button>
-      </div>
-     </div></div>
-    </div>
-    <br>
-    </div>
-</div> 
-<br><br><br><br><br>
-<!-- Extra JavaScript/CSS added manually in "Settings" tab -->
-<!-- Include jQuery -->
-<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+<h2>Update Customer</h2>
+<p id ='debug'></p>
+<div class ='block-center'>
+<p><span class="error-head">* required field.</span></p>
+<!-- Ensure that all of these IDs are properly referenced 
+     in the scripting section. -->
+<form id="customerForm" method="post">  
+   Customer Name: <input type="text" id="customerName">
+   <span id="customerNameErr" class="error">* </span>
+   <br><br>
+   Customer Email: <input type="text" id="customerEmail">
+   <span id="customerEmailErr" class="error">* </span>
+   <br><br>
+   Customer Phone: <input type="text" id="phone">
+   <span id="phoneErr" class="error">* </span>
+   <input type="submit" name="Add" value="Add"> 
+</form>
+<form action="customerList.html" method ="get">
+<button type="submit" >Cancel</button>
+</form>
 
-<script>
-    
-</script>
+</div>
 </body>
 </html>
