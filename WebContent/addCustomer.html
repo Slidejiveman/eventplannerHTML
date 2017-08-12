@@ -15,7 +15,7 @@
     $(document).ready(function(){
         var date_input=$('input[name="date"]'); //our date input has the name "date"
         var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
-        $("#save").click(function() {
+        $("#save").submit(function(e) {
         	//e.preventDefault();
         	var customerName = $('#customerName').val();
     		var customerEmail = $('#customerEmail').val();  
@@ -26,17 +26,23 @@
     			type: "POST",
     			dataType: "json",
     			contentType: "application/json",
-    			data: {
-    				'customer_name': customerName,
-    				'customer_email': eventDate,
-    				'customer_phone' : eventStatus,
-    			},
+    			data: '{'+
+				'"name": "'+customerName+'",'+
+				'"email": "'+customerEmail+'",'+
+				'"phoneNumber" : "'+customerPhone+'"'+
+			"}",
     			statusCode: {
     				200: function(response) {
     	
-    					  $("#page-message").html("Record Updated");
+    					  $("#page-message").html("Record Added");
     					  window.location.assign("customerList.html");
-    			  	},
+    				},
+    			  	401:function( response ) {
+    	  	    			$('#page-message').html("You must Login first");
+    	  	    			},
+    	  	      	405:function( response ) {
+    	  		  	    	$('#page-message').html("Access to the page forbiden");
+    	  		  	    	},
     			  	406: function(response) {
     			  		var errors = response.responseJSON;
     			  		$(".error").html("*");
@@ -49,7 +55,7 @@
     			  	
     				404 : function(jqXHR, textStatus, errorThrown) {
     					$("#page-message").html("Error:"+textStatus);
-    					consule.log(errorThrown);
+    					console.log(errorThrown);
     		  	        console.log("error " + textStatus);
     		  	        console.log("incoming Text " + jqXHR.responseText);
     		  	      }
