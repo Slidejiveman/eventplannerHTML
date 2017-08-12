@@ -13,6 +13,13 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script>
+function confirmLogout(){
+    agree = confirm("Do you want to logout?");
+     if(agree){
+ 		window.location.assign("Logout.html");
+ 	}
+}
+
 $(document).ready(function() {
 
 	$("#guestForm").submit(function (e){
@@ -30,7 +37,7 @@ $(document).ready(function() {
 		    }
 		}
 		
-		$.ajax({
+		/* $.ajax({
 		    url: "/eventplannereventplannerJava/eventplanner/guestservice/guests/"+$.urlParam("id"),
 		    type: 'GET',
 		    datatype: 'json',
@@ -38,7 +45,7 @@ $(document).ready(function() {
 		    200: function(response) {
 		    		$('#id').val(response.idNumber);
 				$('#name').val(response.guestName);
-				$('#relationshipDescriptor').val(response.note)
+				$('#relationshipDescriptor').val(response.note) */
 		
 		$.ajax( { 
 			url:"/eventplannerJava/eventplanner/guestservice/guests/id/",
@@ -76,41 +83,42 @@ $(document).ready(function() {
 				console.log(errorThrown);
 	  	        console.log("error " + textStatus);
 	  	        console.log("incoming Text " + jqXHR.responseText);
-	  	    		}
+	  	    	}
 		  	},
 		
 			});
 
 		e.preventDefault();
-		    
-		    }
-
-       function loadGuests()
-       {           
-   		if (1) {  //Check condition here
-   		    $('#guestselection').empty().append('<option>select</option>');        
-   		    $.ajax({
-   		            url: '/eventplannerJava/eventplanner/guestservice/guests',
-   		            dataType: 'json',
-   		            type: 'GET',
-   		            success: function(response) {
-   		              var guests = response;
-   		              if (guests != null)
-   		              {
-   		            	$("#guestselection").empty();
-   		                for (i in guests) {
-   		                 $("#guestselection").append("<option>"+guests[i].name+"</option>");
-   		               }
-   		              }
-   		            },
-   		            error: function(x, e) {
-   		
-   		            }
-   		        });
-   		}
-   	}
+		
 });
-              </script>
+		    
+  function loadGuests()
+  {           
+if (1) {  //Check condition here
+    $('#guestselection').empty().append('<option>select</option>');        
+    $.ajax({
+            url: '/eventplannerJava/eventplanner/guestservice/guests',
+            dataType: 'json',
+            type: 'GET',
+            success: function(response) {
+              var guests = response;
+              if (guests != null)
+              {
+            	$("#guestselection").empty();
+                for (i in guests) {
+                 $("#guestselection").append("<option>"+guests[i].name+"</option>");
+               }
+              }
+            },
+            error: function(x, e) {
+
+            }
+        });
+     }
+   }
+  });
+		    
+</script>
        
     </head>
 <body class="pageBody">
@@ -122,7 +130,7 @@ $(document).ready(function() {
       <li role="presentation"><a href="eventsList.html">Events</a></li>
   <li role="presentation"><a href="customerList.html">Customer</a></li>
   <li role="presentation"><a href="userList.html">Users</a></li>
-  <li class="logouttab pull-right"><a href="#">Logout</a></li>
+  <li class="logouttab pull-right" role="presentation"><a onclick ="confirmLogout();" href="#">Logout</a></li>
     </ul>
   </nav>
 </div>
