@@ -139,6 +139,13 @@
     		 window.location.assign("#");	
     	 });
     });
+    
+    function confirmLogout(){
+	    agree = confirm("Do you want to logout?");
+	     if(agree){
+	 		window.location.assign("Logout.html");
+	 	}
+		}
 </script>
 </head>
 <body class="pageBody">
@@ -149,7 +156,7 @@
   <li role="presentation"><a href="eventsList.html">Events</a></li>
   <li role="presentation"><a href="#">Customers</a></li>
   <li role="presentation"><a href="#">Users</a></li>
-  <li class="logouttab pull-right"><a href="Logout.html">Logout</a></li>
+  <li class="logouttab pull-right" role="presentation"><a onclick ="confirmLogout();" href="#">Logout</a></li>
 </ul>
 </div>
 <div class="formrow">

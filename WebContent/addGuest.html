@@ -59,13 +59,20 @@ $(document).ready(function() {
 		e.preventDefault();
 });
 });
+
+function confirmLogout(){
+    agree = confirm("Do you want to logout?");
+     if(agree){
+ 		window.location.assign("Logout.html");
+ 	}
+	}
 </script>
 <div>
 <ul class="nav">
 <li><a href="eventList.html">Event</a></li>
 <li><a href="customerList.html">Customer</a></li>
 <li><a href="userList.html">Users</a></li>
-<li><a href="Logout.html">Logout</a></li>
+<li class="logouttab pull-right" role="presentation"><a onclick ="confirmLogout();" href="#">Logout</a></li>
 </ul>
 </div>
 <h2>Add Guest</h2>

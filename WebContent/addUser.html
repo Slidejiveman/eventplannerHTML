@@ -19,7 +19,7 @@
        <li role="presentation"><a href="eventsList.html">Events</a></li>
        <li role="presentation"><a href="#">Customers</a></li>
        <li role="presentation"><a href="userList.html">Users</a></li>
-       <li class="logouttab pull-right" role="presentation"><a href="Logout.html">Logout</a></li>
+       <li class="logouttab pull-right" role="presentation"><a onclick ="confirmLogout();" href="#">Logout</a></li>
      </ul>
     </div>
  <div class="formrow">
@@ -74,6 +74,14 @@
         var key = event.keyCode;
         return ((key >= 65 && key <= 90) || key == 8);
         };
+        
+        function confirmLogout(){
+            agree = confirm("Do you want to logout?");
+             if(agree){
+         		window.location.assign("Logout.html");
+         	}
+        	}
+        
   </script>
     </body>
 </html>

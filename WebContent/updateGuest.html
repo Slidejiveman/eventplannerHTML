@@ -37,6 +37,11 @@
    		        });
    		}
    	}
+       function confirmLogout(){
+	        agree = confirm("Do you want to logout?");
+	         if(agree){
+	     		window.location.assign("Logout.html");
+	     	}
        </script>
        
     </head>
@@ -49,7 +54,7 @@
       <li role="presentation"><a href="eventsList.html">Events</a></li>
   <li role="presentation"><a href="customerList.html">Customer</a></li>
   <li role="presentation"><a href="userList.html">Users</a></li>
-  <li class="logouttab pull-right"><a href="Logout.html">Logout</a></li>
+  <li class="logouttab pull-right" role="presentation"><a onclick ="confirmLogout();" href="#">Logout</a></li>
     </ul>
   </nav>
 </div>
