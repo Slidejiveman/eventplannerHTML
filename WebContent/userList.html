@@ -67,19 +67,6 @@
 	}
     
     function createTable() {
-    	//$.getJSON( "/eventplannerJava/eventplanner/userservice/users")
-    	 /* .done(function( response ) {
-    		  var tableHTML = '<thead><tr><th></th><th>ID</th><th>User Name</th></tr></thead><tbody>';
-    	        $.each(response, function (i, user) {
-    	            tableHTML += '<tr><td><input type="radio" onchange= "selectChange()" name="selectedRow" value='+user.id+'><td>'+ user.id+ '</td><td>' + user.name + '</td></tr>';
-    	        });
-    	        tableHTML+='</tbody>';
-    	       $('#user-list-table').html(tableHTML);})
-  	  .fail(function(jqXHR, textStatus, errorThrown) {
-  	        console.log("error " + textStatus);
-  	        console.log("incoming Text " + jqXHR.responseText);});
-      },
-      beforeSend: setHeader*/
       $.ajax({
     	  url:"/eventplannerJava/eventplanner/userservice/users",
     	  type:'GET',
@@ -155,14 +142,31 @@
  </form>
     <script>
     function confirmDelete(){
-        var agree=confirm("Are you sure you want to delete this user?");
-            if (agree){
-            }else{
-            
-	    
-	    }
-        }
-  
+    	agree = confirm("Do you want to delete user #"+$("#deleteID").val()+"?");
+    	if(agree){
+	    	//alert("Delete "+$("#deleteID").val());
+	 		//alert("You confirmed the deletion");
+	 		$('#deletebtn').attr("disabled", true);
+	 		$.ajax({ 
+	 			url:"/eventplannerJava/eventplanner/userservice/users/"+$("#deleteID").val(),
+	 			dataType: "json",
+				contentType: "application/json",
+	 			type: "DELETE",
+	 			beforeSend: setHeader,
+	 		    success: (function(data) {
+	 			  console.log("Delete success ");
+	 			  window.location.assign("customerList.html");
+	 			  console.log("Delete after change href");
+	 		  }),
+	 		  fail: (function(jqXHR, textStatus, errorThrown) {
+	 	 	      console.log("Delete error " + textStatus);
+	 	 	      console.log("incoming Text " + jqXHR.responseText);
+	 		  })
+
+	 	  	 });
+	 		console.log("end of delete")
+    	}
+    }
   </script>
 
 </div>
