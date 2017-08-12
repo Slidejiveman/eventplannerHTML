@@ -1,91 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE HTML> 
+<html>
 <head>
-  <title>Login</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" type="text/css" href="style.css">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
- 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 </head>
-<body class="pageBody">
-
-<div class="container">
-<div class="formrow">
-  <h3>Login</h3> 
-  <p><span class="error-head">* required field.</span></p>
-  <p><span id="page-message">Enter fields and click Save</span></p>
-  <div class="row">
-    <div class="col-sm-4 col-md-offset-4"> 
-  	  <form id="login" method="post">
-     <div class="form-group ">
-      <label class="control-label requiredField" for="username">
-       Username
-       <span class="asteriskField">
-        *
-       </span>
-      </label>
-      <input class="form-control" id="username" name="username" type="text"/>
-     </div>
-       <div class="form-group ">
-      <label class="control-label requiredField" for="password">
-       Password
-       <span class="asteriskField">
-        *
-       </span>
-      </label>
-      <div class="input-group">
-       <input class="form-control" id="password" name="password" type="password" size="80"/>
-      </div>
-     </div>
-     <div>
-       <button class="btn btn-primary " name="submit" type="submit" id="loginbtn">
-        Login
-       </button>
-      </div>
-    </form>
-    </div>
-    </div>
-    <div class="pageFooter footer-buttons">
-     <div class="pageFooter">
-   <!--<div class ="row">
-        <div class="col-md-2 col-md-offset-5"><div class="form-group">
-      <div>
-       <button class="btn btn-primary " name="submit" type="submit" id="loginbtn">
-        Login
-       </button>
-      </div>
-     </div></div>
-    </div> --> 
-    <br>
-    </div>
-    </div>
-    </div>
-    
-</div> 
-<br><br><br><br><br>
-<!-- Extra JavaScript/CSS added manually in "Settings" tab -->
-<!-- Include jQuery -->
-<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
-
+<body> 
 <script>
 
-
 $(document).ready(function() {
-$("#login").submit(function (e){
-		var username = $('#username').val();
+$("#loginForm").submit(function (e){
+		var userName = $('#userName').val();
 		var password = $('#password').val();
 
 		$.ajax( { 
-			url:"/eventplannerJava/eventplanner/userservice/login/", 
+			url:"/eventplannerJava/eventplanner/userservice/login/",
 			type: "POST",
 			dataType: "json",
 			contentType: "application/json",
 			data: '{'+  
-				'"username" : "'+username+'",'+
+				'"username" : "'+userName+'",'+
 				'"password" : "'+password+'"'+
 			"}",
 			statusCode: {
@@ -94,9 +27,8 @@ $("#login").submit(function (e){
 				  $("#page-message").html("Logged in");
 				  window.location.assign("eventsList.html");
 		  		},
-		  	401: function(response) {
+		  	406: function(response) {
 		  		var errors = response.responseJSON;
-		  		console.log(errors);
 		  		$(".error").html("*");
 		  		$.each(errors, function (i, message) {
 		  			$("#"+message.attributeName+"Err").html(message.message);
@@ -107,7 +39,7 @@ $("#login").submit(function (e){
 		  	
 			404 : function(jqXHR, textStatus, errorThrown) {
 				$("#page-message").html("Error:"+textStatus);
-				console.log(errorThrown);
+				consule.log(errorThrown);
 	  	        console.log("error " + textStatus);
 	  	        console.log("incoming Text " + jqXHR.responseText);
 	  	      	}
@@ -119,5 +51,22 @@ $("#login").submit(function (e){
 });
 
 </script>
+
+<h2>Login</h2>
+<p id ='debug'></p>
+<div class ='block-center'>
+<p><span id="page-message">Enter fields and click Save</span></p>
+<p><span class="error-head">* required field.</span></p>
+<form id="loginForm" method="post"> 
+   Username: <input type="text" id="userName" >
+   <span id="usernameErr" class="error">* </span>
+   <br><br>
+   Password: <input type="text" id="password">
+   <span id="passwordErr" class="error">* </span>
+   <br><br>
+   <input type="submit" name="login" value="Login"> 
+</form>
+
+</div>
 </body>
 </html>
