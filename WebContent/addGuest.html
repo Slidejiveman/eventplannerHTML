@@ -68,7 +68,7 @@ $(document).ready(function() {
 			contentType: "application/json",
 			data: '{'+  
 				'"name" : "'+guestName+'",'+
-				'"relationshipDesciptor" :"'+ note+'",'+
+				'"relationshipDescriptor" :"'+ note+'",'+
 			"}",
 			statusCode: {
 			200: function(response) {
@@ -120,10 +120,10 @@ $(document).ready(function() {
 <p><span class="error-head">* required field.</span></p>
 <form id="guestForm" method="post">
    Guest Name: <input type="text" id="name">
-   <span id="firstNameErr" class="error">* </span>
+   <span id="name" class="error">* </span>
    <br><br>
-   Note: <input type="text" id="relationshipDesciptor">
-   <span id="lastNameErr" class="error">* </span>
+   Note: <input type="text" id="relationshipDescriptor">
+   <span id="relationshipDescriptorErr" class="error">* </span>
    
    <br><br>
    <input type="submit" name="Add" value="Add"> 
