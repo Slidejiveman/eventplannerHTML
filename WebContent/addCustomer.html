@@ -9,11 +9,14 @@
 <script>
 $(document).ready(function(){
     
+	// This should reference the form id
     $("#customerForm").submit(function(e) {
+    	// These reference the text box ids
     	var customerName = $('#customerName').val();
 		var customerEmail = $('#customerEmail').val();  
 		var customerPhone= $('#phone').val();  
 	
+		// Ensure you are using the correct type and url here.
 		$.ajax( { 
 			url:"/eventplannerJava/eventplanner/customerservice/customers/",
 			type: "POST",
@@ -54,21 +57,23 @@ $(document).ready(function(){
 		  	      }
 				}
 			});
-	
+	// Don't comment this out. It prevents the form from submitting
+	// If none of the above responses are satisfied.
 		e.preventDefault();
     	
     });
     $("#cancel").click(function(){
     	window.location.assign("customerList.html");
     });
-});
+}); // Do not forget these semi-colons.
 
+// Needed to allow logout from this page.
 function confirmLogout(){
     agree = confirm("Do you want to logout?");
      if(agree){
  		window.location.assign("Logout.html");
  	}
-	}
+}
 </script>
 <div>
 <ul class="nav">
@@ -82,7 +87,9 @@ function confirmLogout(){
 <p id ='debug'></p>
 <div class ='block-center'>
 <p><span class="error-head">* required field.</span></p>
-<form id="customerForm" method="post">
+<!-- Ensure that all of these IDs are properly referenced 
+     in the scripting section. -->
+<form id="customerForm" method="post">  
    Customer Name: <input type="text" id="customerName">
    <span id="customerNameErr" class="error">* </span>
    <br><br>
