@@ -13,8 +13,80 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script>
+$(document).ready(function() {
+
+	$("#guestForm").submit(function (e){
+		e.preventDefault;
+		var guestName =$('#name').val();
+		var note = $('#relationshipDescriptor').val();
+		
+		$.urlParam = function(name){
+		    var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+		    if (results==null){
+		       return null;
+		    }
+		    else{
+		       return results[1] || 0;
+		    }
+		}
+		
+		$.ajax({
+		    url: "/eventplannereventplannerJava/eventplanner/guestservice/guests/"+$.urlParam("id"),
+		    type: 'GET',
+		    datatype: 'json',
+		    statusCode: {
+		    200: function(response) {
+		    		$('#id').val(response.idNumber);
+				$('#name').val(response.guestName);
+				$('#relationshipDescriptor').val(response.note)
+		
+		$.ajax( { 
+			url:"/eventplannerJava/eventplanner/guestservice/guests/id/",
+			type: "PUT",
+			dataType: "json",
+			contentType: "application/json",
+			data: '{'+  
+				'"name" : "'+guestName+'",'+
+				'"relationshipDescriptor" :"'+ note+'"'+
+			"}",
+			statusCode: {
+			200: function(response) {
+				  $("#page-message").html("Record Added");
+				  window.location.assign("guestList.html");
+		  		},
+		  	401:function( response ) {
+  	    			$('#page-message').html("You must Login first");
+  	    			},
+  	      	405:function( response ) {
+  		  	    	$('#page-message').html("Access to the page forbiden");
+  		  	    	},
+
+		  	406: function(response) {
+		  		var errors = response.responseJSON;
+		  		$(".error").html("*");
+		  		$.each(errors, function (i, message) {
+		  			$("#"+message.attributeName+"Err").html(message.message);
+		  			console.log("Error "+message.attributeName +" "+message.message)
+    	        		});
+		  		$("#page-message").html("Fix errors and click Save");
+		  		},
+		  	
+			404 : function(jqXHR, textStatus, errorThrown) {
+				$("#page-message").html("Error:"+textStatus);
+				console.log(errorThrown);
+	  	        console.log("error " + textStatus);
+	  	        console.log("incoming Text " + jqXHR.responseText);
+	  	    		}
+		  	},
+		
+			});
+
+		e.preventDefault();
+		    
+		    }
+
        function loadGuests()
-   	{           
+       {           
    		if (1) {  //Check condition here
    		    $('#guestselection').empty().append('<option>select</option>');        
    		    $.ajax({
@@ -37,12 +109,8 @@
    		        });
    		}
    	}
-       function confirmLogout(){
-	        agree = confirm("Do you want to logout?");
-	         if(agree){
-	     		window.location.assign("Logout.html");
-	     	}
-       </script>
+});
+              </script>
        
     </head>
 <body class="pageBody">
@@ -54,7 +122,7 @@
       <li role="presentation"><a href="eventsList.html">Events</a></li>
   <li role="presentation"><a href="customerList.html">Customer</a></li>
   <li role="presentation"><a href="userList.html">Users</a></li>
-  <li class="logouttab pull-right" role="presentation"><a onclick ="confirmLogout();" href="#">Logout</a></li>
+  <li class="logouttab pull-right"><a href="#">Logout</a></li>
     </ul>
   </nav>
 </div>
@@ -136,18 +204,23 @@
     <div class="col-sm-1">
     <div class="form-group">
         <div>
+        <form action="guestList.html" method ="get">
         <button class="btn btn-primary" name="submit" type="submit">
-	Add
+	Update
         </button>
+        </form>
 </div>
 </div>
 </div>
 <div class="col-sm-1">
 <div class="form-group">
 <div>
+<form action="guestList.html" method ="get">
 <button class="btn btn-primary " name="submit" type="submit">
+
         Cancel
        </button>
+        </form>
       </div>
      </div>
      </div>
