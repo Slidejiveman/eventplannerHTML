@@ -129,6 +129,8 @@
     	 $("#viewassignmentsbtn").click(function(){
     	 	window.location.assign("assignments.html");
     	 });
+    	 
+    	// Unneeded. The logic is handled by the vanilla JS functions below
     	 $("#seatingreportsa_zbtn").click(function(){
     	 	window.location.assign("#");
     	 });
@@ -136,7 +138,8 @@
     	 	window.location.assign("#")
     	 });
     	 $("#generatemarkersbtn").click(function(){
-    		 window.location.assign("#");	
+    		 //window.location.assign("#");	
+    		 
     	 });
     });
     
@@ -145,7 +148,56 @@
 	     if(agree){
 	 		window.location.assign("Logout.html");
 	 	}
-		}
+	}
+    
+    // The following three methods work, but the IDs are hard coded.
+    // There is no way to get the ID for an event that has yet to be
+    // persisted, so we probably don't want these buttons on the add
+    // screen to begin with.
+    function generateTableMarkers() {
+	    var req = new XMLHttpRequest();
+		 req.open("GET", "/eventplannerJava/eventplanner/reportservice/events/1/tablemarkers", true);
+		 req.responseType = "blob";
+		 req.onload = function (event) {
+			 var blob = req.response;
+			 console.log(blob.size);
+			 var link = document.createElement('a');
+			 link.href = window.URL.createObjectURL(blob);
+			 link.download = "TableMarkers_" + new Date() + ".pdf";
+			 link.click();
+		 };
+		 req.send();
+    }
+    
+    function generateSeatingReportTables() {
+    	var req = new XMLHttpRequest();
+		 req.open("GET", "/eventplannerJava/eventplanner/reportservice/events/1/tablenumberseatingreport", true);
+		 req.responseType = "blob";
+		 req.onload = function (event) {
+			 var blob = req.response;
+			 console.log(blob.size);
+			 var link = document.createElement('a');
+			 link.href = window.URL.createObjectURL(blob);
+			 link.download = "SeatRepByTable_" + new Date() + ".pdf";
+			 link.click();
+		 };
+		 req.send();
+    }
+    
+    function generateSeatingReportAlpha() {
+    	var req = new XMLHttpRequest();
+		 req.open("GET", "/eventplannerJava/eventplanner/reportservice/events/2/alphabeticalseatingreport", true);
+		 req.responseType = "blob";
+		 req.onload = function (event) {
+			 var blob = req.response;
+			 console.log(blob.size);
+			 var link = document.createElement('a');
+			 link.href = window.URL.createObjectURL(blob);
+			 link.download = "SeatRepByTable_" + new Date() + ".pdf";
+			 link.click();
+		 };
+		 req.send();
+    }
 </script>
 </head>
 <body class="pageBody">
@@ -327,7 +379,7 @@
     <div class=row>
     <div class="col-md-3"><div class="form-group">
       <div>
-       <button class="btn btn-primary " name="submit" type="submit" id="seatingreportsa_zbtn">
+       <button class="btn btn-primary " name="submit" type="submit" id="seatingreportsa_zbtn" onclick="generateSeatingReportAlpha()">
         Generate Seating Reports Alphabetically
        </button>
       </div>
@@ -335,7 +387,7 @@
    </div>
    <div class="col-md-3"><div class="form-group">
       <div>
-       <button class="btn btn-primary " name="submit" type="submit" id="reportsbytablebtn">
+       <button class="btn btn-primary " name="submit" type="submit" id="reportsbytablebtn" onclick="generateSeatingReportTables()">
         Generate Seating Reports By Table
        </button>
       </div>
@@ -343,7 +395,7 @@
      </div>
    <div class="col-md-3"><div class="form-group">
       <div>
-       <button class="btn btn-primary " name="submit" type="submit" id="generatemarkersbtn">
+       <button class="btn btn-primary " name="submit" type="submit" id="generatemarkersbtn" onclick="generateTableMarkers()">
         Generate Table Markers
        </button>
       </div>
