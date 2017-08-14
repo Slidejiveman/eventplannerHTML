@@ -7,6 +7,8 @@
 </head>
 <body> 
 <script>
+// This function returns the URL parameter for an ID using a regular expression.
+// for this function to work, the text "id" needs to appear in the URL field
 $.urlParam = function(name){
     var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
     if (results==null){
@@ -140,7 +142,7 @@ function confirmLogout(){
    <br><br>
    Customer Phone: <input type="text" id="phone">
    <span id="phoneErr" class="error">* </span>
-   <input type="submit" name="Add" value="Add"> 
+   <input type="submit" name="Update" value="Update"> 
 </form>
 <form action="customerList.html" method ="get">
 <button type="submit" >Cancel</button>

@@ -191,7 +191,7 @@
     <div class=row>
     <div class="col-md-3"><div class="form-group">
       <div>
-       <button id="seatingreportsa_zbtn" class="btn btn-primary " name="submit" type="submit">
+       <button id="seatingreportsa_zbtn" class="btn btn-primary " name="submit" type="submit" onclick="generateSeatingReportAlpha()">
         Generate Seating Reports Alphabetically
        </button>
       </div>
@@ -199,7 +199,7 @@
    </div>
    <div class="col-md-3"><div class="form-group">
       <div>
-       <button id = "reportsbytablebtn" class="btn btn-primary " name="submit" type="submit">
+       <button id = "reportsbytablebtn" class="btn btn-primary " name="submit" type="submit" onclick="generateSeatingReportTables()">
         Generate Seating Reports By Table
        </button>
       </div>
@@ -207,7 +207,7 @@
      </div>
    <div class="col-md-3"><div class="form-group">
       <div>
-       <button id = "generatemarkersbtn"class="btn btn-primary " name="submit" type="submit">
+       <button id = "generatemarkersbtn"class="btn btn-primary " name="submit" type="submit" onclick="generateTableMarkers()">
         Generate Table Markers
        </button>
       </div>
@@ -380,6 +380,8 @@
 	 $("#viewassignmentsbtn").click(function(){
 	 	window.location.assign("updateAssignments.html?id="+$.urlParam("id")+"&like=like");
 	 });
+	 
+	 // Unneeded. The logic is handled by the vanilla JS functions below
 	 $("#seatingreportsa_zbtn").click(function(){
 	 	window.location.assign("#");
 	 });
@@ -389,6 +391,51 @@
 	 $("#generatemarkersbtn").click(function(){
 		 window.location.assign("#");	
 	 });
+	 
+	 function generateTableMarkers() {
+		    var req = new XMLHttpRequest();
+			 req.open("GET", "/eventplannerJava/eventplanner/reportservice/events/"+$.urlParam("id")+"/tablemarkers", true);
+			 req.responseType = "blob";
+			 req.onload = function (event) {
+				 var blob = req.response;
+				 console.log(blob.size);
+				 var link = document.createElement('a');
+				 link.href = window.URL.createObjectURL(blob);
+				 link.download = "TableMarkers_" + new Date() + ".pdf";
+				 link.click();
+			 };
+			 req.send();
+	 }
+	    
+    function generateSeatingReportTables() {
+    	var req = new XMLHttpRequest();
+		 req.open("GET", "/eventplannerJava/eventplanner/reportservice/events/"+$.urlParam("id")+"/tablenumberseatingreport", true);
+		 req.responseType = "blob";
+		 req.onload = function (event) {
+			 var blob = req.response;
+			 console.log(blob.size);
+			 var link = document.createElement('a');
+			 link.href = window.URL.createObjectURL(blob);
+			 link.download = "SeatRepByTable_" + new Date() + ".pdf";
+			 link.click();
+		 };
+		 req.send();
+    }
+    
+    function generateSeatingReportAlpha() {
+    	var req = new XMLHttpRequest();
+		 req.open("GET", "/eventplannerJava/eventplanner/reportservice/events/"+$.urlParam("id")+"/alphabeticalseatingreport", true);
+		 req.responseType = "blob";
+		 req.onload = function (event) {
+			 var blob = req.response;
+			 console.log(blob.size);
+			 var link = document.createElement('a');
+			 link.href = window.URL.createObjectURL(blob);
+			 link.download = "SeatRepByTable_" + new Date() + ".pdf";
+			 link.click();
+		 };
+		 req.send();
+    }
 </script>
 </body>
 </html>
