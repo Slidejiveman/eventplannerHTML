@@ -8,197 +8,13 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <!--Font Awesome (added because you use icons in your prepend/append)-->
 	<link rel="stylesheet" href="https://formden.com/static/cdn/font-awesome/4.4.0/css/font-awesome.min.css" />
-	<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+  <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
-	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <script>
-  
-    $(document).ready(function(){
-    	 $("#customerselection").select2({
-      	 	  ajax:{
-     	            url: '/eventplannerJava/eventplanner/customerservice/customers',
-     	            dataType: 'json',
-     	            type: 'GET',
-     	            processResults: function (data) {
-     	                return {
-     	                    results: $.map(data, function(obj) {
-     	                        return { id: obj.id, text:obj.name};
-     	                    })
-     	                };
-     	            }
-     	        }
-      	 	});
-      	 $("#eventPlannerSelection").select2({
-     	 	  ajax:{
-     	            url: '/eventplannerJava/eventplanner/userservice/users',
-     	            dataType: 'json',
-     	            type: 'GET',
-     	            processResults: function (data) {
-     	                return {
-     	                    results: $.map(data, function(obj) {
-     	                        return { id: obj.id, text: obj.name};
-     	                    })
-     	                };
-     	            }
-     	        }
-     	 	});
-   	 $(".searchableselect").select2();
-        var date_input=$('input[name="date"]'); //our date input has the name "date"
-        var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
-        date_input.datepicker({
-            format: 'mm/dd/yyyy',
-            container: container,
-            todayHighlight: true,
-            autoclose: true,
-        })
-        $("#save").click(function() {
-        	//e.preventDefault();
-        	var eventName = $('#eventName').val();
-    		var selectedEventPlanner = $('#eventPlannerSelection').val();  
-    		var selectedCustomer= $('#customerselection').val();  
-    		var eventDate= $('#date').val();
-    		var eventStatus= $('#status').val();
-    		var eventLocation= $('#venueloc').val();
-    		var eventMenu= $('#eventMenu').val();
-    		var emptySeats= $('#emptySeats').val();
-    		alert(selectedCustomer);
-    	
-    		$.ajax( { 
-    			url:"/eventplannerJava/eventplanner/eventservice/events/",
-    			type: "POST",
-    			dataType: "json",
-    			contentType: "application/json",
-    			data: {
-    				'name': eventName,
-    				'date': eventDate,
-    				'status' : eventStatus,
-    				'location' : eventLocation,
-    				'menu' : eventMenu,
-    				'percentSeatsEmpty' : emptySeats,
-    				assignedUser:{
-    					'name':selectedEventPlanner,
-    				},
-    				customer:{
-    					'name':selectedCustomer
-    				}
-    			},
-    			statusCode: {
-    				200: function(response) {
-    	
-    					  $("#page-message").html("Record Updated");
-    					  window.location.assign("eventsList.html");
-    			  	},
-    			  	406: function(response) {
-    			  		var errors = response.responseJSON;
-    			  		$(".error").html("*");
-    			  		$.each(errors, function (i, message) {
-    			  			$("#"+message.attributeName+"Err").html(message.message);
-    			  			console.log("Error "+message.attributeName +" "+message.message)
-    	    	        		});
-    			  		$("#page-message").html("Fix errors and click Save");
-    			  	},
-    			  	
-    				404 : function(jqXHR, textStatus, errorThrown) {
-    					$("#page-message").html("Error:"+textStatus);
-    					consule.log(errorThrown);
-    		  	        console.log("error " + textStatus);
-    		  	        console.log("incoming Text " + jqXHR.responseText);
-    		  	      }
-    				}
-    			});
-    	
-    		//e.preventDefault();
-        	
-        });
-        $("#cancel").click(function(){
-        	window.location.assign("eventsList.html");
-        });
-        $("#importbtn").click(function(){
-        	//open the file picker
-        });
-    	$("#viewguestsbtn").click(function(){
-    	    window.location.assign("guestList.html");
-    	});
-    	 $("#generateassignmentsbtn").click(function(){
-    	 	window.location.assign("#");
-    	 });
-    	 $("#viewassignmentsbtn").click(function(){
-    	 	window.location.assign("assignments.html");
-    	 });
-    	 
-    	// Unneeded. The logic is handled by the vanilla JS functions below
-    	 $("#seatingreportsa_zbtn").click(function(){
-    	 	window.location.assign("#");
-    	 });
-    	 $("#reportsbytablebtn").click(function(){
-    	 	window.location.assign("#")
-    	 });
-    	 $("#generatemarkersbtn").click(function(){
-    		 //window.location.assign("#");	
-    		 
-    	 });
-    });
-    
-    function confirmLogout(){
-	    agree = confirm("Do you want to logout?");
-	     if(agree){
-	 		window.location.assign("Logout.html");
-	 	}
-	}
-    
-    // The following three methods work, but the IDs are hard coded.
-    // There is no way to get the ID for an event that has yet to be
-    // persisted, so we probably don't want these buttons on the add
-    // screen to begin with.
-    function generateTableMarkers() {
-	    var req = new XMLHttpRequest();
-		 req.open("GET", "/eventplannerJava/eventplanner/reportservice/events/1/tablemarkers", true);
-		 req.responseType = "blob";
-		 req.onload = function (event) {
-			 var blob = req.response;
-			 console.log(blob.size);
-			 var link = document.createElement('a');
-			 link.href = window.URL.createObjectURL(blob);
-			 link.download = "TableMarkers_" + new Date() + ".pdf";
-			 link.click();
-		 };
-		 req.send();
-    }
-    
-    function generateSeatingReportTables() {
-    	var req = new XMLHttpRequest();
-		 req.open("GET", "/eventplannerJava/eventplanner/reportservice/events/1/tablenumberseatingreport", true);
-		 req.responseType = "blob";
-		 req.onload = function (event) {
-			 var blob = req.response;
-			 console.log(blob.size);
-			 var link = document.createElement('a');
-			 link.href = window.URL.createObjectURL(blob);
-			 link.download = "SeatRepByTable_" + new Date() + ".pdf";
-			 link.click();
-		 };
-		 req.send();
-    }
-    
-    function generateSeatingReportAlpha() {
-    	var req = new XMLHttpRequest();
-		 req.open("GET", "/eventplannerJava/eventplanner/reportservice/events/2/alphabeticalseatingreport", true);
-		 req.responseType = "blob";
-		 req.onload = function (event) {
-			 var blob = req.response;
-			 console.log(blob.size);
-			 var link = document.createElement('a');
-			 link.href = window.URL.createObjectURL(blob);
-			 link.download = "SeatRepByTable_" + new Date() + ".pdf";
-			 link.click();
-		 };
-		 req.send();
-    }
-</script>
 </head>
 <body class="pageBody">
 
@@ -206,8 +22,8 @@
 <div class=row>
 <ul class="nav nav-pills" >
   <li role="presentation"><a href="eventsList.html">Events</a></li>
-  <li role="presentation"><a href="#">Customers</a></li>
-  <li role="presentation"><a href="#">Users</a></li>
+  <li role="presentation"><a href="customerList.html">Customers</a></li>
+  <li role="presentation"><a href="userList.html">Users</a></li>
   <li class="logouttab pull-right" role="presentation"><a onclick ="confirmLogout();" href="#">Logout</a></li>
 </ul>
 </div>
@@ -251,53 +67,41 @@
       <input class="form-control" id="venueloc" name="venueloc" type="text"/>
      </div>
      <div class="form-group ">
-      <label class="control-label requiredField" for="number">
+      <label class="control-label requiredField" for="emptySeats">
        Percentage of Empty Seats
        <span class="asteriskField">
         *
        </span>
       </label>
-      <input class="form-control" id="number" name="number" type="text"/>
+      <input class="form-control" id="emptySeats" name="emptySeats" type="text"/>
      </div>
 
      <div class="form-group ">
-      <label class="control-label requiredField" for="select1">
+      <label class="control-label requiredField" for="sizeselection">
        Table Size
        <span class="asteriskField">
         *
        </span>
       </label>
-      <select class="select form-control searchableselect" id="select1" name="select1">
-       <option value="4">
-        4
-       </option>
-       <option value="6">
-        6
-       </option>
-       <option value="8">
-        8
-       </option>
+      <select class="form-control searchableselect" id="sizeselection" name="sizeselection" data-placeholder="Select an option">
+      	<option value="4">4</option>
+       <option value="6">6</option>
+       <option value="8">8</option>
       </select>
      </div>
     </div>
     <div class="col-sm-6">
     <div class="form-group ">
-      <label class="control-label requiredField" for="select2">
+      <label class="control-label requiredField" for="shapeselection">
        Table Shape
        <span class="asteriskField">
         *
        </span>
       </label>
-      <select class="select form-control searchableselect" id="select2" name="select2">
-       <option value="Square">
-        Square
-       </option>
-       <option value="Rectangular">
-        Rectangular
-       </option>
-       <option value="Circular">
-        Circular
-       </option>
+      <select class="form-control searchableselect" id="shapeselection" name="select2" data-placeholder="Select an option">
+      	<option value="Square">Square</option>
+       <option value="Rectangular">Rectangular</option>
+       <option value="Circular">Circular</option>
       </select>
      </div>
  	<div class="form-group ">
@@ -307,37 +111,45 @@
         *
        </span>
       </label>
-      <select class="select form-control searchableselect" id="status" name="status">
-       <option value="Open">
-        Open
-       </option>
-       <option value="Closed">
-        Closed
-       </option>
+      <select class=" form-control searchableselect" id="status" name="status" data-placeholder="Select an option">
+      <option value="Open">Open</option>
+       <option value="Closed">Closed</option>
       </select>
      </div>
     <h4>Customer Information</h4>
-     <div class="form-group">
+     <div class="form-group custSelectOption">
       <label class="control-label requiredField" for = "customerselection">
       Customer Name
       <span class ="asteriskField">*</span>
       </label>
-      <select class="form-control searchableselect1" id="customerselection" name ="customerselection" data-placeholder="Select an option">
-      </select>
+      <select class="form-control searchableselect" id="customerselection" name ="customerselection" data-placeholder="Select an option"
+      ></select>
      </div>
      <h4>Office Information</h4>
-     <div class="form-group ">
+     <div class="form-group epSelectOption">
       <label class="control-label requiredField" for="eventPlannerSelection">
        Event Planner
        <span class="asteriskField">
         *
        </span>
       </label>
-      <select class="select form-control searchableselect" id="eventPlannerSelection" name="eventPlannerSelection" data-placeholder="Select an option">
-      </select>
+      <select class="form-control searchableselect" id="eventPlannerSelection" name="eventPlannerSelection" data-placeholder="Select an option"></select>
      </div>
      </div>
     </form>
+    </div>
+     <div class="row">
+    	<div class="col-md-12">
+    	<div class="form-group ">
+      <label class="control-label requiredField" for="eventMenu">
+       Event Menu
+       <span class="asteriskField">
+        *
+       </span>
+      </label>
+      <input class="form-control" id="eventMenu" name="eventMenu" type="text"/>
+     </div>
+    	</div>
     </div>
     </div>
     <div class="pageFooter">
@@ -346,15 +158,14 @@
     <div class="col-md-3">
     <div class="form-group">
       <div>
-       <button class="btn btn-primary " name="submit" type="submit" id="importbtn">
+       <input id="importbtn" class="btn btn-primary " name="submit" type="file">
         Save and Import Guests
-       </button>
       </div>
      </div>
    </div>
    <div class="col-md-3"><div class="form-group">
       <div>
-       <button class="btn btn-primary " name="submit" type="submit" id="viewguestsbtn">
+       <button id="viewguestsbtn" class="btn btn-primary " name="submit" type="submit">
         View Guests
        </button>
       </div>
@@ -362,24 +173,25 @@
     </div>
   <div class="col-md-3"><div class="form-group">
       <div>
-       <button class="btn btn-primary " name="submit" type="submit" id="generateassignmentsbtn">
+       <button id="generateassignmentsbtn" class="btn btn-primary " name="submit" type="submit">
         Generate Seating Assignments
        </button>
       </div>
      </div></div>
    <div class="col-md-3"><div class="form-group">
       <div>
-       <button class="btn btn-primary " name="submit" type="submit" id="viewassignmentsbtn">
+       <button id="viewassignmentsbtn" class="btn btn-primary " name="submit" type="submit">
         View Seating Assignments
        </button>
       </div>
      </div>
    </div>
     </div>
+   
     <div class=row>
     <div class="col-md-3"><div class="form-group">
       <div>
-       <button class="btn btn-primary " name="submit" type="submit" id="seatingreportsa_zbtn" onclick="generateSeatingReportAlpha()">
+       <button id="seatingreportsa_zbtn" class="btn btn-primary " name="submit" type="submit" onclick="generateSeatingReportAlpha()">
         Generate Seating Reports Alphabetically
        </button>
       </div>
@@ -387,7 +199,7 @@
    </div>
    <div class="col-md-3"><div class="form-group">
       <div>
-       <button class="btn btn-primary " name="submit" type="submit" id="reportsbytablebtn" onclick="generateSeatingReportTables()">
+       <button id = "reportsbytablebtn" class="btn btn-primary " name="submit" type="submit" onclick="generateSeatingReportTables()">
         Generate Seating Reports By Table
        </button>
       </div>
@@ -395,21 +207,21 @@
      </div>
    <div class="col-md-3"><div class="form-group">
       <div>
-       <button class="btn btn-primary " name="submit" type="submit" id="generatemarkersbtn" onclick="generateTableMarkers()">
+       <button id = "generatemarkersbtn" class="btn btn-primary " name="submit" type="submit" onclick="generateTableMarkers()">
         Generate Table Markers
        </button>
       </div>
      </div></div>
-        <div class="col-md-1"><div class="form-group">
-      <div >
-       <button id="save" class="btn btn-primary " name="submit" type="submit">
+     	<div class="col-md-1"><div class="form-group" id="savebtn">
+      <div>
+       <button class="btn btn-primary " name="submit" type="submit" onclick="save();">
         Save
        </button>
       </div>
      </div></div>
         <div class="col-md-1"><div class="form-group">
       <div>
-       <button id="cancel" class="btn btn-primary" name="submit" type="submit">
+       <button id="cancelbtn" class="btn btn-primary" name="submit" type="submit" onclick="cancel();">
         Cancel
        </button>
       </div>
@@ -419,5 +231,247 @@
     </div>
 </div> 
 <br><br><br><br><br>
+<script>
+	function getCurrentUser() {
+		$.ajax({
+		    url: "/eventplannerJava/eventplanner/userservice/users/current",
+		    type: 'GET',
+		    datatype: 'json',
+		    statusCode: {
+		    200: function( response ) {
+		
+				//$('#userWelcome').html("Welcome, "+response.firstName+" "+response.lastName);
+		    },
+		    401:function( response ) {
+		    		alert("You must login first");}
+		    },
+		    error: function(jqXHR, textStatus, errorThrown) {
+	  	        console.log("error " + textStatus);
+	  	        console.log("incoming Text " + jqXHR.responseText);},    
+			beforeSend: setHeader
+		});   	
+	}
+	function getCookie(cname) {
+	    var name = cname + "=";
+	    var decodedCookie = decodeURIComponent(document.cookie);
+	    var ca = decodedCookie.split(';');
+	    for(var i = 0; i <ca.length; i++) {
+	        var c = ca[i];
+	        while (c.charAt(0) == ' ') {
+	            c = c.substring(1);
+	        }
+	        if (c.indexOf(name) == 0) {
+	            return c.substring(name.length, c.length);
+	        }
+	    }
+	    return "";
+	}
+	
+	function setHeader(xhr) {
+		  token = getCookie("token");
+		  xhr.setRequestHeader('Authorization', 'Bearer '+token );		  
+	}
+	$.urlParam = function(name){
+	    var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+	    if (results==null){
+	       return null;
+	    }
+	    else{
+	       return results[1] || 0;
+	    }
+	}
+	  function confirmLogout(){
+	        agree = confirm("Do you want to logout?");
+	         if(agree){
+	     		window.location.assign("Logout.html");
+	     	 }
+	  }
+    $(document).ready(function(){
+    	getCurrentUser();
+    	$(".searchableselect").select2();
+    	var date_input=$('input[name="date"]'); //our date input has the name "date"
+        var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+        /*date_input.datepicker({
+            format: 'mm/dd/yyyy',
+            container: container,
+            todayHighlight: true,
+            autoclose: true,
+        });*/
+        $("#customerselection").select2({
+   	 	  ajax:{
+  	            url: '/eventplannerJava/eventplanner/customerservice/customers',
+  	            dataType: 'json',
+  	            type: 'GET',
+  	            processResults: function (data) {
+  	            	customers=data;
+  	                return {
+  	                    results: $.map(data, function(obj) {
+  	                        return { id: obj.id, text: obj.name};
+  	                    })
+  	                };
+  	            }
+  	        }
+   	 	});
+   	 $("#eventPlannerSelection").select2({
+  	 	  ajax:{
+  	            url: '/eventplannerJava/eventplanner/userservice/users',
+  	            dataType: 'json',
+  	            type: 'GET',
+  	            processResults: function (data) {
+  	            	//alert(data[2].name);
+  	                return {
+  	                    results: $.map(data, function(obj) {
+  	                        return { id: obj.id, text:obj.name};
+  	                    })
+  	                };
+  	            },
+	    		beforeSend: setHeader
+  	        }
+  	 	});
+    });
+    function save (){
+		//e.preventDefault;
+		var eventName = $('#eventName').val();
+    	var selectedEventPlanner = $('#eventPlannerSelection').val();  
+    	var selectedCustomer= $('#customerselection').val(); 
+    	var eventDate= $('#date').val();
+    	var eventStatus= $('#status').val();
+    	var eventLocation= $('#venueloc').val();
+    	var eventMenu= $('#eventMenu').val();
+    	var emptySeats= $('#emptySeats').val();
+    	//var selectedCustomerId = (selectedCustomer.split('_'))[1];
+		
+    	$.when($.ajax("/eventplannerJava/eventplanner/userservice/users/"+selectedEventPlanner,{type:"GET",
+    		dataType:"json",
+    		beforeSend: setHeader,
+    		contentType:"application/json"}), 
+    			$.ajax("/eventplannerJava/eventplanner/customerservice/customers/"+selectedCustomer))
+    	  .then(function(userResponse, customerResponse){
+			var user = userResponse[0];
+			var customer = customerResponse[0];
+			var jsonstr = {
+					"assignedUser":{
+						"company":{
+							"id":1,
+							"name":"Eagles Event Planning"
+						},
+						"id":user.id,
+						"isActive":true,
+						"name":user.name,
+						"okToDelete":true,
+						"password":user.password,
+						"roleAssignments":[{"role":user.roleAssignments[0].role}],
+						"username":user.username
+					},
+					"customer":{
+						"email":customer.email,
+						"id":customer.id,
+						"name":customer.name,
+						"okToDelete":true,
+						"phoneNumber":customer.phoneNumber
+					},
+					"date":Number(eventDate),
+					"eventStatus":eventStatus,
+					"location":eventLocation,
+					"menu":eventMenu,
+					"name":eventName,
+					"okToDelete":true,
+					"percentSeatsEmpty":parseFloat(emptySeats),
+					"totalSeats":100	
+			};
+			alert(JSON.stringify(jsonstr));
+			$.ajax( {
+				url:"/eventplannerJava/eventplanner/eventservice/events",
+				type: "POST",
+				dataType: "json",
+	    		beforeSend: setHeader,
+				contentType: "application/json",
+				data: JSON.stringify(jsonstr),	
+				success: (function(data) {
+		 			  console.log("Update success ");
+		 			  window.location.assign("eventsList.html");
+		 		}),
+		 		fail: (function(jqXHR, textStatus, errorThrown) {
+		 	 	      console.log("Update error " + textStatus);
+		 	 	      console.log("incoming Text " + jqXHR.responseText);
+		 		})
+				});
+    	  });
+	}
+    function cancel(){
+    	window.location.assign("eventsList.html");
+    }
+    $("#generatemarkersbtn").click(function(){
+    	window.location.assign("#");
+    });
+    $("#importbtn").click(function(){
+    	//open the file picker
+    });
+	$("#viewguestsbtn").click(function(){
+	    window.location.assign("guestList.html");
+	});
+	 $("#generateassignmentsbtn").click(function(){
+	 	window.location.assign("#");
+	 });
+	 $("#viewassignmentsbtn").click(function(){
+	 	window.location.assign("updateAssignments.html?id="+$.urlParam("id")+"&like=like");
+	 });
+	 
+	 // Unneeded. The logic is handled by the vanilla JS functions below
+	 $("#seatingreportsa_zbtn").click(function(){
+	 	window.location.assign("#");
+	 });
+	 $("#reportsbytablebtn").click(function(){
+	 	window.location.assign("#")
+	 });
+	 $("#generatemarkersbtn").click(function(){
+		 window.location.assign("#");	
+	 });
+	 
+	 function generateTableMarkers() {
+		    var req = new XMLHttpRequest();
+			 req.open("GET", "/eventplannerJava/eventplanner/reportservice/events/"+$.urlParam("id")+"/tablemarkers", true);
+			 req.responseType = "blob";
+			 req.onload = function (event) {
+				 var blob = req.response;
+				 console.log(blob.size);
+				 var link = document.createElement('a');
+				 link.href = window.URL.createObjectURL(blob);
+				 link.download = "TableMarkers_" + new Date() + ".pdf";
+				 link.click();
+			 };
+			 req.send();
+	 }
+	    
+    function generateSeatingReportTables() {
+    	var req = new XMLHttpRequest();
+		 req.open("GET", "/eventplannerJava/eventplanner/reportservice/events/"+$.urlParam("id")+"/tablenumberseatingreport", true);
+		 req.responseType = "blob";
+		 req.onload = function (event) {
+			 var blob = req.response;
+			 console.log(blob.size);
+			 var link = document.createElement('a');
+			 link.href = window.URL.createObjectURL(blob);
+			 link.download = "SeatRepByTable_" + new Date() + ".pdf";
+			 link.click();
+		 };
+		 req.send();
+    }
+    
+    function generateSeatingReportAlpha() {
+    	var req = new XMLHttpRequest();
+		 req.open("GET", "/eventplannerJava/eventplanner/reportservice/events/"+$.urlParam("id")+"/alphabeticalseatingreport", true);
+		 req.responseType = "blob";
+		 req.onload = function (event) {
+			 var blob = req.response;
+			 console.log(blob.size);
+			 var link = document.createElement('a');
+			 link.href = window.URL.createObjectURL(blob);
+			 link.download = "SeatRepByTable_" + new Date() + ".pdf";
+			 link.click();
+		 };
+		 req.send();
+    }
+</script>
 </body>
 </html>
