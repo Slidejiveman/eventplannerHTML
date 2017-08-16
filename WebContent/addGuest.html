@@ -8,6 +8,24 @@
 <body> 
 <script>
 
+// Generates the table marker for the guest.
+// The generate table marker button must have an onclick that references this function
+// That is if we choose to have this button on the add screen at all.
+function generateTableMarker() {
+ var req = new XMLHttpRequest();
+	 req.open("GET", "/eventplannerJava/eventplanner/reportservice/tablemarkers/"+$.urlParam("id"), true);
+	 req.responseType = "blob";
+	 req.onload = function (event) {
+		 var blob = req.response;
+		 console.log(blob.size);
+		 var link = document.createElement('a');
+		 link.href = window.URL.createObjectURL(blob);
+		 link.download = "TableMarker_" + new Date() + ".pdf";
+		 link.click();
+	 };
+	 req.send();
+}
+
 $(document).ready(function() {
 
 	$("#guestForm").submit(function (e){
