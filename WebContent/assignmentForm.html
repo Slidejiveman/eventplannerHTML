@@ -1,0 +1,163 @@
+<!DOCTYPE HTML> 
+<html>
+<head>
+<title>Assignment Form</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <!--Font Awesome (added because you use icons in your prepend/append)-->
+	<link rel="stylesheet" href="https://formden.com/static/cdn/font-awesome/4.4.0/css/font-awesome.min.css" />
+  <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+</head>
+<body>
+	<div class="container-fluid">
+  <div class="row">
+   <div class="col-md-6 col-sm-6 col-xs-12">
+    <form method="post">
+     <div class="form-group ">
+      <label class="control-label requiredField" for="name">
+       Guest Name
+       <span class="asteriskField">
+        *
+       </span>
+      </label>
+      <input class="form-control" id="name" name="name" type="text"/>
+     </div>
+     <div class="form-group ">
+      <label class="control-label requiredField" for="table">
+       Assigned Table
+       <span class="asteriskField">
+        *
+       </span>
+      </label>
+      <select class="select form-control" id="table" name="table" data-placeholder="Select a table">
+      </select>
+     </div>
+     <div class="form-group">
+      <div>
+       <button class="btn btn-primary " name="submit" type="submit" id="savebtn" onclick="saveChanges();">
+        Submit
+       </button>
+      </div>
+     </div>
+    </form>
+  <button class="full btn btn-primary" type = "submit" value="Cancel" id="cancelbtn" onclick="window.close();">Cancel</button>
+   </div>
+  </div>
+ </div>
+ <script>
+		 $.urlParam = function(name){
+		    var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+		    if (results==null){
+		       return null;
+		    }
+		    else{
+		       return results[1] || 0;
+		    }
+		}
+	 	$(document).ready(function(){
+	 		//event.preventDefault();
+	 		//load all the tables for the event
+	 		//populate the name and the table assignment of the selected guest
+	 		$.getJSON("/eventplannerJava/eventplanner/guestservice/guests/"+$.urlParam("id"))
+	    	.done(function(response){
+	    		$('#name').val(response.name);
+	    		//$('#table').empty().append('<option>'+"table #"+(response.table.number)+'</option>').trigger('change'); 
+	    		$("#table").select2({
+		   	 	  	ajax:{
+		  	            url: '/eventplannerJava/eventplanner/eventservice/events/'+$.urlParam("event")+"/tables",
+		  	            dataType: 'json',
+		  	            type: 'GET',
+		  	            cache:false,
+		  	            processResults: function (data) {
+		  	                return {
+		  	                    results: $.map(data, function(obj) {
+		  	                        return { id: obj.id, text: "table #"+(obj.number)};
+		  	                    })
+		  	                };
+		  	            }
+		  	        }
+	   	 		});
+	    		$('#table').empty().append('<option>'+"table #"+(response.table.number)+'</option>').trigger('change'); 
+	    	})
+	    	.fail(function(jqXHR, textStatus, errorThrown) {
+		    console.log("error " + textStatus);
+		    console.log("incoming Text " + jqXHR.responseText);
+		    });
+	 		
+	 		$('#name').attr("disabled",true);
+	 		
+	 	});
+		 function saveChanges(){
+			  //get guestlist given a number, event number
+			  //get table given table given the id of the selected table
+			  //save changes
+			  	var guestName = $('#name').val();
+			  	var okToDelete=true;
+			  	var selectedTable = $('#table').select2('data')[0].text;
+			  	alert("Selected table value: "+selectedTable);
+			  	var guestlistId = $.urlParam("event");
+			  	var guestlistOkToDelete=true;
+			  	//alert($.urlParam("event"));
+				
+		    	$.when($.ajax("/eventplannerJava/eventplanner/guestservice/guests/"+$.urlParam("id"),{type:"GET",
+		    		dataType:"json",
+		    		cache:false,
+		    		contentType:"application/json"}), 
+		    			$.ajax("/eventplannerJava/eventplanner/eventservice/events/"+$.urlParam("event")+"/tables",{type:"GET",
+				    		dataType:"json",
+				    		cache:false,
+				    		contentType:"application/json"}))
+		    	  .then(function(guestResponse, tablesResponse){
+					var guest = guestResponse[0];
+					var tables = tablesResponse[0];
+					alert("tables "+tables.length);
+					for(i in tables){
+						alert("Entered a loop! for table #"+tables[i].number);
+						if (tables[i].number==selectedTable.split('#')[1]){
+							alert("Table Match found!");
+							var jsonstr = {
+									"guestlist":{
+										"id":Number(guestlistId),
+										"okayToDelete":true
+									},
+									"name":guest.name,
+									"okToDelete":guest.okToDelete,
+									"relationshipDescriptor":guest.relationshipDescriptor,
+									"table":{
+										"id":tables[i].id,
+										"number":tables[i].number,
+										"shape":tables[i].shape,
+										"size":tables[i].size
+									}	
+							};
+							alert(JSON.stringify(jsonstr));
+							$.ajax( {
+								url:"/eventplannerJava/eventplanner/guestservice/guests/"+$.urlParam("id"),
+								cache:false,
+								type: "PUT",
+								dataType: "json",
+								contentType: "application/json",
+								data: JSON.stringify(jsonstr),	
+								success: (function(data) {
+						 		}),
+						 		fail: (function(jqXHR, textStatus, errorThrown) {
+									alert("Update failed");
+
+						 	 	      console.log("Update error " + textStatus);
+						 	 	      console.log("incoming Text " + jqXHR.responseText);
+						 		})
+								});
+							window.opener.location.reload();
+				 			window.close();
+						}
+					}
+		    	  });
+		 }
+	
+  </script>
+</body>
