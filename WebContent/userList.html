@@ -82,7 +82,10 @@
         		401:function( response ) {
           	    	$('#user-list-table').html("You must Login first");},
             	403:function( response ) {
-          	    	$('#user-list-table').html("Access to the page forbiden");}
+          	    	$('#user-list-table').html("Access to the page limited to the administrator.");}
+          	    	document.getElementById('updateBtn').style.visibility = 'hidden';
+          	    	document.getElementById('addBtn').style.visibility = 'hidden';
+          	    	document.getElementById('deleteBtn').style.visibility = 'hidden';
     	  	},
     	  	error: function(jqXHR, textStatus, errorThrown) {
       	        console.log("error " + textStatus);
@@ -129,16 +132,16 @@
 <div class="footer-buttons">
 <form class='inline' action="updateUser.html" method="get">
 	<input id="updateID" type="hidden" name="id" value="">
-     <button class="btn btn-primary" type = "submit" name="submit" value="Update">Update</button>
+     <button class="btn btn-primary" type = "submit" name="submit" value="Update" id="updateBtn">Update</button>
 </form>
 
 <form class='inline' action="addUser.html" method ="get">
-     <button class="full btn btn-primary" type = "submit">Add</button>
+     <button class="full btn btn-primary" type = "submit" id="addBtn">Add</button>
 </form>
 <form class='inline'>
 	<input id="deleteID" type="hidden" name="id" value="">
          
-         <button class="full btn btn-primary" type = "submit" onClick="confirmDelete();" value="Delete">Delete</button>
+         <button class="full btn btn-primary" type = "submit" onClick="confirmDelete();" value="Delete" id="deleteBtn">Delete</button>
  </form>
     <script>
     function confirmDelete(){
