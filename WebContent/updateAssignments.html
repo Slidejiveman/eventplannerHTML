@@ -6,15 +6,23 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-	<link href="path/to/bootstrap-editable/css/bootstrap-editable.css" rel="stylesheet">
-	<script src="path/to/bootstrap-editable/js/bootstrap-editable.min.js"></script>
   <script type="text/javascript" src="http://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   
 <script>
-
+	$.urlParam = function(name){
+	    var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+	    if (results==null){
+	       return null;
+	    }
+	    else{
+	       return results[1] || 0;
+	    }
+	}
+	function backToUpdate(){
+		window.location.assign("updateEvent.html?id="+$.urlParam("id")+"&like=like");
+	}
 	createTable();
-
 	function selectChange() 
     {
         id = getId();
@@ -27,13 +35,12 @@
 	{ 
 	  return jQuery( 'input[name=selectedRow]:checked' ).val()
 	}
-  
     function createTable() {
-    	$.getJSON( "/eventplannerJava/eventplanner/guestservice/guests")
+    	$.getJSON( "/eventplannerJava/eventplanner/guestservice/guestsbyguestlist/"+$.urlParam("id"))
     	  .done(function( response ) {
     		  var tableHTML = '<thead><tr><th></th><th>ID</th><th>Guest Name</th><th>Table Number</th></tr></thead><tbody>';
     	        $.each(response, function (i, guest) {
-    	            tableHTML += '<tr><td><input type="radio" onchange= "selectChange()" name="selectedRow" value='+guest.id+'></td><td>' + guest.id + '</td><td>' + guest.name + '</td><td><input type="text" id="table" value='+guest.table.number+'></td></tr>';
+    	            tableHTML += '<tr><td><input type="radio" onchange= "selectChange()" name="selectedRow" value='+guest.id+'></td><td>' + guest.id + '</td><td>' + guest.name + '</td><td>'+guest.table.number+'</td></tr>';
     	        });
     	       tableHTML+='</tbody>';
     	       $('#assignments-list-table').html(tableHTML);})
@@ -41,30 +48,23 @@
   	        console.log("error " + textStatus);
   	        console.log("incoming Text " + jqXHR.responseText);});
       }
-    
     function confirmLogout(){
         agree = confirm("Do you want to logout?");
          if(agree){
      		window.location.assign("Logout.html");
      	}
-    	}
-</script>
-
-<script>
-var agree;
-$.urlParam = function(name){
-    var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
-    if (results==null){
-       return null;
+   	}
+    
+    function updateAssignment(){
+    	var selectedId = getId();
+    	window.open('assignmentForm.html?id='+selectedId+'&event='+$.urlParam("id")+'&like=like','_blank','height=500,width=500,top=150, left=400');
     }
-    else{
-       return results[1] || 0;
-    }
-}
-$(document).ready(function(){
-	//alert($.urlParam("id"));
-    $('#assignments-list-table').dataTable(); 
-});
+    
+    var agree;
+    $(document).ready(function(){
+    	//alert($.urlParam("id"));
+        $('#assignments-list-table').dataTable(); 
+    });
 </script>
 </head>
 <body class="pageBody"> 
@@ -79,20 +79,15 @@ $(document).ready(function(){
 </div>
 <h2>Seating Assignments List</h2>
 <div>
+<button class="full btn btn-primary" type = "button" value="Edit" onclick="updateAssignment();">Edit</button>
+<br><br>
 <div class="table-responsive">
 <table class="table table-striped" id="assignments-list-table" >
 </table></div>
 <br>
 <p id="selectedID"></p>
 <div class="footer-buttons">
-<form class='inline' action="assignments.html" method="get">
-	<input id="updateID" type="hidden" name="id" value="">
-     <button class="full btn btn-primary" type = "submit" name="submit" value="Update">Save</button>
-</form>
-
-<form class='inline' method="get" action="assignments.html">
-  <button class="full btn btn-primary" type = "submit" value="Cancel" id="cancelbtn">Cancel</button>
-</form>
+<button onclick ="backToUpdate()" class="full btn btn-primary" type = "submit" name="submit" value="Update">Finish</button>
 </div>
 </div>
 </div>
