@@ -47,23 +47,50 @@ function generateTableMarker() {
 	 req.send();
 }
 
+function loadGuests() {           
+ if (1) {  //Check condition here
+  $('#guestselection').empty().append('<option>select</option>');        
+  $.ajax({
+          url: '/eventplannerJava/eventplanner/guestservice/guests',
+          dataType: 'json',
+          type: 'GET',
+          success: function(response) {
+            var guests = response;
+            if (guests != null)
+            {
+          	$("#guestselection").empty();
+              for (i in guests) {
+               $("#guestselection").append("<option>"+guests[i].name+"</option>");
+             }
+            }
+          },
+          error: function(x, e) {
+          }
+      });
+   }
+ }
+
 $(document).ready(function() {
 
+	// Get the basic guest attributes out of the database and add their values to the fields
+	 $.ajax({
+	    url: "/eventplannerJava/eventplanner/guestservice/guests/"+$.urlParam("id"),
+	    type: 'GET',
+	    datatype: 'json',
+	    contentType: "application/json",
+	    statusCode: {
+	    200: function(response) {
+			$('#name').val(response.name);
+			$('#relationshipDescriptor').val(response.relationshipDescriptor)
+	    }}
+	  });
+	
 	$("#guestForm").submit(function (e){
 		e.preventDefault;
 		var guestName =$('#name').val();
 		var note = $('#relationshipDescriptor').val();
 		
-		/* $.ajax({
-		    url: "/eventplannereventplannerJava/eventplanner/guestservice/guests/"+$.urlParam("id"),
-		    type: 'GET',
-		    datatype: 'json',
-		    statusCode: {
-		    200: function(response) {
-		    		$('#id').val(response.idNumber);
-				$('#name').val(response.guestName);
-				$('#relationshipDescriptor').val(response.note) */
-		
+		 // Post the update to dthe database.
 		$.ajax( { 
 			url:"/eventplannerJava/eventplanner/guestservice/guests/id/",
 			type: "PUT",
@@ -107,32 +134,7 @@ $(document).ready(function() {
 
 		e.preventDefault();
 		
-});
-		    
-  function loadGuests()
-  {           
-if (1) {  //Check condition here
-    $('#guestselection').empty().append('<option>select</option>');        
-    $.ajax({
-            url: '/eventplannerJava/eventplanner/guestservice/guests',
-            dataType: 'json',
-            type: 'GET',
-            success: function(response) {
-              var guests = response;
-              if (guests != null)
-              {
-            	$("#guestselection").empty();
-                for (i in guests) {
-                 $("#guestselection").append("<option>"+guests[i].name+"</option>");
-               }
-              }
-            },
-            error: function(x, e) {
-
-            }
-        });
-     }
-   }
+   });
   });
 		    
 </script>

@@ -9,7 +9,7 @@
   <!--Font Awesome (added because you use icons in your prepend/append)-->
 	<link rel="stylesheet" href="https://formden.com/static/cdn/font-awesome/4.4.0/css/font-awesome.min.css" />
   <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
@@ -155,14 +155,15 @@
     <div class="pageFooter">
     <br><br>
     <div class ="row">
-    <div class="col-md-3">
-    <div class="form-group">
+   <div class="col-md-3"><div class="form-group">
       <div>
-       <input id="importbtn" class="btn btn-primary " name="submit" type="file">
-        Save and Import Guests
+       <input id="importfile" class="btn btn-primary " name="submit" type="file">
+       <button id="importbtn" class="btn btn-primary " name="submit" type="submit">
+         Save and Import Guests
+       </button>
       </div>
      </div>
-   </div>
+    </div>
    <div class="col-md-3"><div class="form-group">
       <div>
        <button id="viewguestsbtn" class="btn btn-primary " name="submit" type="submit">
@@ -207,7 +208,7 @@
      </div>
    <div class="col-md-3"><div class="form-group">
       <div>
-       <button id = "generatemarkersbtn" class="btn btn-primary " name="submit" type="submit" onclick="generateTableMarkers()">
+       <button id = "generatemarkersbtn" class="btn btn-primary" name="submit" type="submit" onclick="generateTableMarkers()">
         Generate Table Markers
        </button>
       </div>
@@ -495,6 +496,34 @@
 		 };
 		 req.send();
     }
+    
+    $('#importbtn').on('click', function() {
+       
+    	// Get file name
+    	var fileList = document.getElementById('importfile').files;
+    	console.log(fileList[0]);
+    	var data = new FormData();
+    	data.append("file", fileList[0]);
+    	
+    	$.ajax({
+            // Your server script to process the upload
+            url: "/eventplannerJava/eventplanner/eventservice/events/"+$.urlParam("id")+"/importguestlist/",
+            type: "POST",
+
+            // Form data
+            data: data,
+
+            // Tell jQuery not to process data or worry about content-type
+            // You *must* include these options!
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function(response) {
+            	alert(response);
+            },
+        });
+    });
+    
 </script>
 </body>
 </html>
