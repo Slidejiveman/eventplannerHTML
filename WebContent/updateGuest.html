@@ -157,6 +157,20 @@ $(document).ready(function() {
 			});
 		
    });
+	
+	$("#sitwithbtn").on('click',function (e){
+		$.ajax( { 
+			url:"/eventplannerJava/eventplanner/guestservice/guests/"+$.urlParam("id")+"/gueststositwith/"+$("#guestselection").val(),
+			type: "PUT",
+			dataType: "json",
+			contentType: "application/json",
+			statusCode: {
+				200: function() {
+					alert("Guest to sit with added.");
+				}
+			}
+		});
+	});
   });
 		    
 </script>
@@ -203,9 +217,9 @@ $(document).ready(function() {
      </div>
     <div class="col-sm-2 col-sm-offset">
     <div class="buttonShould">
-      <button type="button" class="btn btn-primary">Should Sit With</button>
+      <button id="sitwithbtn" type="button" class="btn btn-primary">Should Sit With</button>
        <br><br>
-      <button type="button" class="btn btn-primary">Should Avoid</button>
+      <button id="avoidbtn" type="button" class="btn btn-primary">Should Avoid</button>
      </div>
   </div>
   <div class="col-sm-3"> 
@@ -220,7 +234,7 @@ $(document).ready(function() {
 				    </select>
 			     </div>
 			     <br><br><br><br><br><br>
-			     <button type="button" class="btn-remove btn btn-primary">Remove</button>	
+			     <button id="removeavoidbtn" type="button" class="btn-remove btn btn-primary">Remove</button>	
      		</form>
     </div>
    </div>
@@ -235,7 +249,7 @@ $(document).ready(function() {
 				    </select>
 			     </div>
 			     <br><br><br><br><br><br>
-			     <button type="button" class="btn-remove btn btn-primary">Remove</button>	
+			     <button id="removesitwithbtn" type="button" class="btn-remove btn btn-primary">Remove</button>	
      	</form>
    </div>  
     </div>
