@@ -524,6 +524,18 @@
         });
     });
     
+    $('#generateassignmentsbtn').on('click', function() {
+    	$.ajax({
+    		url: "/eventplannerJava/eventplanner/eventservice/events/"+$.urlParam("id")+"/createseatingassignment",
+    		type: "POST",
+    		dataType: "json",
+    		contentType: "application/json",
+    		success: function() {
+    			alert("The seating arrangement has been created for this event.");
+    		}
+    	});
+    });
+    
 </script>
 </body>
 </html>
