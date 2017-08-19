@@ -172,6 +172,49 @@ $(document).ready(function() {
 			}
 		});
 	});
+	
+	$("#avoidbtn").on('click',function (e){
+		$.ajax( { 
+			url:"/eventplannerJava/eventplanner/guestservice/guests/"+$.urlParam("id")+"/gueststoavoid/"+$("#guestselection").val(),
+			type: "PUT",
+			dataType: "json",
+			contentType: "application/json",
+			statusCode: {
+				200: function() {
+					alert("Guest to avoid added.");
+				}
+			}
+		});
+	});
+	
+	$("#removesitwithbtn").on('click',function (e){
+		$.ajax( { 
+			url:"/eventplannerJava/eventplanner/guestservice/guests/"+$.urlParam("id")+"/deletegueststositwith/"+$("#guestsToSitWith").val(),
+			type: "PUT",
+			dataType: "json",
+			contentType: "application/json",
+			statusCode: {
+				200: function() {
+					alert("Guest to sit with deleted.");
+				}
+			}
+		});
+	});
+	
+	$("#removeavoidbtn").on('click',function (e){
+		$.ajax( { 
+			url:"/eventplannerJava/eventplanner/guestservice/guests/"+$.urlParam("id")+"/deletegueststoavoid/"+$("#guestsToAvoid").val(),
+			type: "PUT",
+			dataType: "json",
+			contentType: "application/json",
+			statusCode: {
+				200: function() {
+					alert("Guest to avoid deleted.");
+				}
+			}
+		});
+	});
+	
   });
 		    
 </script>
