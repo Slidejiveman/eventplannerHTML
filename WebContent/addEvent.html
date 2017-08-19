@@ -339,6 +339,7 @@
     	var eventLocation= $('#venueloc').val();
     	var eventMenu= $('#eventMenu').val();
     	var emptySeats= $('#emptySeats').val();
+    	var seatsPerTable = $('#sizeselection').val();
     	//var selectedCustomerId = (selectedCustomer.split('_'))[1];
 		
     	$.when($.ajax("/eventplannerJava/eventplanner/userservice/users/"+selectedEventPlanner,{type:"GET",
@@ -377,6 +378,7 @@
 					"name":eventName,
 					"okToDelete":true,
 					"percentSeatsEmpty":parseFloat(emptySeats),
+					"seatsPerTable": seatsPerTable,
 					"totalSeats":100	
 			};
 			alert(JSON.stringify(jsonstr));

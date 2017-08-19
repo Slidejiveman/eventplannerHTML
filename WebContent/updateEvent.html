@@ -334,8 +334,8 @@
         $.getJSON("/eventplannerJava/eventplanner/eventservice/events/"+$.urlParam("id"))
     	.done(function(response){
     		$('#eventName').val(response.name);
-    		$('#eventPlannerSelection').empty().append('<option>'+response.assignedUser.name+'_'+response.assignedUser.id+'</option>');  
-    		//$('eventPlannerSelection').select2("user", response.assignedUser.name+'_'+response.assignedUser.id);
+    		$('#eventPlannerSelection').empty().append('<option>'+response.assignedUser.name+'_'+response.assignedUser.id+'</option>');    
+
     		$('#customerselection').empty().append('<option>'+response.customer.name+'_'+response.customer.id+'</option>');  
     		$('#date').val(response.date);
     		$("#status").val(response.eventStatus);
@@ -361,6 +361,7 @@
     	var eventMenu= $('#eventMenu').val();
     	var emptySeats= $('#emptySeats').val();
     	var selectedCustomerId = (selectedCustomer.split('_'))[1];
+    	var seatsPerTable = $('#sizeselection').val();
 		
     	$.when($.ajax("/eventplannerJava/eventplanner/userservice/users/"+selectedEventPlanner,{type:"GET",
     		dataType:"json",
@@ -398,6 +399,7 @@
 					"name":eventName,
 					"okToDelete":true,
 					"percentSeatsEmpty":parseFloat(emptySeats),
+					"seatsPerTable":seatsPerTable,
 					"totalSeats":100	
 			};
 			alert(JSON.stringify(jsonstr));
