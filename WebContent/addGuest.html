@@ -26,6 +26,18 @@ function generateTableMarker() {
 	 req.send();
 }
 
+$.urlParam = function(name){
+    var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+    if (results==null){
+       return null;
+    }
+    else{
+       return results[1] || 0;
+    }
+}
+function cancel(){
+	window.location.assign("guestList.html?id="+$.urlParam('eventid')+"&anthony=anthony");
+}
 $(document).ready(function() {
 
 	$("#guestForm").submit(function (e){
@@ -34,7 +46,7 @@ $(document).ready(function() {
 		var note = $('#relationshipDescriptor').val();
 		
 		$.ajax( { 
-			url:"/eventplannerJava/eventplanner/guestservice/guests/",
+			url:"/eventplannerJava/eventplanner/guestservice/guests",
 			type: "POST",
 			dataType: "json",
 			contentType: "application/json",
@@ -42,40 +54,12 @@ $(document).ready(function() {
 				'"name" : "'+guestName+'",'+
 				'"relationshipDescriptor" :"'+ note+'"'+
 			"}",
-			statusCode: {
-			200: function(response) {
+			Success: function(response) {
 				  $("#page-message").html("Record Added");
-				  window.location.assign("guestList.html");
-		  		},
-		  	401:function( response ) {
-  	    			$('#page-message').html("You must Login first");
-  	    			},
-  	      	405:function( response ) {
-  		  	    	$('#page-message').html("Access to the page forbiden");
-  		  	    	},
-
-		  	406: function(response) {
-		  		var errors = response.responseJSON;
-		  		$(".error").html("*");
-		  		$.each(errors, function (i, message) {
-		  			$("#"+message.attributeName+"Err").html(message.message);
-		  			console.log("Error "+message.attributeName +" "+message.message)
-    	        		});
-		  		$("#page-message").html("Fix errors and click Save");
-		  		},
-		  	
-			404 : function(jqXHR, textStatus, errorThrown) {
-				$("#page-message").html("Error:"+textStatus);
-				console.log(errorThrown);
-	  	        console.log("error " + textStatus);
-	  	        console.log("incoming Text " + jqXHR.responseText);
-	  	    		}
-		  	},
-		
-			});
-
-		e.preventDefault();
-});
+				  window.location.assign("guestList.html?id="+$.urlParam('eventid')+"&anthony=anthony");
+		  	}
+		});
+	});
 });
 
 function confirmLogout(){
@@ -107,10 +91,7 @@ function confirmLogout(){
    <br><br>
    <input type="submit" name="Add" value="Add"> 
 </form>
-<form action="guestList.html" method ="get">
-<button type="submit" >Cancel</button>
-</form>
-
+<button id ="cancelbtn" onclick="cancel();">Cancel</button>
 </div>
 </body>
 </html>

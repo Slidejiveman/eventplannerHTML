@@ -5,73 +5,99 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" type="text/css" href="style.css">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-        
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> 
         <!--Font Awesome (added because you use icons in your prepend/append)-->
         <link rel="stylesheet" href="https://formden.com/static/cdn/font-awesome/4.4.0/css/font-awesome.min.css" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+ 	 	<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+ 	 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+ 	 	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+  		<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script>
-function confirmLogout(){
-    agree = confirm("Do you want to logout?");
-     if(agree){
- 		window.location.assign("Logout.html");
- 	}
-}
-
-$.urlParam = function(name){
-    var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
-    if (results==null){
-       return null;
-    }
-    else{
-       return results[1] || 0;
-    }
-}
-
-// Generates the table marker for the guest.
-// The generate table marker button must have an onclick that references this function
-function generateTableMarker() {
-    var req = new XMLHttpRequest();
-	 req.open("GET", "/eventplannerJava/eventplanner/reportservice/tablemarkers/"+$.urlParam("id"), true);
-	 req.responseType = "blob";
-	 req.onload = function (event) {
-		 var blob = req.response;
-		 console.log(blob.size);
-		 var link = document.createElement('a');
-		 link.href = window.URL.createObjectURL(blob);
-		 link.download = "TableMarker_" + new Date() + ".pdf";
-		 link.click();
-	 };
-	 req.send();
-}
-
-function loadGuests() {           
- if (1) {  //Check condition here
-  $('#guestselection').empty().append('<option>select</option>');        
-  $.ajax({
-          url: '/eventplannerJava/eventplanner/guestservice/guests',
-          dataType: 'json',
-          type: 'GET',
-          success: function(response) {
-            var guests = response;
-            if (guests != null)
-            {
-          	$("#guestselection").empty();
-              for (i in guests) {
-               $("#guestselection").append("<option>"+guests[i].name+"</option>");
-             }
-            }
-          },
-          error: function(x, e) {
-          }
-      });
-   }
- }
+	function confirmLogout(){
+	    agree = confirm("Do you want to logout?");
+	     if(agree){
+	 		window.location.assign("Logout.html");
+	 	}
+	}
+	
+	$.urlParam = function(name){
+	    var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+	    if (results==null){
+	       return null;
+	    }
+	    else{
+	       return results[1] || 0;
+	    }
+	}
+	
+	function backToGuestList(){
+		window.location.assign("guestList.html?id="+$.urlParam("event")+"&like=like");
+	}
+	// Generates the table marker for the guest.
+	// The generate table marker button must have an onclick that references this function
+	function generateTableMarker() {
+	    var req = new XMLHttpRequest();
+		 req.open("GET", "/eventplannerJava/eventplanner/reportservice/tablemarkers/"+$.urlParam("id"), true);
+		 req.responseType = "blob";
+		 req.onload = function (event) {
+			 var blob = req.response;
+			 console.log(blob.size);
+			 var link = document.createElement('a');
+			 link.href = window.URL.createObjectURL(blob);
+			 link.download = "TableMarker_" + new Date() + ".pdf";
+			 link.click();
+		 };
+		 req.send();
+	}
 
 $(document).ready(function() {
 
+	$("#guestselection").select2({
+	 	  ajax:{
+	            url: '/eventplannerJava/eventplanner/guestservice/guests',
+	            dataType: 'json',
+	            type: 'GET',
+	            cache:false,
+	            processResults: function (data) {
+	                return {
+	                    results: $.map(data, function(obj) {
+	                        return { id: obj.id, text:obj.name};
+	                    })
+	                };
+	            }
+	        }
+	 	});
+	$("#guestsToSitWith").select2({
+	 	  ajax:{
+	            url: "/eventplannerJava/eventplanner/guestservice/guests/"+$.urlParam("id")+"/gueststositwith",
+	            dataType: 'json',
+	            type: 'GET',
+	            cache:false,
+	            processResults: function (data) {
+	                return {
+	                    results: $.map(data, function(obj) {
+	                        return { id: obj.id, text:obj.name};
+	                    })
+	                };
+	            }
+	        }
+	 	}).val(initid);
+	$("#guestsToAvoid").select2({
+	 	  ajax:{
+	            url: "/eventplannerJava/eventplanner/guestservice/guests/"+$.urlParam("id")+"/gueststoavoid",
+	            dataType: 'json',
+	            type: 'GET',
+	            cache:false,
+	            processResults: function (data) {
+	                return {
+	                    results: $.map(data, function(obj) {
+	                        return { id: obj.id, text:obj.name};
+	                    })
+	                };
+	            }
+	        }
+	 	});
 	// Get the basic guest attributes out of the database and add their values to the fields
 	 $.ajax({
 	    url: "/eventplannerJava/eventplanner/guestservice/guests/"+$.urlParam("id"),
@@ -81,7 +107,7 @@ $(document).ready(function() {
 	    statusCode: {
 	    200: function(response) {
 			$('#name').val(response.name);
-			$('#relationshipDescriptor').val(response.relationshipDescriptor)
+			$('#relationshipDescriptor').val(response.relationshipDescriptor);
 	    }}
 	  });
 	
@@ -163,21 +189,18 @@ $(document).ready(function() {
  <form>
   <div class="form-group text-left">
     <label for="InputName">Guest Name</label>
-    <input type="text" class="form-control" placeholder="Name">
+    <input type="text" class="form-control" placeholder="Name" id="name">
   </div>
   <div class="form-group">
-    <label for="exampleInputPassword1">Note</label>
-    <input type="text" class="form-control">
+    <label for="realationshipDescriptor">Note</label>
+    <input type="text" class="form-control" id ="relationshipDescriptor">
   </div>
   <div class="form-group">
     <label class="control-label requiredField" for = "guestselection">
      Other Guest
       <span class ="asteriskField">*</span>
       </label>
-      <select class=" select form-control" id="guestselection" name ="guestselection" onclick="loadGuests();">
-      	 
-	 <option value="guestselection">Select</option>
-    
+      <select class=" select form-control" id="guestselection" name ="guestselection" data-placeholder="Select an option">
     </select>
      </div>
        </form>
@@ -191,32 +214,34 @@ $(document).ready(function() {
   </div>
   <div class="col-sm-3"> 
     <div class="groupList">
-     
-        <h2>Should Sit With</h2>
-            <div class="list-group">
-                <a class="list-group-item list-group-item-action">Faunie Reyard</a>
-                <a href="#" class="list-group-item list-group-item-action"><!--Name--></a>
-                <a href="#" class="list-group-item list-group-item-action"><!--Name--></a>
-                <a href="#" class="list-group-item list-group-item-action"><!--Name--></a>
-                <br>
-                <button type="button" class="btn-remove btn btn-primary">Remove</button>
-            </div>
-            </div>
-            </div>
-        <div class="col-sm-3">
-          <div class="groupList-shouldAvoid">
-          <h2>Should Avoid</h2>
-            <div class="list-group">
-                <a class="list-group-item list-group-item-action"><!--Name--></a>
-                <a href="" class="list-group-item list-group-item-action"><!--Name--></a>
-                <a href="#" class="list-group-item list-group-item-action"><!--Name--></a>
-                <a href="#" class="list-group-item list-group-item-action"><!--Name--></a>
-                <a href="#" class="list-group-item list-group-item-action"><!--Name--></a>
-                <br>
-                <button type="button" class="btn-remove-2 btn btn-primary">Remove</button>
-            </div>
-         </div>
-     </div>  
+     		<form>
+			     <div class="form-group">
+				    <label class="control-label requiredField" for = "guestsToAvoid">
+				     Guests (S)He Must Avoid
+				      <span class ="asteriskField">*</span>
+				      </label>
+				      <select class=" select form-control" id="guestsToAvoid" name ="guestsToAvoid">
+				    </select>
+			     </div>
+			     <br><br><br><br><br><br>
+			     <button type="button" class="btn-remove btn btn-primary">Remove</button>	
+     		</form>
+    </div>
+   </div>
+   <div class="col-sm-3">
+          <form>
+			     <div class="form-group">
+				    <label class="control-label requiredField" for = "guestsToSitWith">
+				     Guests S(H)e Must Sit With
+				      <span class ="asteriskField">*</span>
+				      </label>
+				      <select class=" select form-control" id="guestsToSitWith" name ="guestsToSitWith">
+				    </select>
+			     </div>
+			     <br><br><br><br><br><br>
+			     <button type="button" class="btn-remove btn btn-primary">Remove</button>	
+     	</form>
+   </div>  
     </div>
      <div class="footer-buttons">
      <br><br><br>
@@ -244,7 +269,6 @@ $(document).ready(function() {
 <div>
 <form action="guestList.html" method ="get">
 <button class="btn btn-primary " name="submit" type="submit">
-
         Cancel
        </button>
         </form>

@@ -19,7 +19,6 @@
 	       return results[1] || 0;
 	    }
 	}
-	createTable();
     function selectChange() 
     {
         id = getId();
@@ -46,51 +45,54 @@
   	        console.log("error " + textStatus);
   	        console.log("incoming Text " + jqXHR.responseText);});
       }
-	$(document).ready(function() {
-    		$("#previous").click(function() {getPrevious()});
-    		$("#next").click(function() {getNext()});
-    });
-</script>
-  
-   <script>
    var agree;
    $(document).ready(function(){
+		createTable();
         $('#guest-list-table').dataTable();
+        $('#addbtn').click(function(){
+        	var selectedId = getId();
+        	window.location.assign('addGuest.html?eventid='+$.urlParam("id")+'&like=like');
+        });
+        $('#updatebtn').click(function(){
+        	var selectedId = getId();
+        	window.location.assign('updateGuest.html?id='+selectedId+'&event='+$.urlParam("id")+'&like=like');	
+        });
+        
+        
 	});    
 	function confirmDeletion(){
-$.getJSON( "/eventplannerJava/eventplanner/guestservice/guests/"+$("#deleteID").val())
-	.done(function( response ) {
-		console.log(response);
-	    agree = confirm("Do you want to delete event: "+response.name+"?");
-	     if(agree){
-	    	//alert("Delete "+$("#deleteID").val());
-	 		//alert("You confirmed the deletion");
-	 		$('#deletebtn').attr("disabled", true);
-	 		$.ajax({ 
-	 			url:"/eventplannerJava/eventplanner/guestservice/guests/"+$("#deleteID").val(),
-	 			type: "DELETE",
-	 		    success: (function(data) {
-	 			  console.log("Delete success ");
-	 			  window.location.assign("guestList.html");
-	 			  console.log("Delete after change href");
-	 		  }),
-	 		  fail: (function(jqXHR, textStatus, errorThrown) {
-	 	 	      console.log("Delete error " + textStatus);
-	 	 	      console.log("incoming Text " + jqXHR.responseText);
-	 		  })
+		$.getJSON( "/eventplannerJava/eventplanner/guestservice/guests/"+getId())
+		.done(function( response ) {
+			console.log(response);
+		    agree = confirm("Do you want to delete Guest: "+response.name+"?");
+		     if(agree){
+		    	//alert("Delete "+$("#deleteID").val());
+		 		//alert("You confirmed the deletion");
+		 		$.ajax({ 
+		 			url:"/eventplannerJava/eventplanner/guestservice/guests/"+getId(),
+		 			type: "DELETE",
+		 		    success: (function(data) {
+		 			  console.log("Delete success ");
+		 			  window.location.assign("guestList.html?id="+$.urlParam('id')+"&ryder=ryder");
+		 			  console.log("Delete after change href");
+		 		  }),
+		 		  fail: (function(jqXHR, textStatus, errorThrown) {
+		 	 	      console.log("Delete error " + textStatus);
+		 	 	      console.log("incoming Text " + jqXHR.responseText);
+		 		  })
 
-	 	  	 });
-	 		console.log("end of delete")
-	 	}else{
-	 		//alert("You canceled the deletion");
-			  window.location.assign("guestList.html");
-	 	}
-		})
-	.fail(function(jqXHR, textStatus, errorThrown) {
-	    console.log("error " + textStatus);
-	    console.log("incoming Text " + jqXHR.responseText);
-	    });
-}
+		 	  	 });
+		 		console.log("end of delete")
+		 	}else{
+		 		//alert("You canceled the deletion");
+	 			  window.location.assign("guestList.html?id="+$.urlParam('id')+"&ryder=ryder");
+		 	}
+			})
+		.fail(function(jqXHR, textStatus, errorThrown) {
+		    console.log("error " + textStatus);
+		    console.log("incoming Text " + jqXHR.responseText);
+		    });
+	}
      
 	function confirmLogout(){
 	    agree = confirm("Do you want to logout?");
@@ -108,7 +110,7 @@ $.getJSON( "/eventplannerJava/eventplanner/guestservice/guests/"+$("#deleteID").
   <li role="presentation"><a href="eventsList.html">Events</a></li>
   <li role="presentation"><a href="customerList.html">Customers</a></li>
   <li role="presentation"><a href="userList.html">Users</a></li>
-  <li class="logouttab pull-right" role="presentation"><a onclick ="confirmLogout();" href="#">Logout</a></li>
+  <li class="logouttab pull-right" role="presentation"><a onclick ="confirmDeletion();" href="#">Logout</a></li>
 </ul>
 </div>
 <h2>Guest List</h2>
@@ -120,20 +122,10 @@ $.getJSON( "/eventplannerJava/eventplanner/guestservice/guests/"+$("#deleteID").
 <br>
 
 <p id="selectedID"></p>
-<div class="footer-buttons">
-<form class='inline' action="updateGuest.html" method="get">
-	<input id="updateID" type="hidden" name="id" value="">
-     <button class="full btn btn-primary" type = "submit" name="submit" value="Update">Update</button>
-</form>
-
-<form class='inline' action="addGuest.html" method ="get">
-     <button class="full btn btn-primary" type = "submit">Add</button>
-</form>
-<form class='inline' method="get">
-	<input id="deleteID" type="hidden" name="id" value="">
-         
-         <button class="full btn btn-primary" onClick="confirmDeletion();" type = "submit" value="Delete">Delete</button>
-</form>
+<div class="footer-buttons inline">
+<button id = "updatebtn" class="full btn btn-primary" type = "submit" name="submit" value="Update">Update</button>
+<button id = "addbtn" class="full btn btn-primary" type = "submit">Add</button>
+<button class="full btn btn-primary" onclick="confirmDeletion();" type = "submit" value="Delete">Delete</button>
 </div>
 </div>
 </div>
