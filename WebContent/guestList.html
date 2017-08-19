@@ -47,19 +47,20 @@
       }
    var agree;
    $(document).ready(function(){
-		createTable();
-        $('#guest-list-table').dataTable();
-        $('#addbtn').click(function(){
-        	var selectedId = getId();
-        	window.location.assign('addGuest.html?eventid='+$.urlParam("id")+'&like=like');
-        });
-        $('#updatebtn').click(function(){
-        	var selectedId = getId();
-        	window.location.assign('updateGuest.html?id='+selectedId+'&event='+$.urlParam("id")+'&like=like');	
-        });
-        
-        
-	});    
+	   createTable();
+        $('#guest-list-table').dataTable();     
+	});
+   
+  function toAddScreen(){
+   	var selectedId = getId();
+   	window.location.assign('addGuest.html?eventid='+$.urlParam("id")+'&like=like');
+   }
+   
+   function toUpdateScreen(){
+   	var selectedId = getId();
+   	window.location.assign('updateGuest.html?id='+getId()+'&event='+$.urlParam("id")+'&like=like');	
+   }
+   
 	function confirmDeletion(){
 		$.getJSON( "/eventplannerJava/eventplanner/guestservice/guests/"+getId())
 		.done(function( response ) {
@@ -123,8 +124,8 @@
 
 <p id="selectedID"></p>
 <div class="footer-buttons inline">
-<button id = "updatebtn" class="full btn btn-primary" type = "submit" name="submit" value="Update">Update</button>
-<button id = "addbtn" class="full btn btn-primary" type = "submit">Add</button>
+<button id = "updatebtn" class="full btn btn-primary" type = "submit" name="submit" value="Update" onclick="toUpdateScreen()">Update</button>
+<button id = "addbtn" class="full btn btn-primary" type = "submit" onclick="toAddScreen()">Add</button>
 <button class="full btn btn-primary" onclick="confirmDeletion();" type = "submit" value="Delete">Delete</button>
 </div>
 </div>

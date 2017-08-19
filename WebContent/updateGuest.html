@@ -82,7 +82,7 @@ $(document).ready(function() {
 	                };
 	            }
 	        }
-	 	}).val(initid);
+	 	});
 	$("#guestsToAvoid").select2({
 	 	  ajax:{
 	            url: "/eventplannerJava/eventplanner/guestservice/guests/"+$.urlParam("id")+"/gueststoavoid",
@@ -111,14 +111,13 @@ $(document).ready(function() {
 	    }}
 	  });
 	
-	$("#guestForm").submit(function (e){
-		e.preventDefault;
+	$("#updatebtn").on('click',function (e){
 		var guestName =$('#name').val();
 		var note = $('#relationshipDescriptor').val();
 		
 		 // Post the update to dthe database.
 		$.ajax( { 
-			url:"/eventplannerJava/eventplanner/guestservice/guests/id/",
+			url:"/eventplannerJava/eventplanner/guestservice/guests/"+$.urlParam("id"),
 			type: "PUT",
 			dataType: "json",
 			contentType: "application/json",
@@ -127,38 +126,35 @@ $(document).ready(function() {
 				'"relationshipDescriptor" :"'+ note+'"'+
 			"}",
 			statusCode: {
-			200: function(response) {
-				  $("#page-message").html("Record Added");
-				  window.location.assign("guestList.html");
-		  		},
-		  	401:function( response ) {
-  	    			$('#page-message').html("You must Login first");
-  	    			},
-  	      	405:function( response ) {
-  		  	    	$('#page-message').html("Access to the page forbiden");
-  		  	    	},
-
-		  	406: function(response) {
-		  		var errors = response.responseJSON;
-		  		$(".error").html("*");
-		  		$.each(errors, function (i, message) {
-		  			$("#"+message.attributeName+"Err").html(message.message);
-		  			console.log("Error "+message.attributeName +" "+message.message)
-    	        		});
-		  		$("#page-message").html("Fix errors and click Save");
-		  		},
-		  	
-			404 : function(jqXHR, textStatus, errorThrown) {
-				$("#page-message").html("Error:"+textStatus);
-				console.log(errorThrown);
-	  	        console.log("error " + textStatus);
-	  	        console.log("incoming Text " + jqXHR.responseText);
-	  	    	}
-		  	},
+				200: function(response) {				  
+					  window.location.assign("guestList.html?id="+$.urlParam('event')+"&anthony=anthony");
+			  		},
+			  	401:function( response ) {
+	  	    			$('#page-message').html("You must Login first");
+	  	    			},
+	  	      	405:function( response ) {
+	  		  	    	$('#page-message').html("Access to the page forbiden");
+	  		  	    	},
+	
+			  	406: function(response) {
+			  		var errors = response.responseJSON;
+			  		$(".error").html("*");
+			  		$.each(errors, function (i, message) {
+			  			$("#"+message.attributeName+"Err").html(message.message);
+			  			console.log("Error "+message.attributeName +" "+message.message)
+	    	        		});
+			  		$("#page-message").html("Fix errors and click Save");
+			  		},
+			  	
+				404 : function(jqXHR, textStatus, errorThrown) {
+					$("#page-message").html("Error:"+textStatus);
+					console.log(errorThrown);
+		  	        console.log("error " + textStatus);
+		  	        console.log("incoming Text " + jqXHR.responseText);
+		  	    	}
+		  	}
 		
 			});
-
-		e.preventDefault();
 		
    });
   });
@@ -256,27 +252,25 @@ $(document).ready(function() {
     <div class="col-sm-1">
     <div class="form-group">
         <div>
-        <form action="guestList.html" method ="get">
-        <button class="btn btn-primary" name="submit" type="submit">
-	Update
-        </button>
-        </form>
+        
+<button id="updatebtn" class="btn btn-primary" name="submit" type="submit">
+Update
+</button>
+        
 </div>
 </div>
 </div>
 <div class="col-sm-1">
 <div class="form-group">
 <div>
-<form action="guestList.html" method ="get">
-<button class="btn btn-primary " name="submit" type="submit">
+<button class="btn btn-primary " name="submit" onclick="backToGuestList()">
         Cancel
-       </button>
-        </form>
-      </div>
-     </div>
-     </div>
-    </div>
-    </div>
-    </div>
-    </body>
+</button>
+  </div>
+ </div>
+ </div>
+</div>
+</div>
+</div>
+</body>
 </html>

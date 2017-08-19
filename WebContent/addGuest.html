@@ -40,7 +40,7 @@ function cancel(){
 }
 $(document).ready(function() {
 
-	$("#guestForm").submit(function (e){
+	$("#addbtn").on('click', function (e){
 		
 		var guestName =$('#name').val();
 		var note = $('#relationshipDescriptor').val();
@@ -54,10 +54,11 @@ $(document).ready(function() {
 				'"name" : "'+guestName+'",'+
 				'"relationshipDescriptor" :"'+ note+'"'+
 			"}",
-			Success: function(response) {
-				  $("#page-message").html("Record Added");
-				  window.location.assign("guestList.html?id="+$.urlParam('eventid')+"&anthony=anthony");
-		  	}
+			statusCode: {
+				200: function(response) {
+					 window.location.assign("guestList.html?id="+$.urlParam('eventid')+"&anthony=anthony");				 
+			  	}
+			}
 		});
 	});
 });
@@ -67,7 +68,7 @@ function confirmLogout(){
      if(agree){
  		window.location.assign("Logout.html");
  	}
-	}
+}
 </script>
 <div>
 <ul class="nav">
@@ -89,9 +90,10 @@ function confirmLogout(){
    <span id="relationshipDescriptorErr" class="error">* </span>
    
    <br><br>
-   <input type="submit" name="Add" value="Add"> 
 </form>
-<button id ="cancelbtn" onclick="cancel();">Cancel</button>
+   <button id="addbtn" name="Add" value="Add"> Add </button>
+
+<button id="cancelbtn" onclick="cancel();">Cancel</button>
 </div>
 </body>
 </html>
