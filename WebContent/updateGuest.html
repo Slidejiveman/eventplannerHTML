@@ -55,8 +55,9 @@ $(document).ready(function() {
 
 	$("#guestselection").select2({
 	 	  ajax:{
-	            url: '/eventplannerJava/eventplanner/guestservice/guests',
+	            url: "/eventplannerJava/eventplanner/guestservice/guestsbyguestlist/"+$.urlParam("event"),
 	            dataType: 'json',
+	            contentType: 'application/json',
 	            type: 'GET',
 	            cache:false,
 	            processResults: function (data) {
