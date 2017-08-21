@@ -403,7 +403,7 @@
 					"seatsPerTable":seatsPerTable,
 					"totalSeats":100	
 			};
-			alert(JSON.stringify(jsonstr));
+			//alert(JSON.stringify(jsonstr));
 			$.ajax( {
 				url:"/eventplannerJava/eventplanner/eventservice/events/"+$.urlParam("id"),
 				type: "PUT",
@@ -519,7 +519,8 @@
             contentType: false,
             processData: false,
             success: function(response) {
-            	alert(response);
+            	//alert(response);
+            	alert("Guests imported.");
             },
         });
     });

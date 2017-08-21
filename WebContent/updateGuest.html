@@ -123,6 +123,7 @@ $(document).ready(function() {
 			dataType: "json",
 			contentType: "application/json",
 			data: '{'+  
+			    '"guestlist": { "id" :' + $.urlParam('eventid') + '},' +
 				'"name" : "'+guestName+'",'+
 				'"relationshipDescriptor" :"'+ note+'"'+
 			"}",

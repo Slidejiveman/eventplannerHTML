@@ -39,9 +39,9 @@
      </div>
      <div class="form-group">
       <div>
-       <button class="btn btn-primary " name="submit" type="submit" id="savebtn" onclick="saveChanges();">
+        <button class="btn btn-primary " name="submit" type="submit" id="savebtn" onclick="saveChanges();">
         Submit
-       </button>
+       </button> 
       </div>
      </div>
     </form>
@@ -60,7 +60,7 @@
 		    }
 		}
 	 	$(document).ready(function(){
-	 		//event.preventDefault();
+	 		event.preventDefault();
 	 		//load all the tables for the event
 	 		//populate the name and the table assignment of the selected guest
 	 		$.getJSON("/eventplannerJava/eventplanner/guestservice/guests/"+$.urlParam("id"))
@@ -99,7 +99,7 @@
 			  	var guestName = $('#name').val();
 			  	var okToDelete=true;
 			  	var selectedTable = $('#table').select2('data')[0].text;
-			  	alert("Selected table value: "+selectedTable);
+			  //	alert("Selected table value: "+selectedTable);
 			  	var guestlistId = $.urlParam("event");
 			  	var guestlistOkToDelete=true;
 			  	//alert($.urlParam("event"));
@@ -115,11 +115,12 @@
 		    	  .then(function(guestResponse, tablesResponse){
 					var guest = guestResponse[0];
 					var tables = tablesResponse[0];
-					alert("tables "+tables.length);
+					//alert("tables "+tables.length);
 					for(i in tables){
-						alert("Entered a loop! for table #"+tables[i].number);
+					//	alert("Entered a loop! for table #"+tables[i].number);
 						if (tables[i].number==selectedTable.split('#')[1]){
-							alert("Table Match found!");
+							//alert(selectedTable.split('#')[1]);
+						//	alert("Table Match found!");
 							var jsonstr = {
 									"guestlist":{
 										"id":Number(guestlistId),
@@ -135,7 +136,7 @@
 										"size":tables[i].size
 									}	
 							};
-							alert(JSON.stringify(jsonstr));
+							//alert(JSON.stringify(jsonstr));
 							$.ajax( {
 								url:"/eventplannerJava/eventplanner/guestservice/guests/"+$.urlParam("id"),
 								cache:false,
